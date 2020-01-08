@@ -7,7 +7,7 @@ import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel;
 import com.revrobotics.ControlType;
 
-public class SparkMax implements PIDMotor{
+public class SparkMax implements PIDMotor {
 
     CANSparkMax motor;
     CANEncoder encoder;
@@ -44,18 +44,37 @@ public class SparkMax implements PIDMotor{
         pidController.setD(d);
     }
 
-    //@param percentVariance: decimal percent (0 - 1) that the PID controller can vary from the input speed
-    public void setSpeedVariance(double percentVariance){
+    // @param percentVariance: decimal percent (0 - 1) that the PID controller can vary from the input speed
+    public void setSpeedVariance(double percentVariance) {
         speedVariance = percentVariance;
     }
 
     public void setSpeed(double speed) {
+
         pidController.setOutputRange(
             speed * (1 - speedVariance),
             speed * (1 + speedVariance)
         );
+
         pidController.setReference(speed, ControlType.kVelocity);
+
     }
 
+    public void setPosition(double rotations, double speed) {
+
+        pidController.setOutputRange(
+            speed * (1 - speedVariance),
+            speed * (1 + speedVariance)
+        );
+
+        pidController.setReference(rotations, ControlType.kPosition);
+
+    }
+
+    public double getPosition() {
+
+       return encoder.getPosition();
+
+    }
 
 }

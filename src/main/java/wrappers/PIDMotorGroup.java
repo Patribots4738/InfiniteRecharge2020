@@ -35,4 +35,24 @@ public class PIDMotorGroup extends MotorGroup {
 
     }    
 
+    public void setPosition(double rotations, double speed) {
+
+        for(int j = 0; j < motors.length; j++) {
+
+            PIDMotors[j].setPosition(rotations, speed);
+
+        }
+        
+    }
+
+    public void setSpeedVariance(double speedVariance) {
+
+        for(int j = 0; j < motors.length; j++) {
+
+            PIDMotors[j].setSpeedVariance(speedVariance);
+
+        }
+        
+    }
+
 }

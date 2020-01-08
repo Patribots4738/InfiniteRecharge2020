@@ -19,8 +19,7 @@ public class UltraSonic{
     public String getDistance() {
 
         double sonicVolts = PWMInput.getAverageVoltage();
-        sonicVolts = 0.825 + (1.43 * sonicVolts) + (1.63 * sonicVolts * sonicVolts) - (0.28 * sonicVolts * sonicVolts * sonicVolts);
-        //0.716 + 2.1 * (sonicVolts) + 1.25 * (sonicVolts * sonicVolts) - 0.224 * (sonicVolts * sonicVolts * sonicVolts);
+        sonicVolts = (sonicVolts/0.00977) * .394 / 12;//0.477 + (2.36 * sonicVolts) + (1.05 * sonicVolts * sonicVolts) - (0.19 * sonicVolts * sonicVolts * sonicVolts);
         int feet = (int) sonicVolts;
         double decimal = sonicVolts - feet;
         decimal = decimal * 12;

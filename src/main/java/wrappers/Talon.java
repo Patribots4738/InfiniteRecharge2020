@@ -1,6 +1,8 @@
 package wrappers;
 
 import interfaces.*;
+import utils.Constants;
+
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
@@ -8,6 +10,8 @@ import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 public class Talon implements PIDMotor{
 
     private TalonSRX motor;
+
+    private double speedVariance;
 
     public Talon(int canID){
 
@@ -22,6 +26,8 @@ public class Talon implements PIDMotor{
         motor.configPeakOutputForward(1, 20);
         motor.configPeakOutputReverse(-1, 20);
         motor.setSensorPhase(true);
+
+        speedVariance = 0;
 
     }
 
@@ -43,6 +49,25 @@ public class Talon implements PIDMotor{
 
     public void setSpeed(double speed){
         motor.set(ControlMode.PercentOutput, speed);
+    }
+
+    public void setSpeedVariance(double speedVariance){
+        this.speedVariance = speedVariance;
+    }
+
+    public void setPosition(double rotations, double speed) {
+
+        motor.configPeakOutputForward(speed + speedVariance, 20);
+        motor.configPeakOutputReverse(speed - speedVariance, 20);
+
+        motor.set(ControlMode.Position, (int)(rotations * Constants.TALON_CLICKS));
+
+    }
+
+    public double getPosition() {
+
+        return motor.getSelectedSensorPosition() / Constants.TALON_CLICKS; 
+
     }
 
 }

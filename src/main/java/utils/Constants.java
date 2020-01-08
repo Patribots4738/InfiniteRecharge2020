@@ -22,6 +22,11 @@ public final class Constants {
 
     };
 
+    // the amount of clicks in a rotation in a Talon SRX encoder
+    public static final int TALON_CLICKS = 4096;
+
+    public static final double DRIVE_WHEEL_DIAMETER = 3.98;
+
     public static final String[] COLORS = {"Yellow","Red","Green","Blue"};
 
     public enum Color{
