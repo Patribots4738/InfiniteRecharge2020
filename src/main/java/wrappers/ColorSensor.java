@@ -54,63 +54,55 @@ public class ColorSensor{
 
         double[] rgbIR = getRGBIR();
 
-        if(isColor(rgbIR, "Yellow") == true) {
-            //System.out.println("yellow");
-            return "Yellow";
+        for (int i = 0; i < Constants.COLORS.length; i++) {
 
-        } else if(isColor(rgbIR, "Red") == true) {
-            //System.out.println("red");
-            return "Red";
+            String checkColor = Constants.COLORS[i];
 
-        } else if(isColor(rgbIR, "Green") == true) {
-            //System.out.println("green");
-            return "Green";
+            if (isColor(rgbIR, checkColor)) {
 
-        } else if(isColor(rgbIR, "Blue") == true) {
-            //System.out.println("blue");
-            return "Blue";
-
-        } else {
-
-            return "N/A";
-
-        }
-
-    }
-
-    public boolean isColor(double[] rgb, String color) {
-
-            if(color.equals("Yellow")) {
-
-                return isYellow(rgb);
-
-            } else if(color.equals("Red")) {
-
-                return isRed(rgb);
-
-            } else if(color.equals("Green")) {
-
-                return isGreen(rgb);
-
-            } else if(color.equals("Blue")) {
-
-                return isBlue(rgb);
-
-            } else {
-
-                return false;
+                return checkColor;
 
             }
 
+        }
+
+        return "N/A";
+
     }
 
-    public boolean isYellow(double[] rgb) {
+    public boolean isColor (double[] rgb, String colorName) {
 
-        if(rgb[0] > Constants.Color.Yellow.RMIN && rgb[0] < Constants.Color.Yellow.RMAX) {
+        Constants.Color testColor;
+
+        switch (colorName) {
+
+            case "Yellow":
+                testColor = Constants.Color.Yellow;
+            break;
+
+            case "Red":
+                testColor = Constants.Color.Red;
+            break;
             
-            if(rgb[1] > Constants.Color.Yellow.GMIN && rgb[1] < Constants.Color.Yellow.GMAX) {
+            case "Green":
+                testColor = Constants.Color.Green;
+            break;
+
+            case "Blue":
+                testColor = Constants.Color.Blue;
+            break;
+
+            default:
+                testColor = null;
+            break;
+
+        }
+
+        if(rgb[0] > testColor.RMIN && rgb[0] < testColor.RMAX) {
+            
+            if(rgb[1] > testColor.GMIN && rgb[1] < testColor.GMAX) {
                 
-                if(rgb[2] > Constants.Color.Yellow.BMIN && rgb[2] < Constants.Color.Yellow.BMAX) {
+                if(rgb[2] > testColor.BMIN && rgb[2] < testColor.BMAX) {
                     
                     return true;
 
@@ -123,65 +115,5 @@ public class ColorSensor{
         return false;
 
     } 
-
-    public boolean isRed(double[] rgb) {
-
-        if(rgb[0] > Constants.Color.Red.RMIN && rgb[0] < Constants.Color.Red.RMAX) {
-            
-            if(rgb[1] > Constants.Color.Red.GMIN && rgb[1] < Constants.Color.Red.GMAX) {
-
-                if(rgb[2] > Constants.Color.Red.BMIN && rgb[2] < Constants.Color.Red.BMAX) {
-
-                    return true;
-
-                }
-
-            }
-
-        }
-
-        return false;
-
-    }
-
-    public boolean isGreen(double[] rgb) {
-
-        if(rgb[0] > Constants.Color.Green.RMIN && rgb[0] < Constants.Color.Green.RMAX) {
-            
-            if(rgb[1] > Constants.Color.Green.GMIN && rgb[1] < Constants.Color.Green.GMAX) {
-                
-                if(rgb[2] > Constants.Color.Green.BMIN && rgb[2] < Constants.Color.Green.BMAX) {
-                    
-                    return true;
-
-                }
-
-            }
-
-        }
-
-        return false;
-
-    }
-
-    public boolean isBlue(double[] rgb) {
-
-        if(rgb[0] > Constants.Color.Blue.RMIN && rgb[0] < Constants.Color.Blue.RMAX) {
-
-            if(rgb[1] > Constants.Color.Blue.GMIN && rgb[1] < Constants.Color.Blue.GMAX) {
-
-                if(rgb[2] > Constants.Color.Blue.BMIN && rgb[2] < Constants.Color.Blue.BMAX) {
-
-                    return true;
-
-                }
-
-            }
-
-        }
-
-        return false;
-
-    }
 
 }

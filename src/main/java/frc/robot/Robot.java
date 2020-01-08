@@ -17,7 +17,7 @@ public class Robot extends TimedRobot {
 
   Drive drive;
 
-  //ColorSensor colorSensor;
+  ColorSensor colorSensor;
 
   MotorGroup leftMotors;
   MotorGroup rightMotors;
@@ -29,7 +29,7 @@ public class Robot extends TimedRobot {
 
     driver = new XboxController(0);
 
-    //colorSensor = new ColorSensor();
+    colorSensor = new ColorSensor();
   
     //leftMotors = new MotorGroup(new SparkMax(3));
     //rightMotors = new MotorGroup(new SparkMax(1));
@@ -74,24 +74,24 @@ public class Robot extends TimedRobot {
 
       //double decimal = test - tester;
 
-  
+  /*
     if(driver.getToggle(0)){
 
       System.out.println(ultra.getDistance());
 
     }
-    
+    */
 
     //System.out.println("toggle: " + driver.getToggle(0));
     //System.out.println("wasPressed: " + driver.getButtonUp(0));
 
-    /*
+    
     if(driver.getToggle(0)){
 
       System.out.println(colorSensor.determineColor());
 
     }
-    */
+    
   }
   
   @Override
