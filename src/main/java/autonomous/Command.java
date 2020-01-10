@@ -1,6 +1,4 @@
-package hardware;
-
-import wrappers.*;
+package autonomous;
 
 public class Command {
 
@@ -17,10 +15,13 @@ public class Command {
 
     private boolean initiated;
 
-    public Command(CommandType type, double value) {
+    private double speed;
+
+    public Command(CommandType type, double value, double speed) {
 
         this.type = type;
         this.value = value;
+        this.speed = speed;
 
         this.completed = false;
         this.initiated = false;
@@ -30,21 +31,49 @@ public class Command {
     public void init() {
 
         if (initiated) {
+
             return;
+
         }
 
         initiated = true;
-
-
 
     }
 
     public boolean isDone() {
 
-
+        return completed;
 
     }
 
+    public void finish() {
 
+        if(completed){
+
+            return;
+
+        }
+
+        completed = true;
+
+    }
+
+    public CommandType getType() {
+
+        return type;
+
+    }
+
+    public double getValue() {
+
+        return value;
+
+    }
+
+    public double getSpeed() {
+
+        return speed;
+
+    }
 
 }

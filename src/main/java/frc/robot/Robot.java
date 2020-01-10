@@ -6,8 +6,8 @@ import edu.wpi.first.wpilibj.TimedRobot;
 import wrappers.*;
 import utils.*;
 import interfaces.*;
-//import sun.management.Sensor;
 import hardware.*;
+import autonomous.*;
 
 public class Robot extends TimedRobot {
 
@@ -17,6 +17,8 @@ public class Robot extends TimedRobot {
 
   PIDMotorGroup leftMotors;
   PIDMotorGroup rightMotors;
+
+  AutoDrive autonomous;
 
   @Override
   public void robotInit() {
@@ -28,24 +30,29 @@ public class Robot extends TimedRobot {
 
     drive = new Drive(leftMotors, rightMotors);
 
+    autonomous = new AutoDrive(leftMotors, rightMotors);
+
   }
 
   @Override
   public void robotPeriodic() {}
 
   @Override
-  public void autonomousInit() {}
+  public void autonomousInit() {
 
-  @Override
-  public void autonomousPeriodic() {}
-
-  @Override
-  public void teleopPeriodic() {
-    
-    leftMotors.setDistance(24);
-    rightMotors.setDistance(48);
+    autonomous.addCommand(new Command(Command.CommandType.MOVE, 12, 0.2));
 
   }
+
+  @Override
+  public void autonomousPeriodic() {
+
+    autonomous.executeQueue();
+
+  }
+
+  @Override
+  public void teleopPeriodic() {}
   
   @Override
   public void testPeriodic() {}

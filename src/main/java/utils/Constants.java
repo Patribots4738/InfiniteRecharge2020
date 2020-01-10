@@ -27,6 +27,14 @@ public final class Constants {
 
     public static final double DRIVE_WHEEL_DIAMETER = 3.98;
 
+    public static final double DRIVE_WHEEL_CIRCUMFRENCE = Math.PI * DRIVE_WHEEL_DIAMETER;
+
+    // this distance between the centers of the wheels on opposite sides of the robot, in inches
+    public static final double ROBOT_WHEEL_SPACING = 25.75;
+
+    // the circumfrence of the circle formed by rotating the robot a full rotation in place
+    public static final double ROBOT_WHEEL_CIRCLE_CIRCUMFRENCE = Math.PI * ROBOT_WHEEL_SPACING;
+
     public static final String[] COLORS = {"Yellow","Red","Green","Blue"};
 
     public enum Color{

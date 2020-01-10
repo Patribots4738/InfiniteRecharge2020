@@ -45,6 +45,20 @@ public class PIDMotorGroup extends MotorGroup {
         
     }
 
+    public double getPosition() {
+
+        int positionSum = 0;
+
+        for(int j = 0; j < motors.length; j++) {
+
+            positionSum += PIDMotors[j].getPosition();
+
+        }
+
+        return positionSum / motors.length;
+
+    }
+
     public void setSpeedVariance(double speedVariance) {
 
         for(int j = 0; j < motors.length; j++) {
