@@ -1,5 +1,8 @@
 package autonomous;
 
+import utils.Constants;
+import wrappers.PIDMotorGroup;
+
 public class Command {
 
     public enum CommandType {
@@ -9,8 +12,8 @@ public class Command {
     private CommandType type;
     
     // Inches if moving, percent of a full revolution if rotating
-    private double value; 
-
+    private double value;    
+    // decimal percent of the max motor speed
     private double speed;
 
     public Command(CommandType type, double value, double speed) {
@@ -26,7 +29,7 @@ public class Command {
         return type;
 
     }
-
+    
     public double getValue() {
 
         return value;
