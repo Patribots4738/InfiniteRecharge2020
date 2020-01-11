@@ -35,11 +35,11 @@ public class PIDMotorGroup extends MotorGroup {
 
     }    
 
-    public void setPosition(double rotations, double speed) {
+    public void setPosition(double rotations, double minSpeed, double maxSpeed) {
 
         for(int j = 0; j < motors.length; j++) {
 
-            PIDMotors[j].setPosition(rotations, speed);
+            PIDMotors[j].setPosition(rotations, minSpeed, maxSpeed);
 
         }
         
@@ -47,7 +47,7 @@ public class PIDMotorGroup extends MotorGroup {
 
     public double getPosition() {
 
-        int positionSum = 0;
+        double positionSum = 0.0;
 
         for(int j = 0; j < motors.length; j++) {
 

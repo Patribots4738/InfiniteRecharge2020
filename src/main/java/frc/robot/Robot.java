@@ -12,12 +12,15 @@ public class Robot extends TimedRobot {
 
   AutoDrive autonomous;
 
-  PIDMotorGroup testGroup;
+  SparkMax testMotor;
 
   @Override
   public void robotInit() {
 
-    testGroup = new PIDMotorGroup(new SparkMax(3));
+    testMotor = new SparkMax(3);
+    testMotor.setP(1);
+    testMotor.setI(0);
+    testMotor.setD(0);
 
     /*
     leftMotors = new PIDMotorGroup(new SparkMax(3));
@@ -33,28 +36,28 @@ public class Robot extends TimedRobot {
 
   @Override
   public void autonomousInit() {
-  
-    autonomous.create(Command.CommandType.MOVE, 12, 0.2);
-    autonomous.create(Command.CommandType.ROTATE, 0.25, 0.2);
-    autonomous.create(Command.CommandType.MOVE, 12, 0.2);
-    autonomous.create(Command.CommandType.ROTATE, 0.25, 0.2);
-    autonomous.create(Command.CommandType.MOVE, 12, 0.2);
-    autonomous.create(Command.CommandType.ROTATE, 0.25, 0.2);
-    autonomous.create(Command.CommandType.MOVE, 12, 0.2);
-    autonomous.create(Command.CommandType.ROTATE, 0.25, 0.2);
+
+    //autonomous.addCommand(new Command(Command.CommandType.MOVE, 12, 0.2));
 
   }
 
   @Override
   public void autonomousPeriodic() {
-    
-    autonomous.executeQueue();
-    
+
+    //autonomous.executeQueue();
+
   }
 
   @Override
-  public void teleopPeriodic() {
-    
+  public void teleopInit() {}
+
+  @Override
+  public void teleopPeriodic() { 
+
+    testMotor.setPosition(10.0, -0.25, 0.25);
+
+    System.out.println("position is: " + testMotor.getPosition());    
+
   }
   
   @Override

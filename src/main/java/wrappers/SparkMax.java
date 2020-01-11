@@ -24,6 +24,8 @@ public class SparkMax implements PIDMotor {
 
         speedVariance = 0.0;
 
+        encoder.setPosition(0);
+
         pidController.setP(1.5);
         pidController.setI(0.2);
         pidController.setD(0);
@@ -60,12 +62,9 @@ public class SparkMax implements PIDMotor {
 
     }
 
-    public void setPosition(double rotations, double speed) {
+    public void setPosition(double rotations, double minSpeed, double maxSpeed) {
 
-        pidController.setOutputRange(
-            speed * (1 - speedVariance),
-            speed * (1 + speedVariance)
-        );
+        pidController.setOutputRange(minSpeed, maxSpeed);
 
         pidController.setReference(rotations, ControlType.kPosition);
 

@@ -55,10 +55,10 @@ public class Talon implements PIDMotor{
         this.speedVariance = speedVariance;
     }
 
-    public void setPosition(double rotations, double speed) {
+    public void setPosition(double rotations, double minSpeed, double maxSpeed) {
 
-        motor.configPeakOutputForward(speed + speedVariance, 20);
-        motor.configPeakOutputReverse(speed - speedVariance, 20);
+        motor.configPeakOutputReverse(minSpeed, 20);
+        motor.configPeakOutputForward(maxSpeed, 20);
 
         motor.set(ControlMode.Position, (int)(rotations * Constants.TALON_CLICKS));
 
