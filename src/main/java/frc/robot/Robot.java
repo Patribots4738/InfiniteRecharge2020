@@ -39,20 +39,29 @@ public class Robot extends TimedRobot {
 
   @Override
   public void autonomousInit() {
-
-    autonomous.addCommand(new Command(Command.CommandType.MOVE, 12, 0.2));
+  
+    autonomous.create(Command.CommandType.MOVE, 12, 0.2);
+    autonomous.create(Command.CommandType.ROTATE, 0.25, 0.2);
+    autonomous.create(Command.CommandType.MOVE, 12, 0.2);
+    autonomous.create(Command.CommandType.ROTATE, 0.25, 0.2);
+    autonomous.create(Command.CommandType.MOVE, 12, 0.2);
+    autonomous.create(Command.CommandType.ROTATE, 0.25, 0.2);
+    autonomous.create(Command.CommandType.MOVE, 12, 0.2);
+    autonomous.create(Command.CommandType.ROTATE, 0.25, 0.2);
 
   }
 
   @Override
   public void autonomousPeriodic() {
-
+    
     autonomous.executeQueue();
-
+    
   }
 
   @Override
-  public void teleopPeriodic() {}
+  public void teleopPeriodic() {
+    
+  }
   
   @Override
   public void testPeriodic() {}

@@ -3,102 +3,58 @@ import wrappers.*;
 
 import java.util.ArrayList;
 
-import utils.Constants;
-
 public class AutoDrive {
 
     ArrayList<Command> commandQueue;
 
-    public AutoDrive(PIDMotorGroup leftMotors, PIDMotorGroup rightMotors) {
+    private PIDMotorGroup leftMotors;
+    private PIDMotorGroup rightMotors; 
+
+    public AutoDrive(PIDMotorGroup leftMotors, PIDMotorGroup rightMotors, Command... commands) {
 
         this.leftMotors = leftMotors;
         this.rightMotors = rightMotors;
 
-        completePositions = new double[2];
-        completePositions[0] = leftMotors.getPosition();
-        completePositions[1] = rightMotors.getPosition();
+        for (int i = 0; i < commands.length; i++) {
 
-        currentPositions = new double[2];
-        currentPositions[0] = leftMotors.getPosition();
-        currentPositions[1] = rightMotors.getPosition();
-
-    }
-
-    public void addCommand(Command command) {
-
-        commandQueue.add(command);
-
-    }
-
-    public void insertCommand(Command command, int index) {
-
-        commandQueue.add(index, command);
-
-    }
-
-    public void removeCommand(int index) {
-
-        if(index < commandQueue.size()){
-
-            commandQueue.remove(index);
+            commandQueue.add(commands[i]);
 
         }
 
     }
 
-    // this command will be called once to start executing a command
-    public void executeCommand(Command command) {
+    public void create(Command.CommandType type, double value, double speed) {
 
-        Command.CommandType commandType = command.getType();
-
-        if(commandType == Command.CommandType.MOVE) {
-
-            completePositions[0] += command.getValue();
-            completePositions[1] -= command.getValue();
-
-            leftMotors.setPosition(leftMotors.getPosition() + command.getValue(), command.getSpeed());
-            rightMotors.setPosition(-(rightMotors.getPosition() + command.getValue()), -command.getSpeed());
-
-        }
-
-        if(commandType == Command.CommandType.ROTATE) {
-
-            completePositions[0] += command.getValue();
-            completePositions[1] += command.getValue();
-
-            // converts percent rotations of the robot to percent rotations of the drive wheels
-            double conversion = (command.getValue() * Constants.ROBOT_WHEEL_CIRCLE_CIRCUMFRENCE) / Constants.DRIVE_WHEEL_CIRCUMFRENCE;
-
-            leftMotors.setPosition(leftMotors.getPosition() + conversion, command.getSpeed());
-            rightMotors.setPosition(rightMotors.getPosition() + conversion, command.getSpeed());
-
-        }
+        commandQueue.add(
+            new Command(type, value, speed, leftMotors, rightMotors)
+        );
 
     }
 
     // this command will be called continously in robot
-    public void executeQueue() {
+    public boolean executeQueue() {
 
-        currentPositions[0] = leftMotors.getPosition();
-        currentPositions[1] = rightMotors.getPosition();
-
-        if((currentPositions[0] == completePositions[0]) && currentPositions[1] == completePositions[1]) {
-
-            if(!(commandQueue.size() == 0)) {
-
-                removeCommand(0);
-
-            }
-
-            if(commandQueue.size() == 0) {
-
-                return;
-
-            }
-
-            executeCommand(commandQueue.get(0));
+        if (commandQueue.size() == 0) {
+            // there are no more commands in the queue
+            return false;
 
         }
+        // runs the command and stores whether it is done or not
+        boolean done = commandQueue.get(0).execute();
+
+        if (done) {
+
+            commandQueue.remove(0);
+
+        }
+        // there is still commands in the queue
+        return true;
+
+    }
+
+    public int queueLength() {
+
+        return commandQueue.size();
 
     }
     
