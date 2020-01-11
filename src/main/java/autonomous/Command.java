@@ -11,10 +11,6 @@ public class Command {
     // Inches if moving, percent of a full revolution if rotating
     private double value; 
 
-    private boolean completed;
-
-    private boolean initiated;
-
     private double speed;
 
     public Command(CommandType type, double value, double speed) {
@@ -22,39 +18,6 @@ public class Command {
         this.type = type;
         this.value = value;
         this.speed = speed;
-
-        this.completed = false;
-        this.initiated = false;
-
-    }
-
-    public void init() {
-
-        if (initiated) {
-
-            return;
-
-        }
-
-        initiated = true;
-
-    }
-
-    public boolean isDone() {
-
-        return completed;
-
-    }
-
-    public void finish() {
-
-        if(completed){
-
-            return;
-
-        }
-
-        completed = true;
 
     }
 

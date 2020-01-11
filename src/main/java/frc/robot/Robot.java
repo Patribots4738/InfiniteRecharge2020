@@ -1,36 +1,30 @@
 package frc.robot;
 
-import javax.xml.namespace.QName;
-
 import edu.wpi.first.wpilibj.TimedRobot;
-import wrappers.*;
-import utils.*;
-import interfaces.*;
-import hardware.*;
+
 import autonomous.*;
+import wrappers.*;
 
 public class Robot extends TimedRobot {
-
-  XboxController driver;
-
-  Drive drive;
 
   PIDMotorGroup leftMotors;
   PIDMotorGroup rightMotors;
 
   AutoDrive autonomous;
 
+  PIDMotorGroup testGroup;
+
   @Override
   public void robotInit() {
 
-    driver = new XboxController(0);
-  
+    testGroup = new PIDMotorGroup(new SparkMax(3));
+
+    /*
     leftMotors = new PIDMotorGroup(new SparkMax(3));
     rightMotors = new PIDMotorGroup(new SparkMax(1));
 
-    drive = new Drive(leftMotors, rightMotors);
-
     autonomous = new AutoDrive(leftMotors, rightMotors);
+    */
 
   }
 
@@ -40,19 +34,23 @@ public class Robot extends TimedRobot {
   @Override
   public void autonomousInit() {
 
-    autonomous.addCommand(new Command(Command.CommandType.MOVE, 12, 0.2));
+    //autonomous.addCommand(new Command(Command.CommandType.MOVE, 12, 0.2));
 
   }
 
   @Override
   public void autonomousPeriodic() {
 
-    autonomous.executeQueue();
+    //autonomous.executeQueue();
 
   }
 
   @Override
-  public void teleopPeriodic() {}
+  public void teleopPeriodic(){ 
+
+    testGroup.setPosition(1.0, 0.1);
+
+  }
   
   @Override
   public void testPeriodic() {}
