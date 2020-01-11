@@ -1,5 +1,8 @@
 package autonomous;
 
+import utils.Constants;
+import wrappers.PIDMotorGroup;
+
 public class Command {
 
     public enum CommandType {
@@ -9,15 +12,19 @@ public class Command {
     private CommandType type;
     
     // Inches if moving, percent of a full revolution if rotating
-    private double value; 
+    private double value;    
+    // decimal percent of the max motor speed
+    private double speed;
 
     private boolean completed;
 
     private boolean initiated;
 
-    private double speed;
 
-    public Command(CommandType type, double value, double speed) {
+    private PIDMotorGroup leftMotors;
+    private PIDMotorGroup rightMotors;
+
+    public Command(CommandType type, double value, double speed, PIDMotorGroup leftMotors, PIDMotorGroup rightMotors) {
 
         this.type = type;
         this.value = value;
@@ -26,53 +33,41 @@ public class Command {
         this.completed = false;
         this.initiated = false;
 
+        this.leftMotors = leftMotors;
+        this.rightMotors = rightMotors;
+
     }
 
-    public void init() {
-
-        if (initiated) {
-
-            return;
-
-        }
+    private void init() {
 
         initiated = true;
 
     }
 
-    public boolean isDone() {
+    public boolean execute() {
 
-        return completed;
+        if (!initiated) {
 
-    }
+            init();
 
-    public void finish() {
+        } else {
 
-        if(completed){
+            if (type == CommandType.MOVE) {
 
-            return;
+                leftMotors.setPosition((value / Constants.DRIVE_WHEEL_CIRCUMFRENCE) + leftMotors.getPosition(), speed);
+                rightMotors.setPosition((-value / Constants.DRIVE_WHEEL_CIRCUMFRENCE) + rightMotors.getPosition(), -speed);
+
+            } else if (type == CommandType.ROTATE) {
+
+                // converts percent rotations of the robot to percent rotations of the drive wheels
+                double conversion = (value * Constants.ROBOT_WHEEL_CIRCLE_CIRCUMFRENCE) / Constants.DRIVE_WHEEL_CIRCUMFRENCE;
+
+                leftMotors.setPosition(leftMotors.getPosition() + conversion, speed);
+                rightMotors.setPosition(rightMotors.getPosition() + conversion, speed);
+
+            }
 
         }
-
-        completed = true;
-
-    }
-
-    public CommandType getType() {
-
-        return type;
-
-    }
-
-    public double getValue() {
-
-        return value;
-
-    }
-
-    public double getSpeed() {
-
-        return speed;
 
     }
 

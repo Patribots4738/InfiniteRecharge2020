@@ -7,19 +7,6 @@ import utils.Constants;
 
 public class AutoDrive {
 
-    PIDMotorGroup leftMotors;
-    PIDMotorGroup rightMotors;
-
-    // the positions the left and right motorgroups should
-    // be at when the currently running command has been
-    // completed, these values will change often during the operation of the class
-    // order is left, right
-    double[] completePositions;
-
-    // the positions of the left and right motorgroups at the current time,
-    // will start same as the completed position, but will change every time a new command is run
-    double[] currentPositions;
-
     ArrayList<Command> commandQueue;
 
     public AutoDrive(PIDMotorGroup leftMotors, PIDMotorGroup rightMotors) {
