@@ -16,8 +16,8 @@ public class Robot extends TimedRobot {
   AutoDrive autonomous;
   */
 
-  @Override
-  public void robotInit() {
+	@Override
+	public void robotInit() {
 
     topShooter = new SparkMax(2);
     bottomShooter = new SparkMax(1);
@@ -38,40 +38,40 @@ public class Robot extends TimedRobot {
     leftMotors = new PIDMotorGroup(new SparkMax(2), new SparkMax(1));
     rightMotors = new PIDMotorGroup(new SparkMax(5), new SparkMax(4));
 
-    rightMotors.setP(1);
-    rightMotors.setI(0);
-    rightMotors.setD(0);
+		rightMotors.setP(1);
+		rightMotors.setI(0);
+		rightMotors.setD(0);
 
-    leftMotors.setP(1);
-    leftMotors.setI(0);
-    leftMotors.setD(0);
+		leftMotors.setP(1);
+		leftMotors.setI(0);
+		leftMotors.setD(0);
 
     autonomous = new AutoDrive(leftMotors, rightMotors);
     */
 
-  }
+	}
 
-  @Override
-  public void robotPeriodic() {}
+	@Override
+	public void robotPeriodic() {}
 
-  @Override
-  public void autonomousInit() {
+	@Override
+	public void autonomousInit() {
 
     //autonomous.reset();
 
     //autonomous.addCommand(new Command(Command.CommandType.MOVE, 72, 0.07));
 
-  }
+	}
 
-  @Override
-  public void autonomousPeriodic() {
+	@Override
+	public void autonomousPeriodic() {
 
     //autonomous.executeQueue();
 
-  }
+	}
 
-  @Override
-  public void teleopInit() {}
+	@Override
+	public void teleopInit() {}
 
   @Override
   public void teleopPeriodic() {
