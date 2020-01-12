@@ -76,4 +76,10 @@ public class SparkMax implements PIDMotor {
 
     }
 
+    public void resetEncoder() {
+
+        encoder.setPosition(0);
+
+    }
+
 }

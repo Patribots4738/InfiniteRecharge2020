@@ -25,11 +25,11 @@ public final class Constants {
     // the amount of clicks in a rotation in a Talon SRX encoder
     public static final int TALON_CLICKS = 4096;
 
-    public static final double DRIVE_WHEEL_DIAMETER = 3.98;
+    public static final double DRIVE_WHEEL_DIAMETER = 3.75;
 
     public static final double DRIVE_WHEEL_CIRCUMFRENCE = Math.PI * DRIVE_WHEEL_DIAMETER;
 
-    public static final double DRIVE_GEAR_RATIO = 7.441;
+    public static final double DRIVE_GEAR_RATIO = 1 / 7.441;
 
     // this distance between the centers of the wheels on opposite sides of the robot, in inches
     public static final double ROBOT_WHEEL_SPACING = 25.75;

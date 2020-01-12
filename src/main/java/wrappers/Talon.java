@@ -70,4 +70,10 @@ public class Talon implements PIDMotor{
 
     }
 
+    public void resetEncoder() {
+
+        motor.setSelectedSensorPosition(0);
+
+    }
+
 }

@@ -69,4 +69,14 @@ public class PIDMotorGroup extends MotorGroup {
         
     }
 
+    public void resetEncoder() {
+
+        for(int j = 0; j < motors.length; j++) {
+
+            PIDMotors[j].resetEncoder();
+
+        }
+
+    }
+
 }

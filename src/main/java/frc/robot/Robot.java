@@ -15,8 +15,8 @@ public class Robot extends TimedRobot {
   @Override
   public void robotInit() {
 
-    leftMotors = new PIDMotorGroup(new SparkMax(3));
-    rightMotors = new PIDMotorGroup(new SparkMax(1));
+    leftMotors = new PIDMotorGroup(new SparkMax(2), new SparkMax(1));
+    rightMotors = new PIDMotorGroup(new SparkMax(5), new SparkMax(4));
 
     rightMotors.setP(1);
     rightMotors.setI(0);
@@ -36,7 +36,9 @@ public class Robot extends TimedRobot {
   @Override
   public void autonomousInit() {
 
-    autonomous.addCommand(new Command(Command.CommandType.MOVE, 12, 0.2));
+    autonomous.reset();
+
+    autonomous.addCommand(new Command(Command.CommandType.MOVE, 10, 0.07));
 
   }
 
