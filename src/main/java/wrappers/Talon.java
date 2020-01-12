@@ -70,6 +70,12 @@ public class Talon implements PIDMotor{
 
     }
 
+    public double getSpeed() {
+
+        return motor.getSelectedSensorVelocity();
+
+    }
+
     public void resetEncoder() {
 
         motor.setSelectedSensorPosition(0);

@@ -10,6 +10,7 @@ public interface PIDMotor extends Motor{
 
     public void setPosition(double rotations, double minSpeed, double maxSpeed);
     public double getPosition();
+    public double getSpeed();
     public void resetEncoder();
 
 }

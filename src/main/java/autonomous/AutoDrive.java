@@ -82,7 +82,7 @@ public class AutoDrive {
         if(commandType == Command.CommandType.MOVE) {
 
             // converts inches of linear distance to rotations of the drive wheels
-            double convertedValue = (command.getValue() / Constants.DRIVE_WHEEL_CIRCUMFRENCE) / Constants.DRIVE_GEAR_RATIO;
+            double convertedValue = (command.getValue() / Constants.DRIVE_WHEEL_CIRCUMFRENCE) / Constants.DRIVE_GEAR_RATIO * 0.666;
 
             completePositions[0] += convertedValue;
             completePositions[1] -= convertedValue;

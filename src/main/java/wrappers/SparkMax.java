@@ -51,6 +51,12 @@ public class SparkMax implements PIDMotor {
         speedVariance = percentVariance;
     }
 
+    public void setOutputRange(double minSpeed, double maxSpeed) {
+
+        pidController.setOutputRange(minSpeed, maxSpeed);
+
+    }
+
     public void setSpeed(double speed) {
 
         pidController.setOutputRange(
@@ -73,6 +79,13 @@ public class SparkMax implements PIDMotor {
     public double getPosition() {
 
        return encoder.getPosition();
+
+    }
+
+    public double getSpeed() {
+
+        // 5700 is the theoretical max RPM of the neo
+        return encoder.getVelocity() / 5700.0;
 
     }
 
