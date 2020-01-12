@@ -5,146 +5,161 @@ import utils.Constants;
 
 import java.util.ArrayList;
 
-import autonomous.Command.CommandType;
-
 public class AutoDrive {
 
-    PIDMotorGroup leftMotors;
-    PIDMotorGroup rightMotors;
+	PIDMotorGroup leftMotors;
+	PIDMotorGroup rightMotors;
 
-    double acceptableError;
+	// details how close we can get to the specified end position of a command
+	// before calling it complete and moving to the next one
+	private double acceptableError;
 
-    // the positions the left and right motorgroups should
-    // be at when the currently running command has been
-    // completed, these values will change often during the operation of the class
-    // order is left, right
-    double[] completePositions;
+	// the positions the left and right motorgroups should
+	// be at when the currently running command has been completed,
+	// these values will change often during the operation of the class.
+	// the order is left motor, right motor for index 0 and 1
+	private double[] completePositions;
 
-    boolean isFirstCommand;
+	// true if it's running commands, false if it's not
+	private boolean running;
 
-    ArrayList<Command> commandQueue;
+	private ArrayList<Command> commandQueue;
 
-    public AutoDrive(PIDMotorGroup leftMotors, PIDMotorGroup rightMotors) {
+	public AutoDrive(PIDMotorGroup leftMotors, PIDMotorGroup rightMotors) {
 
-        this.leftMotors = leftMotors;
-        this.rightMotors = rightMotors;
+		this.leftMotors = leftMotors;
+		this.rightMotors = rightMotors;
 
-        commandQueue = new ArrayList<Command>();
-        // this adds a filler command to be removed at 
-        // the beginning when the robot has yet to be moved
-        addCommand(new Command(CommandType.MOVE, 0, 0));
+		acceptableError = 1.0;
 
-        acceptableError = 1.0;
+		running = false;
 
-        completePositions = new double[2];
-        completePositions[0] = 0.0;
-        completePositions[1] = 0.0;
+		completePositions = new double[]{
+			leftMotors.getPosition(),
+			rightMotors.getPosition()
+		};
 
-        isFirstCommand = true;
+	}
 
-    }
+	// resets the command queue and stops execution of currently running commands
+	public void reset() {
 
-    public void addCommand(Command command) {
+		commandQueue = new ArrayList<Command>();
+		completePositions[0] = 0;
+		completePositions[1] = 0;
+		leftMotors.resetEncoder();
+		rightMotors.resetEncoder();
+		running = false;
 
-        commandQueue.add(command);
+	}
 
-    }
+	// appends a command to the end of the commandQueue arraylist
+	public void addCommand(Command command) {
+		
+		commandQueue.add(command);
 
-    // for internal use only
-    private void removeCommand(int index) {
+	}
 
-        if(index < commandQueue.size()){
+	// appends an array of commands to the end of the commandQueue arraylist
+	public void addCommands(Command... commands) {
+		
+		for (int i = 0; i < commands.length; i++) {
 
-            commandQueue.remove(index);
+			commandQueue.add(commands[i]); 
+			
+		}
 
-        }
+	}
 
-    }
+	// returns a boolean detailing if the command at the supplied index could be removed
+	private boolean removeCommand(int index) {
 
-    public void reset() {
+		if (index < commandQueue.size()){
 
-        commandQueue = new ArrayList<Command>();
-        addCommand(new Command(CommandType.MOVE, 0, 0));
+			commandQueue.remove(index);
 
-        completePositions[0] = 0;
-        completePositions[1] = 0;
+			return true;
 
-        leftMotors.resetEncoder();
-        rightMotors.resetEncoder();
+		} else {
 
-    }
+			return false;
 
-    // this command will be called once to start executing a command
-    public void executeCommand(Command command) {
+		}
 
-        Command.CommandType commandType = command.getType();
+	}
 
-        if(commandType == Command.CommandType.MOVE) {
+	// this command will be called once to start executing a command
+	public void executeCommand(Command command) {
 
-            // converts inches of linear distance to rotations of the drive wheels
-            double convertedValue = (command.getValue() / Constants.DRIVE_WHEEL_CIRCUMFRENCE) / Constants.DRIVE_GEAR_RATIO;
+		Command.CommandType commandType = command.getType();
+		double value = command.getValue();
+		double speed = command.getSpeed();
 
-            completePositions[0] += convertedValue;
-            completePositions[1] -= convertedValue;
+		// the left motor will always move in the same direction regardless of moving or rotating the robot
+		completePositions[0] += value;
+		
+		if(commandType == Command.CommandType.MOVE) {
+			
+			completePositions[1] -= value;
 
-            leftMotors.setPosition(completePositions[0], -command.getSpeed(), command.getSpeed());
-            rightMotors.setPosition(completePositions[1], -command.getSpeed(), command.getSpeed());
+			leftMotors.setPosition(completePositions[0], -speed, speed);
+			rightMotors.setPosition(completePositions[1], -speed, speed);
 
-        }
+		} else { // the command is a rotate command
+			// sets the right motor to rotate opposite of the left
+			completePositions[1] += value;
 
-        if(commandType == Command.CommandType.ROTATE) {
+			leftMotors.setPosition(completePositions[0], -speed, speed);
+			rightMotors.setPosition(completePositions[1], -speed, speed);
 
-            // converts percent rotations of the robot to percent rotations of the drive wheels
-            double convertedValue = ((command.getValue() * Constants.ROBOT_WHEEL_CIRCLE_CIRCUMFRENCE) / Constants.DRIVE_WHEEL_CIRCUMFRENCE) / Constants.DRIVE_GEAR_RATIO;
+		}
 
-            completePositions[0] += convertedValue;
-            completePositions[1] += convertedValue;
+	}
+ 
+	// this command will be called continously in robot
+	public void executeQueue(boolean logging) {
 
-            leftMotors.setPosition(completePositions[0], -command.getSpeed(), command.getSpeed());
-            rightMotors.setPosition(completePositions[1], -command.getSpeed(), command.getSpeed());
+		// checks if there aren't any commands to save cpu cycles
+		if (commandQueue.size() == 0) {
 
-        }
+			running = false;
+			return;
 
-    }
+		} else if (!running) {
 
-    // this command will be called continously in robot
-    public void executeQueue() {
+			// starts executing commands if this is being called while commands aren't executing
+			executeCommand(commandQueue.get(0));
+			running = true;
+			return;
 
-        double leftWheelPosition = leftMotors.getPosition()  / Constants.DRIVE_GEAR_RATIO;
-        double rightWheelPosition = rightMotors.getPosition() / Constants.DRIVE_GEAR_RATIO;
+		}
 
-        System.out.println("left wheel has moved: " + leftWheelPosition);
-        System.out.println("right wheel has moved: " + rightWheelPosition);
+		double leftWheelPosition = leftMotors.getPosition() / Constants.DRIVE_GEAR_RATIO;
+		double rightWheelPosition = rightMotors.getPosition() / Constants.DRIVE_GEAR_RATIO;
 
-        double leftError = Math.abs(completePositions[0] - leftWheelPosition);
-        double rightError = Math.abs(completePositions[1] - rightWheelPosition);
+		double leftError = Math.abs(completePositions[0] - leftWheelPosition);
+		double rightError = Math.abs(completePositions[1] - rightWheelPosition);
 
-        System.out.println("leftError is: " + leftError);
-        System.out.println("rightError is: " + rightError);
+		if (logging) {
 
-        if(leftError <= acceptableError && rightError <= acceptableError) {
+			System.out.println("left wheel has moved: " + leftWheelPosition);
+			System.out.println("right wheel has moved: " + rightWheelPosition);
 
-            if(!(commandQueue.size() == 0)) {
+			System.out.println("leftError is: " + leftError);
+			System.out.println("rightError is: " + rightError);
 
-                System.out.println("removed completed command");
+		}
 
-                removeCommand(0);
+		if(leftError <= acceptableError && rightError <= acceptableError) {
 
-            } 
+			removeCommand(0);
+			executeCommand(commandQueue.get(0));
 
-            if(commandQueue.size() == 0) {
+			running = true;
+			return;
 
-                System.out.println("queue is empty");
+		}
 
-                return;
+	}
 
-            }
-
-            executeCommand(commandQueue.get(0));
-            System.out.println("Running command");
-
-        }
-
-    }
-    
 } 

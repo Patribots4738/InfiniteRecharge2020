@@ -1,5 +1,7 @@
 package autonomous;
 
+import utils.Constants;
+
 public class Command {
 
     public enum CommandType {
@@ -16,7 +18,11 @@ public class Command {
     public Command(CommandType type, double value, double speed) {
 
         this.type = type;
-        this.value = value;
+        this.value = type == CommandType.ROTATE ?
+            // converts inches of linear distance to rotations of the drive wheels
+            (value * Constants.ROBOT_WHEEL_CIRCLE_CIRCUMFRENCE) / Constants.DRIVE_WHEEL_CIRCUMFRENCE : 
+            // converts percent rotations of the robot to percent rotations of the drive wheels
+            (value / Constants.DRIVE_WHEEL_CIRCUMFRENCE) / Constants.DRIVE_GEAR_RATIO; 
         this.speed = speed;
 
     }
