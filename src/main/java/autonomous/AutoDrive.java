@@ -59,8 +59,8 @@ public class AutoDrive {
             completePositions[0] += convertedValue;
             completePositions[1] -= convertedValue;
 
-            leftMotors.setPosition(completePositions[0], -command.getSpeed(), command.getSpeed());
-            rightMotors.setPosition(completePositions[1], -command.getSpeed(), command.getSpeed());
+            leftMotors.setPosition(completePositions[0] / Constants.DRIVE_GEAR_RATIO, -command.getSpeed(), command.getSpeed());
+            rightMotors.setPosition(completePositions[1] / Constants.DRIVE_GEAR_RATIO, -command.getSpeed(), command.getSpeed());
 
         }
 
@@ -72,8 +72,8 @@ public class AutoDrive {
             completePositions[0] += convertedValue;
             completePositions[1] += convertedValue;
 
-            leftMotors.setPosition(completePositions[0], -command.getSpeed(), command.getSpeed());
-            rightMotors.setPosition(completePositions[1], -command.getSpeed(), command.getSpeed());
+            leftMotors.setPosition(completePositions[0] / Constants.DRIVE_GEAR_RATIO, -command.getSpeed(), command.getSpeed());
+            rightMotors.setPosition(completePositions[1] / Constants.DRIVE_GEAR_RATIO, -command.getSpeed(), command.getSpeed());
 
         }
 
@@ -82,7 +82,8 @@ public class AutoDrive {
     // this command will be called continously in robot
     public void executeQueue() {
 
-        if((leftMotors.getPosition() == completePositions[0]) && (rightMotors.getPosition() == completePositions[1])) {
+        if((leftMotors.getPosition() / Constants.DRIVE_GEAR_RATIO == completePositions[0] / Constants.DRIVE_GEAR_RATIO) &&
+         (rightMotors.getPosition() / Constants.DRIVE_GEAR_RATIO == completePositions[1] / Constants.DRIVE_GEAR_RATIO)) {
 
             if(!(commandQueue.size() == 0)) {
 

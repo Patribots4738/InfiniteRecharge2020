@@ -29,6 +29,8 @@ public final class Constants {
 
     public static final double DRIVE_WHEEL_CIRCUMFRENCE = Math.PI * DRIVE_WHEEL_DIAMETER;
 
+    public static final double DRIVE_GEAR_RATIO = 7.441;
+
     // this distance between the centers of the wheels on opposite sides of the robot, in inches
     public static final double ROBOT_WHEEL_SPACING = 25.75;
 
