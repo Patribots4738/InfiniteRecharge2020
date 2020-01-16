@@ -24,14 +24,14 @@ public class Robot extends TimedRobot {
 
     //topShooter.setOutputRange(0.0, 0.25);
     topShooter.setSpeedVariance(0.07);
-    topShooter.setP(1);
-    topShooter.setI(0.5);
+    topShooter.setP(0);
+    topShooter.setI(0);
     topShooter.setD(0);
 
     //bottomShooter.setOutputRange(0, 0);
     bottomShooter.setSpeedVariance(0.07);
-    bottomShooter.setP(1);
-    bottomShooter.setI(0.5);
+    bottomShooter.setP(0.0001);
+    bottomShooter.setI(0);
     bottomShooter.setD(0);
 
     /*
@@ -76,14 +76,14 @@ public class Robot extends TimedRobot {
   @Override
   public void teleopPeriodic() {
 
-    double topShooterSpeed = 0.32;
-    double bottomShooterSpeed = -0.64;
+    double topShooterSpeed = 0.1;
+    double bottomShooterSpeed = -0.1;
 
-    topShooter.setSpeed(topShooterSpeed);
-    bottomShooter.setSpeed(bottomShooterSpeed);
+    topShooter.setSpeed(topShooterSpeed + (topShooterSpeed * 0.1338));
+    bottomShooter.setSpeed(bottomShooterSpeed + (bottomShooterSpeed * 0.1338));
 
-    System.out.println("top shooter is at: " + topShooter.getSpeed());
-    System.out.println("bottom shooter is at: " + bottomShooter.getSpeed());    
+    //System.out.println(topShooter.getSpeed() * 5700);
+    System.out.println(bottomShooter.getSpeed() * -5700);    
 
   }
   
