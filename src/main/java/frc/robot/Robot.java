@@ -20,7 +20,7 @@ public class Robot extends TimedRobot {
 	public void robotInit() {
 
     topShooter = new SparkMax(2);
-    bottomShooter = new SparkMax(1);
+    bottomShooter = new SparkMax(3);
 
     //topShooter.setOutputRange(0.0, 0.25);
     topShooter.setSpeedVariance(0.05);
@@ -76,8 +76,8 @@ public class Robot extends TimedRobot {
   @Override
   public void teleopPeriodic() {
 
-    double topShooterSpeed = 0.5;
-    double bottomShooterSpeed = -0.5;
+    double topShooterSpeed = 0.2;
+    double bottomShooterSpeed = -0.2;
 
     double[] weightCorrection = new double[]{
       ((37.7669895 * Math.pow(31.0431483, topShooterSpeed))/5700) + (100/5700),
@@ -90,8 +90,8 @@ public class Robot extends TimedRobot {
     topShooter.setSpeed(topShooterSpeed);
     bottomShooter.setSpeed(bottomShooterSpeed);
 
-    //System.out.println(topShooter.getSpeed() * 5700);
-    System.out.println(bottomShooter.getSpeed() * -5700);    
+    System.out.println("top: " + topShooter.getSpeed() * 5700);
+    System.out.println("bottom: " + bottomShooter.getSpeed() * -5700);    
 
   }
   
