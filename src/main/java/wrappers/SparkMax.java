@@ -1,6 +1,7 @@
 package wrappers;
 
 import interfaces.*;
+
 import com.revrobotics.CANEncoder;
 import com.revrobotics.CANPIDController;
 import com.revrobotics.CANSparkMax;
@@ -12,10 +13,11 @@ public class SparkMax implements PIDMotor {
     CANSparkMax motor;
     CANEncoder encoder;
     CANPIDController pidController;
+    static double[] errorArray = new double[100];
+    
+    private double speedVariance;
 
-    private double speedVariance; 
-
-    //@param canID: CAN ID of the motor
+    // @param canID: CAN ID of the motor
     public SparkMax(int canID) {
 
         motor = new CANSparkMax(canID, CANSparkMaxLowLevel.MotorType.kBrushless);
@@ -25,13 +27,10 @@ public class SparkMax implements PIDMotor {
         speedVariance = 0.0;
 
         encoder.setPosition(0);
-
-        pidController.setP(1.5);
-        pidController.setI(0.2);
-        pidController.setD(0);
-        pidController.setIZone(0);
-        pidController.setFF(0);
-
+        /*
+         * pidController.setP(1.5); pidController.setI(0.2); pidController.setD(0);
+         * pidController.setIZone(0); pidController.setFF(0);
+         */
     }
 
     public void setP(double p) {
@@ -46,7 +45,8 @@ public class SparkMax implements PIDMotor {
         pidController.setD(d);
     }
 
-    // @param percentVariance: decimal percent (0 - 1) that the PID controller can vary from the input speed
+    // @param percentVariance: decimal percent (0 - 1) that the PID controller can
+    // vary from the input speed
     public void setSpeedVariance(double percentVariance) {
         speedVariance = percentVariance;
     }
@@ -59,10 +59,7 @@ public class SparkMax implements PIDMotor {
 
     public void setSpeed(double speed) {
 
-        pidController.setOutputRange(
-            speed * (1 - speedVariance),
-            speed * (1 + speedVariance)
-        );
+        pidController.setOutputRange(speed * (1 - speedVariance), speed * (1 + speedVariance));
 
         pidController.setReference(speed, ControlType.kVelocity);
 
@@ -78,7 +75,7 @@ public class SparkMax implements PIDMotor {
 
     public double getPosition() {
 
-       return encoder.getPosition();
+        return encoder.getPosition();
 
     }
 
@@ -95,4 +92,53 @@ public class SparkMax implements PIDMotor {
 
     }
 
+    // default feedForward is 1; if it is not 1 the motor will not move
+    // p must be greater than or equal to 0, no negetives
+    // PID 
+    public static double sparkMaxPID(double desiredCommand, double feedForward, double P, double I, double D,
+            SparkMax sparkMax) {
+
+        double error = desiredCommand - sparkMax.getSpeed();
+        double sum = 0;
+        double E_P = 0;
+        double E_I = 0;
+        double E_D = 0;
+
+        for (int i = errorArray.length - 1; i >= 0; i--) {
+
+            if (i == 0) {
+
+                errorArray[0] = error;
+
+            } else {
+
+                errorArray[i] = errorArray[i - 1];
+               
+            }
+
+        }
+
+        //System.out.println(Arrays.toString(errorArray));
+
+        for (int i = 0; i < errorArray.length; i++) {
+
+            sum += errorArray[i];
+
+        }
+
+        E_P = error;
+        // 0.02 is in seconds; 0.02 is delta time
+        // E_I is the integral (area) of the error
+        E_I = sum * 0.02;
+
+        // 0.02 is in seconds; 0.02 is delta time
+        // E_D is the derivative (slope) of the error in the last 0.02 seconds
+        E_D = (errorArray[0] - errorArray[1]) / 0.02;
+
+        // correctedCommand = (desiredCommand) + (delta of desiredCommand)
+        double correctedCommand = (feedForward * desiredCommand) + (P * E_P) + (I * E_I) + (D * E_D);
+        //System.out.println("P: " + E_P + "\tI: " + E_I + "\tD: " + E_D);
+        return correctedCommand;
+
+    }
 }
