@@ -6,7 +6,8 @@ import wrappers.*;
 
 public class Robot extends TimedRobot {
 
-  SparkMax sparkMax;
+  Falcon top;
+  Falcon bottom;
 
   /*
   PIDMotorGroup leftMotors;
@@ -17,22 +18,22 @@ public class Robot extends TimedRobot {
 
 	@Override
 	public void robotInit() {
-
-    sparkMax = new SparkMax(3);
     
-    /*
-    //topShooter.setOutputRange(0.0, 0.25);
-    topShooter.setSpeedVariance(0.05);
-    topShooter.setP(0.0001);
-    topShooter.setI(0);
-    topShooter.setD(0);
+    top = new Falcon(4);
+    bottom = new Falcon(2);
 
-    //bottomShooter.setOutputRange(0, 0);
-    bottomShooter.setSpeedVariance(0.05);
-    bottomShooter.setP(0.0001);
-    bottomShooter.setI(0);
-    bottomShooter.setD(0);
+    top.setPID(1.2, 0.15, 0.15);
+    bottom.setPID(1.2, 0.15, 0.15);
+
+    top.setFF(1.31147971);// 35 ft is 1.18447971
+    bottom.setFF(1.06429);// 35 ft is 1.10429
+
+    /*
+    testFalcon.setP(1.2);
+    testFalcon.setI(0);
+    testFalcon.setD(0.15);
     */
+
     /*
     leftMotors = new PIDMotorGroup(new SparkMax(2), new SparkMax(1));
     rightMotors = new PIDMotorGroup(new SparkMax(5), new SparkMax(4));
@@ -75,14 +76,23 @@ public class Robot extends TimedRobot {
   @Override
   public void teleopPeriodic() {
 
-    double sparkMaxSpeed = SparkMax.sparkMaxPID(5700.0/5700.0, 1.0, 0.0, 0.0, 0.0, sparkMax);
-
     // For 10 feet: topshooter = 100% and bottom = 15%, angle = 60 degrees
     // For 44 feet: topshooter = 30% and bottom = 54%, angle = 60 degrees
- 
-    sparkMax.setSpeed(sparkMaxSpeed);
 
-    System.out.println("RPM: " + (int) (sparkMax.getSpeed() * 5700)); 
+    // 35 feet: 21, 45 (top, bottom)
+    // 30 feet 13, 49 (top, bottom)
+    
+    top.setSpeed(0.13);
+    bottom.setSpeed(-0.49);
+
+    System.out.println("top: " + top.getSpeed() * 100.0);
+    System.out.println("bottom: " + bottom.getSpeed() * 100.0);
+
+    /*
+    testFalcon.setPosition(15, -1, 1);
+
+    System.out.println(testFalcon.getPosition());
+    */
 
   }
   

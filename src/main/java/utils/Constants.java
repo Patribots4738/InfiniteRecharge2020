@@ -2,6 +2,29 @@ package utils;
 
 public final class Constants {
 
+    // the time, in seconds, of a single loop of the robot code
+    public static final double loopTime = 0.02;
+
+    // the amount of encoder clicks per rotation in a Talon SRX encoder
+    public static final int TALON_CLICKS = 4096;
+
+    // the amount of encoder clicks per rotation in a Falcon 500 (Talon FX) encoder
+    public static final int FALCON_CLICKS = 2048;
+
+    public static final double DRIVE_WHEEL_DIAMETER = 3.75;
+
+    public static final double DRIVE_WHEEL_CIRCUMFRENCE = Math.PI * DRIVE_WHEEL_DIAMETER;
+
+    public static final double DRIVE_GEAR_RATIO = 1 / 7.441;
+
+    // this distance between the centers of the wheels on opposite sides of the robot, in inches
+    public static final double ROBOT_WHEEL_SPACING = 25.75;
+
+    // the circumfrence of the circle formed by rotating the robot a full rotation in place
+    public static final double ROBOT_WHEEL_CIRCLE_CIRCUMFRENCE = Math.PI * ROBOT_WHEEL_SPACING;
+
+    public static final String[] COLORS = {"Yellow","Red","Green","Blue"};
+
     // Numeric values for colors are in the RGB color system
     private static final double[][] COLOR_AVERAGES = {
 
@@ -21,23 +44,6 @@ public final class Constants {
         {7.86, 8.04, 5.24} // Blue
 
     };
-
-    // the amount of clicks in a rotation in a Talon SRX encoder
-    public static final int TALON_CLICKS = 4096;
-
-    public static final double DRIVE_WHEEL_DIAMETER = 3.75;
-
-    public static final double DRIVE_WHEEL_CIRCUMFRENCE = Math.PI * DRIVE_WHEEL_DIAMETER;
-
-    public static final double DRIVE_GEAR_RATIO = 1 / 7.441;
-
-    // this distance between the centers of the wheels on opposite sides of the robot, in inches
-    public static final double ROBOT_WHEEL_SPACING = 25.75;
-
-    // the circumfrence of the circle formed by rotating the robot a full rotation in place
-    public static final double ROBOT_WHEEL_CIRCLE_CIRCUMFRENCE = Math.PI * ROBOT_WHEEL_SPACING;
-
-    public static final String[] COLORS = {"Yellow","Red","Green","Blue"};
 
     public enum Color{
 

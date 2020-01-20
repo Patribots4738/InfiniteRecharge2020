@@ -73,16 +73,6 @@ public class PIDMotorGroup extends MotorGroup {
 
     }
 
-    public void setSpeedVariance(double speedVariance) {
-
-        for(int j = 0; j < motors.length; j++) {
-
-            PIDMotors[j].setSpeedVariance(speedVariance);
-
-        }
-        
-    }
-
     public void resetEncoder() {
 
         for(int j = 0; j < motors.length; j++) {

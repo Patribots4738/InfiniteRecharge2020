@@ -11,8 +11,6 @@ public class Talon implements PIDMotor{
 
     private TalonSRX motor;
 
-    private double speedVariance;
-
     public Talon(int canID){
 
         motor = new TalonSRX(canID);
@@ -26,8 +24,6 @@ public class Talon implements PIDMotor{
         motor.configPeakOutputForward(1, 20);
         motor.configPeakOutputReverse(-1, 20);
         motor.setSensorPhase(true);
-
-        speedVariance = 0;
 
     }
 
@@ -49,10 +45,6 @@ public class Talon implements PIDMotor{
 
     public void setSpeed(double speed){
         motor.set(ControlMode.PercentOutput, speed);
-    }
-
-    public void setSpeedVariance(double speedVariance){
-        this.speedVariance = speedVariance;
     }
 
     public void setPosition(double rotations, double minSpeed, double maxSpeed) {
