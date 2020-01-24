@@ -2,8 +2,10 @@ package utils;
 
 public final class Constants {
 
+    public static final boolean LOGGING = true;
+
     // the time, in seconds, of a single loop of the robot code
-    public static final double loopTime = 0.02;
+    public static final double LOOP_TIME = 0.02;
 
     // the amount of encoder clicks per rotation in a Talon SRX encoder
     public static final int TALON_CLICKS = 4096;
@@ -11,14 +13,14 @@ public final class Constants {
     // the amount of encoder clicks per rotation in a Falcon 500 (Talon FX) encoder
     public static final int FALCON_CLICKS = 2048;
 
-    public static final double DRIVE_WHEEL_DIAMETER = 3.75;
+    public static final double DRIVE_WHEEL_DIAMETER = 3.9375;
 
     public static final double DRIVE_WHEEL_CIRCUMFRENCE = Math.PI * DRIVE_WHEEL_DIAMETER;
 
-    public static final double DRIVE_GEAR_RATIO = 1 / 7.441;
+    public static final double DRIVE_GEAR_RATIO = ((1 / 7.441) / 1.5) * 2;
 
     // this distance between the centers of the wheels on opposite sides of the robot, in inches
-    public static final double ROBOT_WHEEL_SPACING = 25.75;
+    public static final double ROBOT_WHEEL_SPACING = 29.75;
 
     // the circumfrence of the circle formed by rotating the robot a full rotation in place
     public static final double ROBOT_WHEEL_CIRCLE_CIRCUMFRENCE = Math.PI * ROBOT_WHEEL_SPACING;

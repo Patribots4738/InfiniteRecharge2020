@@ -53,13 +53,6 @@ public class AutoDrive {
 
 	}
 
-	// appends a command to the end of the commandQueue arraylist
-	public void addCommand(Command command) {
-		
-		commandQueue.add(command);
-
-	}
-
 	// appends an array of commands to the end of the commandQueue arraylist
 	public void addCommands(Command... commands) {
 		
@@ -117,7 +110,7 @@ public class AutoDrive {
 	}
  
 	// this command will be called continously in robot
-	public void executeQueue(boolean logging) {
+	public void executeQueue() {
 
 		// checks if there aren't any commands to save cpu cycles
 		if (commandQueue.size() == 0) {
@@ -134,17 +127,17 @@ public class AutoDrive {
 
 		}
 
-		double leftWheelPosition = leftMotors.getPosition() / Constants.DRIVE_GEAR_RATIO;
-		double rightWheelPosition = rightMotors.getPosition() / Constants.DRIVE_GEAR_RATIO;
+		double leftWheelPosition = leftMotors.getPosition();
+		double rightWheelPosition = rightMotors.getPosition();
 
 		double leftError = Math.abs(completePositions[0] - leftWheelPosition);
 		double rightError = Math.abs(completePositions[1] - rightWheelPosition);
 
-		if (logging) {
+		if (Constants.LOGGING) {
 
 			System.out.println("left wheel has moved: " + leftWheelPosition);
 			System.out.println("right wheel has moved: " + rightWheelPosition);
-
+			System.out.println();
 			System.out.println("leftError is: " + leftError);
 			System.out.println("rightError is: " + rightError);
 

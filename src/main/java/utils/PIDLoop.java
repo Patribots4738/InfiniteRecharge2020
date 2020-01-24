@@ -141,9 +141,9 @@ public class PIDLoop {
 
         PError = error;
 
-        IError = errorSum * Constants.loopTime;
+        IError = errorSum * Constants.LOOP_TIME;
 
-        DError = (errorLog[0] - errorLog[1]) / Constants.loopTime;
+        DError = (errorLog[0] - errorLog[1]) / Constants.LOOP_TIME;
 
         double correctedCommand = (FF * desiredCommand) + (P * PError) + (I * IError) + (D * DError);
 
