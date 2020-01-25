@@ -3,9 +3,14 @@ package frc.robot;
 import edu.wpi.first.wpilibj.TimedRobot;
 
 import wrappers.*;
+import networktables.*;
 import autonomous.*;
 
 public class Robot extends TimedRobot {
+
+  NTInterface ntInterface;
+
+  NTTable SmashboardTest;
   
   PIDMotorGroup leftMotors;
   PIDMotorGroup rightMotors;
@@ -14,6 +19,10 @@ public class Robot extends TimedRobot {
 
 	@Override
 	public void robotInit() {
+
+    ntInterface = new NTInterface();
+
+    SmashboardTest = ntInterface.getTable("/SmartDashboard");
     
     leftMotors = new PIDMotorGroup(new SparkMax(2), new SparkMax(1));
     rightMotors = new PIDMotorGroup(new SparkMax(5), new SparkMax(4));
