@@ -2,7 +2,7 @@ package utils;
 
 public final class Constants {
 
-    public static final boolean LOGGING = true;
+    public static final boolean LOGGING = false;
 
     // the time, in seconds, of a single loop of the robot code
     public static final double LOOP_TIME = 0.02;

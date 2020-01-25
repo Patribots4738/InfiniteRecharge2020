@@ -98,7 +98,7 @@ public class AutoDrive {
 			leftMotors.setPosition(completePositions[0], -speed, speed);
 			rightMotors.setPosition(completePositions[1], -speed, speed);
 
-		} else { // the command is a rotate command
+		} else if(commandType == Command.CommandType.ROTATE) { // the command is a rotate command
 			// sets the right motor to rotate opposite of the left
 			completePositions[1] += value;
 
