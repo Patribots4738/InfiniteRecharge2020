@@ -16,7 +16,7 @@ public class NTTable {
 
         java.util.Set<String> rawKeys = table.getKeys();
 
-        String[] keys = (String[])rawKeys.toArray();
+        String[] keys = rawKeys.toArray(new String[0]);
 
         return keys;
 

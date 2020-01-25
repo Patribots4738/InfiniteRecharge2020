@@ -10,14 +10,16 @@ public class Robot extends TimedRobot {
 
   NTInterface ntInterface;
 
-  NTTable SmashboardTest;
+  NTTable test;
 
 	@Override
 	public void robotInit() {
 
     ntInterface = new NTInterface();
 
-    SmashboardTest = ntInterface.getTable("/SmartDashboard");
+    test = ntInterface.getTable("Test");
+
+    test.setBoolean("test", true);
     
 	}
 
@@ -36,7 +38,7 @@ public class Robot extends TimedRobot {
   @Override
   public void teleopPeriodic() {
 
-    System.out.println(SmashboardTest.getKeys().length);
+    System.out.println(test.getBoolean("test"));
 
   }
   
