@@ -15,6 +15,12 @@ public class Calc {
 
     }
 
+    public static double degreesToRadians(double degrees) {
+
+        return (degrees / 180.0) * Math.PI;
+
+    } 
+
     // converts rotations of the robot to rotations of the drive motors
     public static double robotRotationsToDrive(double inches) {
 

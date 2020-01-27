@@ -4,22 +4,34 @@ import edu.wpi.first.wpilibj.TimedRobot;
 
 import wrappers.*;
 import networktables.*;
-import autonomous.*;
+import hardware.*;
 
 public class Robot extends TimedRobot {
 
   NTInterface ntInterface;
 
-  NTTable test;
+  Limelight limelight;
+
+  XboxController xbox;
+
+  Drive drive;
+
+  PIDMotorGroup leftMotors;
+  PIDMotorGroup rightMotors;
 
 	@Override
 	public void robotInit() {
 
     ntInterface = new NTInterface();
 
-    test = ntInterface.getTable("Test");
+    limelight = new Limelight(ntInterface.getTable("limelight"));
 
-    test.setBoolean("test", true);
+    xbox = new XboxController(0);
+
+    leftMotors = new PIDMotorGroup(new SparkMax(2), new SparkMax(1));
+    rightMotors = new PIDMotorGroup(new SparkMax(5), new SparkMax(4));
+
+    drive = new Drive(leftMotors, rightMotors);
     
 	}
 
@@ -38,7 +50,31 @@ public class Robot extends TimedRobot {
   @Override
   public void teleopPeriodic() {
 
-    System.out.println(test.getBoolean("test"));
+    double limelightHorizontalAngle = limelight.getHorizontalAngle();
+
+    System.out.println("Distance: " + limelight.getDistance());
+    System.out.println("Vertical Angle: " + limelight.getVerticalAngle());
+    System.out.println("Horizontal Angle: " + limelightHorizontalAngle);
+
+    if(xbox.getToggle(XboxController.Buttons.A)) {
+
+      double maxSpeed = 0.4;
+
+      double speedMultiplier = 1.0 / 40.0;
+
+      double minCommand = 0.25;
+
+      double leftCommand = (speedMultiplier * limelightHorizontalAngle) + minCommand;
+      double rightCommand = (speedMultiplier * limelightHorizontalAngle) + minCommand;
+    
+        leftMotors.setSpeed(leftCommand);
+        rightMotors.setSpeed(rightCommand);
+
+    } else {
+
+      drive.curvature(-xbox.getAxis(1), xbox.getAxis(4));
+
+    }
 
   }
   

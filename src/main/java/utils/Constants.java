@@ -4,6 +4,15 @@ public final class Constants {
 
     public static final boolean LOGGING = false;
 
+    // in inches
+    public static final double TARGET_HEIGHT = 90.75;
+
+    // in inches
+    public static final double LIMELIGHT_HEIGHT = 27.5;// 26;
+
+    // in degrees
+    public static final double LIMELIGHT_MOUNTING_ANGLE = 55.0;
+
     // the time, in seconds, of a single loop of the robot code
     public static final double LOOP_TIME = 0.02;
 
