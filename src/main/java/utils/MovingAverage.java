@@ -7,21 +7,23 @@ public class MovingAverage {
 
     double[] values;
 
+    private int maxSize;
+    private int currentIndex;
+    private int numberOfValues;
+
     public MovingAverage(int size) {
 
         this.values = new double[size];
+        this.maxSize = size;
+        this.numberOfValues = 0;
 
     }
 
     public void addValue(double newVal) {
 
-        for(int i = 0; i < values.length; i++) {
+        values[currentIndex] = newVal;
 
-            values[i + 1] = values[i];
-
-        }
-
-        values[0] = newVal;
+        this.increaseIndex();
 
     }
 
@@ -35,8 +37,28 @@ public class MovingAverage {
 
         }
     
-        return sum / values.length;
+        return sum / numberOfValues;
         
     }
 
+    private void increaseIndex() {
+
+        if (currentIndex + 1 >= maxSize) {
+
+            currentIndex = 0;
+
+        } else {
+
+            currentIndex++;
+
+        }
+
+        if (numberOfValues < maxSize) {
+
+            numberOfValues++;
+
+        }
+
+    }
+    
 }
