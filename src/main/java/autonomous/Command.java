@@ -10,7 +10,8 @@ public class Command {
 
     private CommandType type;
     
-    // Inches if moving, percent of a full revolution if rotating
+    // Input for constructor is in inches for moving, decimal percent rotations if rotating
+    // however, it is internally stored in rotations of the drive motor's output shaft
     private double value;    
 
     // decimal percent of the max motor speed
