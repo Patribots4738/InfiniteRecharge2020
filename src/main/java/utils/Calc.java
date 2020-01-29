@@ -24,9 +24,7 @@ public class Calc {
     // converts rotations of the robot to rotations of the drive motors
     public static double robotRotationsToDrive(double inches) {
 
-        double driveMotorRotations = (((inches)
-                                     * Constants.ROBOT_WHEEL_CIRCLE_CIRCUMFRENCE)
-                                     / Constants.DRIVE_WHEEL_CIRCUMFRENCE)
+        double driveMotorRotations = (((inches) * Constants.ROBOT_WHEEL_CIRCLE_CIRCUMFRENCE) / Constants.DRIVE_WHEEL_CIRCUMFRENCE)
                                      / Constants.DRIVE_GEAR_RATIO;
 
         return driveMotorRotations;
@@ -36,8 +34,7 @@ public class Calc {
     // converts linear distance to rotations of the drive motors
     public static double inchesToDrive(double robotRotations) {
 
-        double driveMotorRotations = ((robotRotations)
-                                     / Constants.DRIVE_WHEEL_CIRCUMFRENCE)
+        double driveMotorRotations = ((robotRotations) / Constants.DRIVE_WHEEL_CIRCUMFRENCE)
                                      / Constants.DRIVE_GEAR_RATIO;
 
         return driveMotorRotations;

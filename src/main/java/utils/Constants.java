@@ -10,8 +10,8 @@ public final class Constants {
     // in inches
     public static final double LIMELIGHT_HEIGHT = 27.5;// 26;
 
-    // in degrees
-    public static final double LIMELIGHT_MOUNTING_ANGLE = 55.0;
+    // in radians
+    public static final double LIMELIGHT_MOUNTING_ANGLE = Calc.degreesToRadians(55.0);
 
     // the time, in seconds, of a single loop of the robot code
     public static final double LOOP_TIME = 0.02;

@@ -2,29 +2,28 @@ package utils;
 
 import java.util.ArrayList;
 
+// this class is used to take the average of a constantly changing set of values
 public class MovingAverage {
 
-    ArrayList<Double> values;
+    double[] values;
 
-    int maxSize;
+    private int maxSize;
+    private int currentIndex;
+    private int numberOfValues;
 
     public MovingAverage(int size) {
 
-        values = new ArrayList<Double>();
-
-        maxSize = size;
+        this.values = new double[size];
+        this.maxSize = size;
+        this.numberOfValues = 0;
 
     }
 
     public void addValue(double newVal) {
 
-        values.add(0, newVal);
+        values[currentIndex] = newVal;
 
-        while(values.size() > maxSize) {
-
-            values.remove(values.size() - 1);
-
-        }  
+        this.increaseIndex();
 
     }
 
@@ -32,14 +31,34 @@ public class MovingAverage {
 
         double sum = 0;
 
-        for(int i =0; i < values.size(); i++) {
+        for (int i = 0; i < values.length; i++) {
 
-            sum += values.get(i);
+            sum += values[i];
+
+        }
+    
+        return sum / numberOfValues;
+        
+    }
+
+    private void increaseIndex() {
+
+        if (currentIndex + 1 >= maxSize) {
+
+            currentIndex = 0;
+
+        } else {
+
+            currentIndex++;
 
         }
 
-        return sum / values.size();
+        if (numberOfValues < maxSize) {
+
+            numberOfValues++;
+
+        }
 
     }
-
+    
 }
