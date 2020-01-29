@@ -62,10 +62,22 @@ public class Robot extends TimedRobot {
 
       double speedMultiplier = 1.0 / 40.0;
 
-      double minCommand = 0.25;
+      double minCommand = 0.15 * maxSpeed;
 
       double leftCommand = (speedMultiplier * limelightHorizontalAngle) + minCommand;
       double rightCommand = (speedMultiplier * limelightHorizontalAngle) + minCommand;
+
+      if(Math.abs(leftCommand) > maxSpeed) {
+
+        leftCommand = maxSpeed * (Math.abs(leftCommand) / leftCommand);
+
+      } 
+
+      if(Math.abs(rightCommand) > maxSpeed) {
+
+        rightCommand = maxSpeed * (Math.abs(rightCommand) / rightCommand);
+
+      }
     
         leftMotors.setSpeed(leftCommand);
         rightMotors.setSpeed(rightCommand);
