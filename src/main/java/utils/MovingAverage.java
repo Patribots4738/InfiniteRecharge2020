@@ -1,7 +1,5 @@
 package utils;
 
-import java.util.ArrayList;
-
 // this class is used to take the average of a constantly changing set of values
 public class MovingAverage {
 

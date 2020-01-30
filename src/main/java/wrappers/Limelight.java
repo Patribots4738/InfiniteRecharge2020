@@ -1,4 +1,4 @@
-package hardware;
+package wrappers;
 
 import networktables.*;
 import utils.*;
