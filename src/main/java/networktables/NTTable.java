@@ -26,14 +26,18 @@ public class NTTable {
     }
 
     public NTTable[] getSubtables() {
+
         // gets all of the sub table names inside of this table.
         Set<String> rawSubtableNames = table.getSubTables();
+
         // gets the keys of the current table
         String[] subtableNames = (String[])rawSubtableNames.toArray();
+
         // initializes a new array of NTTables
         NTTable[] subtables = new NTTable[subtableNames.length];
 
         for(int i = 0; i < subtables.length; i++) {
+
             // each of the subtables are added to the array
             subtables[i] = new NTTable(table.getSubTable(subtableNames[i]));
 
@@ -51,8 +55,8 @@ public class NTTable {
     }
     // gets the value at the key in this NetworkTable
     public Object get(String key) {
-        // this value is not bound to a specific type, so needs to be typecasted before use elsewhere
-        return table.getEntry(key).getValue();
+
+        return table.getEntry(key).getValue().getValue();
 
     }
     // sets the value at the key in this NetworkTable

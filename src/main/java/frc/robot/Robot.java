@@ -56,16 +56,25 @@ public class Robot extends TimedRobot {
     System.out.println("Vertical Angle: " + limelight.getVerticalAngle());
     System.out.println("Horizontal Angle: " + limelightHorizontalAngle);
 
-    if(xbox.getToggle(XboxController.Buttons.A)) {
+    if(xbox.getButton(XboxController.Buttons.A)) {
+
+      limelight.setLED(Limelight.LEDMode.ON);
 
       double maxSpeed = 0.4;
 
-      double speedMultiplier = 1.0 / 40.0;
+      double speedMultiplier = 1.0 / 80.0;
 
-      double minCommand = 0.15 * maxSpeed;
+      double minCommand = 0.02 * maxSpeed;
 
       double leftCommand = (speedMultiplier * limelightHorizontalAngle) + minCommand;
       double rightCommand = (speedMultiplier * limelightHorizontalAngle) + minCommand;
+
+      if(xbox.getButton(XboxController.Buttons.B)) {
+
+        leftCommand -= 0.08;
+        rightCommand += 0.08;
+
+      }
 
       if(Math.abs(leftCommand) > maxSpeed) {
 
@@ -84,7 +93,9 @@ public class Robot extends TimedRobot {
 
     } else {
 
-      drive.curvature(-xbox.getAxis(1), xbox.getAxis(4));
+      limelight.setLED(Limelight.LEDMode.OFF);
+
+      drive.curvature(xbox.getAxis(1), xbox.getAxis(4));
 
     }
 
