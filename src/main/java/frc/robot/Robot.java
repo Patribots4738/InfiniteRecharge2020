@@ -51,8 +51,10 @@ public class Robot extends TimedRobot {
   public void teleopPeriodic() {
 
     double limelightHorizontalAngle = limelight.getHorizontalAngle();
+    
+    double distance = limelight.getDistance();
 
-    System.out.println("Distance: " + limelight.getDistance());
+    System.out.println("Distance: " + distance);
     System.out.println("Vertical Angle: " + limelight.getVerticalAngle());
     System.out.println("Horizontal Angle: " + limelightHorizontalAngle);
 
@@ -62,7 +64,13 @@ public class Robot extends TimedRobot {
 
       double maxSpeed = 0.4;
 
-      double speedMultiplier = 1.0 / 80.0;
+      double speedMultiplier = 1.0 / 90.0;
+
+      double distanceMultiplier = 1.0 / 200.0;
+
+      double stopDistance = 150.0;
+
+      double distanceError = distance - stopDistance;
 
       double minCommand = 0.02 * maxSpeed;
 
@@ -71,8 +79,12 @@ public class Robot extends TimedRobot {
 
       if(xbox.getButton(XboxController.Buttons.B)) {
 
-        leftCommand -= 0.08;
-        rightCommand += 0.08;
+        if(limelight.getDistance() > stopDistance)  {
+
+          leftCommand -= distanceMultiplier * distanceError;
+          rightCommand += distanceMultiplier * distanceError;
+
+        }
 
       }
 
