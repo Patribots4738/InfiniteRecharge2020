@@ -65,6 +65,14 @@ public class SparkMax implements PIDMotor {
 
     }
 
+    public void setPID(double P, double I, double D) {
+
+        setP(P);
+        setI(I);
+        setD(D);
+
+    }
+
     public void setSpeed(double speed) {
 
         double currentCommand = PIDLoop.getCommand(speed, getSpeed());

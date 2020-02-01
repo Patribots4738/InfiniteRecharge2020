@@ -43,6 +43,14 @@ public class Talon implements PIDMotor{
         motor.config_kD(0, D, 20);
     }
 
+    public void setPID(double P, double I, double D) {
+
+        setP(P);
+        setI(I);
+        setD(D);
+
+    }
+
     public void setSpeed(double speed){
         motor.set(ControlMode.PercentOutput, speed);
     }
