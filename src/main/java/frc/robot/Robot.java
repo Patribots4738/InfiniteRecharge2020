@@ -1,5 +1,7 @@
 package frc.robot;
 
+import autonomous.*;
+import autonomous.Command.CommandType;
 import edu.wpi.first.wpilibj.TimedRobot;
 
 import wrappers.*;
@@ -15,6 +17,7 @@ public class Robot extends TimedRobot {
   XboxController xbox;
 
   Drive drive;
+  AutoDrive auto;
 
   PIDMotorGroup leftMotors;
   PIDMotorGroup rightMotors;
@@ -32,6 +35,7 @@ public class Robot extends TimedRobot {
     rightMotors = new PIDMotorGroup(new SparkMax(5), new SparkMax(4));
 
     drive = new Drive(leftMotors, rightMotors);
+    auto = new AutoDrive(leftMotors, rightMotors);
     
 	}
 
@@ -39,10 +43,33 @@ public class Robot extends TimedRobot {
 	public void robotPeriodic() {}
 
 	@Override
-	public void autonomousInit() {}
+	public void autonomousInit() {
+
+    double speed = 0.25;
+
+    auto.addCommands(new Command(CommandType.ROTATE, 0.05, speed),
+                     new Command(CommandType.MOVE, 10.0, speed),
+
+                     new Command(CommandType.ROTATE, 0.05, speed),
+                     new Command(CommandType.MOVE, 10.0, speed),
+
+                     new Command(CommandType.ROTATE, 0.05, speed),
+                     new Command(CommandType.MOVE, 10.0, speed),
+
+                     new Command(CommandType.ROTATE, 0.05, speed),
+                     new Command(CommandType.MOVE, 10.0, speed),
+
+                     new Command(CommandType.ROTATE, 0.05, speed),
+                     new Command(CommandType.MOVE, 10.0, speed));
+
+  }
 
 	@Override
-  public void autonomousPeriodic() {}
+  public void autonomousPeriodic() {
+
+    auto.executeQueue();
+
+  }
   
 	@Override
 	public void teleopInit() {}
