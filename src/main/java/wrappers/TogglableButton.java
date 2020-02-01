@@ -42,9 +42,9 @@ public class TogglableButton {
 
 	}
 
-	public boolean toggle(boolean toggleVal) {
+	public boolean toggle(boolean currentButtonState) {
 
-		if(wasPressed(toggleVal)) {
+		if (currentButtonState == true && lastButtonState != true) {
 
 			toggleState = !toggleState;
 

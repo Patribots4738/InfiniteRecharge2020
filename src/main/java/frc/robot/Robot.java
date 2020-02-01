@@ -27,12 +27,15 @@ public class Robot extends TimedRobot {
 
     ntInterface = new NTInterface();
 
-    limelight = new Limelight(ntInterface.getTable("limelight"));
+    //limelight = new Limelight(ntInterface.getTable("limelight"));
 
     xbox = new XboxController(0);
 
     leftMotors = new PIDMotorGroup(new SparkMax(2), new SparkMax(1));
     rightMotors = new PIDMotorGroup(new SparkMax(5), new SparkMax(4));
+
+    leftMotors.setPID(0.1, 0 ,0);
+    rightMotors.setPID(0.1, 0, 0);
 
     drive = new Drive(leftMotors, rightMotors);
     auto = new AutoDrive(leftMotors, rightMotors);
@@ -46,6 +49,8 @@ public class Robot extends TimedRobot {
 	public void autonomousInit() {
 
     double speed = 0.25;
+
+    auto.reset();
 
     auto.addCommands(new Command(CommandType.ROTATE, 0.05, speed),
                      new Command(CommandType.MOVE, 10.0, speed),
@@ -72,11 +77,17 @@ public class Robot extends TimedRobot {
   }
   
 	@Override
-	public void teleopInit() {}
+	public void teleopInit() {
+
+    leftMotors.resetEncoder();
+    rightMotors.resetEncoder();
+
+  }
 
   @Override
   public void teleopPeriodic() {
 
+    /*
     double limelightHorizontalAngle = limelight.getHorizontalAngle();
     
     double distance = limelight.getDistance();
@@ -137,6 +148,9 @@ public class Robot extends TimedRobot {
       drive.curvature(xbox.getAxis(1), xbox.getAxis(4));
 
     }
+    */
+
+    drive.curvature(-xbox.getAxis(1), xbox.getAxis(4));
 
   }
   

@@ -26,6 +26,10 @@ public class SparkMax implements PIDMotor {
 
         encoder.setPosition(0);
 
+        pidController.setP(0);
+        pidController.setI(0);
+        pidController.setD(0);
+
         PIDLoop = new PIDLoop(0, 0, 0);
         
     }

@@ -35,6 +35,16 @@ public class PIDMotorGroup extends MotorGroup {
 
     }    
 
+    public void setPID(double p, double i, double d) {
+
+        for(int j = 0; j < motors.length; j++) {
+
+            PIDMotors[j].setPID(p, i, d);
+
+        }
+
+    }
+
     public void setPosition(double rotations, double minSpeed, double maxSpeed) {
 
         for(int j = 0; j < motors.length; j++) {

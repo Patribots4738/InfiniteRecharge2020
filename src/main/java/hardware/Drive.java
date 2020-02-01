@@ -85,11 +85,11 @@ public class Drive {
 
         if(throttle == 0) {
 
-            linearArcade(throttle, turning);
+            bananaArcade(throttle, turning);
             
         } else {
 
-            double speedDifference = Math.atan(turning * Math.PI) * throttle;
+            double speedDifference = -Math.atan(turning * Math.PI) * throttle;
 
             double leftMotorInput = throttle - speedDifference;
             double rightMotorInput = throttle + speedDifference;
