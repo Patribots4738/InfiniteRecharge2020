@@ -28,19 +28,27 @@ public class Talon implements PIDMotor{
     }
 
     public void setSensorPhase(boolean phase){
+
         motor.setSensorPhase(phase);
+
     }
 
     public void setP(double P) {
+
         motor.config_kP(0, P, 20);
+
     }
 
     public void setI(double I) {
+
         motor.config_kI(0, I, 20);
+
     }
 
     public void setD(double D) {
+
         motor.config_kD(0, D, 20);
+        
     }
 
     public void setPID(double P, double I, double D) {

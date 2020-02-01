@@ -17,6 +17,7 @@ public class Falcon implements PIDMotor{
 
         motor = new TalonFX(canID);
 
+        //this is a black box, dont touch, get Zach (unless I'm gone, then google, I'm sorry for the horrors that await you)
         motor.configSelectedFeedbackSensor(FeedbackDevice.IntegratedSensor);
         motor.configAllowableClosedloopError(0, 0, 20);
         motor.config_kF(0, 0, 20);

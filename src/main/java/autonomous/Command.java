@@ -12,7 +12,7 @@ public class Command {
     
     // Input for constructor is in inches for moving, decimal percent rotations if rotating
     // however, it is internally stored in rotations of the drive motor's output shaft
-    private double value;    
+    private double value;
 
     // decimal percent of the max motor speed
     private double speed;

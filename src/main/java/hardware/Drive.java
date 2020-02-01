@@ -38,6 +38,19 @@ public class Drive {
 
     }
 
+    public void bananaArcade(double throttle, double turning) {
+
+        double adjustedThrottle = Calc.bananaCurve(throttle);
+        double adjustedTurning = Calc.bananaCurve(turning);
+
+        double leftMotorInput = adjustedThrottle + adjustedTurning;
+        double rightMotorInput = -(adjustedThrottle - adjustedTurning);
+
+        leftMotors.setSpeed(leftMotorInput);
+        rightMotors.setSpeed(rightMotorInput);
+
+    }
+
     public void linearTank(double leftStick, double rightStick) {
 
         double leftMotorInput = leftStick;
@@ -52,6 +65,16 @@ public class Drive {
 
         double leftMotorInput = leftStick * Math.abs(leftStick);
         double rightMotorInput = -(rightStick * Math.abs(rightStick));
+
+        leftMotors.setSpeed(leftMotorInput);
+        rightMotors.setSpeed(rightMotorInput);
+
+    }
+
+    public void bananaTank(double leftStick, double rightStick) {
+
+        double leftMotorInput = Calc.bananaCurve(leftStick);
+        double rightMotorInput = -Calc.bananaCurve(rightStick);
 
         leftMotors.setSpeed(leftMotorInput);
         rightMotors.setSpeed(rightMotorInput);
