@@ -17,6 +17,7 @@ public class SmashBoard {
 
     }
 
+    // you'll need to typecast the objects you get from this, but they won't be strange object types, just doubles, booleans and strings
     public Object getValue(String key) {
 
         return smashBoardTable.get(key);
