@@ -150,7 +150,29 @@ public class Robot extends TimedRobot {
     }
     */
 
-    drive.curvature(-xbox.getAxis(1), xbox.getAxis(4));
+    double throttle = -xbox.getAxis(1);
+
+    double speedCap = 0.55;
+
+    if(xbox.getToggle(XboxController.Buttons.Y)) {
+
+      throttle *= -1.0;
+
+    }
+ 
+    if (xbox.getToggle(XboxController.Buttons.A)) {
+
+      if(Math.abs(throttle) > speedCap) {
+
+        throttle = speedCap * (Math.abs(throttle) / throttle);
+
+      }
+
+    }
+
+    double throttleSign = (throttle < 0) ? -1 : 1;
+
+    drive.curvature(throttle, xbox.getAxis(4) * throttleSign);
 
   }
   
