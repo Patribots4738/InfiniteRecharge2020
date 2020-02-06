@@ -5,7 +5,7 @@ import autonomous.Command.CommandType;
 import edu.wpi.first.wpilibj.TimedRobot;
 
 import wrappers.*;
-import networktables.*;
+import networking.*;
 import hardware.*;
 
 public class Robot extends TimedRobot {

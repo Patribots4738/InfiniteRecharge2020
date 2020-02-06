@@ -1,6 +1,6 @@
 package wrappers;
 
-import networktables.*;
+import networking.*;
 import utils.*;
 
 public class Limelight {
