@@ -5,7 +5,7 @@ import utils.Calc;
 public class Command {
 
     public enum CommandType {
-        MOVE, ROTATE;
+        MOVE, ROTATE, SPLINE;
     }
 
     private CommandType type;
