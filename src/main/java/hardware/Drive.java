@@ -8,6 +8,8 @@ public class Drive {
     MotorGroup leftMotors;
     MotorGroup rightMotors;
 
+    private final double deadBand = 0.07;
+
     public Drive(MotorGroup leftMotors, MotorGroup rightMotors) {
 
         this.leftMotors = leftMotors;
@@ -18,7 +20,22 @@ public class Drive {
 
     }
 
+    private double deadBand(double value) {
+
+        if(Calc.isBetween(value, -deadBand, deadBand)) {
+
+            return 0;
+
+        }
+
+        return value;
+
+    }
+
     public void linearArcade(double throttle, double turning) {
+
+        throttle = deadBand(throttle);
+        turning = deadBand(turning);
 
         double leftMotorInput = (throttle + turning);
         double rightMotorInput = -(throttle - turning);
@@ -30,6 +47,9 @@ public class Drive {
 
     public void parabolicArcade(double throttle, double turning) {
 
+        throttle = deadBand(throttle);
+        turning = deadBand(turning);
+
         double leftMotorInput = (throttle + turning) * Math.abs((throttle + turning));
         double rightMotorInput = (throttle - turning) * Math.abs((throttle - turning));
 
@@ -39,6 +59,9 @@ public class Drive {
     }
 
     public void bananaArcade(double throttle, double turning) {
+
+        throttle = deadBand(throttle);
+        turning = deadBand(turning);
 
         double adjustedThrottle = Calc.bananaCurve(throttle);
         double adjustedTurning = Calc.bananaCurve(turning);
@@ -53,6 +76,9 @@ public class Drive {
 
     public void linearTank(double leftStick, double rightStick) {
 
+        leftStick = deadBand(leftStick);
+        rightStick = deadBand(rightStick);
+
         double leftMotorInput = leftStick;
         double rightMotorInput = -rightStick;
 
@@ -62,6 +88,9 @@ public class Drive {
     }
 
     public void parabolicTank(double leftStick, double rightStick) {
+
+        leftStick = deadBand(leftStick);
+        rightStick = deadBand(rightStick);
 
         double leftMotorInput = leftStick * Math.abs(leftStick);
         double rightMotorInput = -(rightStick * Math.abs(rightStick));
@@ -73,6 +102,9 @@ public class Drive {
 
     public void bananaTank(double leftStick, double rightStick) {
 
+        leftStick = deadBand(leftStick);
+        rightStick = deadBand(rightStick);
+
         double leftMotorInput = Calc.bananaCurve(leftStick);
         double rightMotorInput = -Calc.bananaCurve(rightStick);
 
@@ -82,6 +114,9 @@ public class Drive {
     }
 
     public void curvature(double throttle, double turning) {
+
+        throttle = deadBand(throttle);
+        turning = deadBand(turning);
 
         if(throttle == 0) {
 

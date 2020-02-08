@@ -1,4 +1,4 @@
-package networktables;
+package networking;
 
 import edu.wpi.first.networktables.NetworkTableInstance;
 
