@@ -22,14 +22,16 @@ public final class Constants {
     // the amount of encoder clicks per rotation in a Falcon 500 (Talon FX) encoder
     public static final int FALCON_CLICKS = 2048;
 
-    public static final double DRIVE_WHEEL_DIAMETER = 3.9375;
+    public static final double DRIVE_WHEEL_DIAMETER = 6.0;
 
     public static final double DRIVE_WHEEL_CIRCUMFRENCE = Math.PI * DRIVE_WHEEL_DIAMETER;
 
-    public static final double DRIVE_GEAR_RATIO = ((1 / 7.441) / 1.5) * 2;
+    public static final double DRIVE_GEAR_RATIO = 1.0 / 4.4;
+
+    public static final double DRIVE_GEAR_RATIO2 = 1.0 / 12.86;
 
     // this distance between the centers of the wheels on opposite sides of the robot, in inches
-    public static final double ROBOT_WHEEL_SPACING = 29.75;
+    public static final double ROBOT_WHEEL_SPACING = 23.65;
 
     // the circumfrence of the circle formed by rotating the robot a full rotation in place
     public static final double ROBOT_WHEEL_CIRCLE_CIRCUMFRENCE = Math.PI * ROBOT_WHEEL_SPACING;
