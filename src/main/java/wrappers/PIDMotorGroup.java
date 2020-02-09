@@ -2,19 +2,29 @@ package wrappers;
 
 import interfaces.*;
 
-public class PIDMotorGroup extends MotorGroup {
+public class PIDMotorGroup extends MotorGroup implements PIDMotor {
 
     PIDMotor[] PIDMotors;
 
     public PIDMotorGroup(PIDMotor... motors) {
+
         super(motors);
         this.PIDMotors = motors;
+
+    }
+
+    public PIDMotor[] getPidMotors() {
+
+        return this.PIDMotors;
+
     }
 
     public void setP(double p) {
 
-        for(int j = 0; j < motors.length; j++) {
-            PIDMotors[j].setP(p);
+        for(int i = 0; i < motors.length; i++) {
+
+            PIDMotors[i].setP(p);
+
         }
 
     }
@@ -22,15 +32,19 @@ public class PIDMotorGroup extends MotorGroup {
     public void setI(double i) {
 
         for(int j = 0; j < motors.length; j++) {
+
             PIDMotors[j].setI(i);
+
         }
 
     }
 
     public void setD(double d) {
 
-        for(int j = 0; j < motors.length; j++) {
-            PIDMotors[j].setD(d);
+        for(int i = 0; i < motors.length; i++) {
+
+            PIDMotors[i].setD(d);
+
         }
 
     }    
@@ -47,9 +61,9 @@ public class PIDMotorGroup extends MotorGroup {
 
     public void setPosition(double rotations, double minSpeed, double maxSpeed) {
 
-        for(int j = 0; j < motors.length; j++) {
+        for(int i = 0; i < motors.length; i++) {
 
-            PIDMotors[j].setPosition(rotations, minSpeed, maxSpeed);
+            PIDMotors[i].setPosition(rotations, minSpeed, maxSpeed);
 
         }
         
@@ -59,9 +73,9 @@ public class PIDMotorGroup extends MotorGroup {
 
         double positionSum = 0.0;
 
-        for(int j = 0; j < motors.length; j++) {
+        for(int i = 0; i < motors.length; i++) {
 
-            positionSum += PIDMotors[j].getPosition();
+            positionSum += PIDMotors[i].getPosition();
 
         }
 
@@ -73,9 +87,9 @@ public class PIDMotorGroup extends MotorGroup {
 
         double speedSum = 0.0;
 
-        for(int j = 0; j < motors.length; j++) {
+        for(int i = 0; i < motors.length; i++) {
 
-            speedSum += PIDMotors[j].getSpeed();
+            speedSum += PIDMotors[i].getSpeed();
 
         }
 
@@ -85,9 +99,9 @@ public class PIDMotorGroup extends MotorGroup {
 
     public void resetEncoder() {
 
-        for(int j = 0; j < motors.length; j++) {
+        for(int i = 0; i < motors.length; i++) {
 
-            PIDMotors[j].resetEncoder();
+            PIDMotors[i].resetEncoder();
 
         }
 
