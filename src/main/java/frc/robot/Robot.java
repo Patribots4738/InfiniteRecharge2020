@@ -2,7 +2,6 @@ package frc.robot;
 
 import edu.wpi.first.wpilibj.TimedRobot;
 
-
 import autonomous.*;
 import hardware.*;
 import interfaces.*;
@@ -60,15 +59,7 @@ public class Robot extends TimedRobot {
 
   // VERY NO TOUCH
   @Override
-  public void disabledPeriodic() {
-
-    if(xbox.getButtonDown(XboxController.Buttons.A)) {
-
-      drive.bananaArcade(-xbox.getAxis(XboxController.Axes.LeftY), xbox.getAxis(XboxController.Axes.RightX));
-
-    }
-
-  }
+  public void disabledPeriodic() {}
   
 	@Override
 	public void teleopInit() {}
