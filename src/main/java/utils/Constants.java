@@ -26,8 +26,12 @@ public final class Constants {
 
     public static final double DRIVE_WHEEL_CIRCUMFRENCE = Math.PI * DRIVE_WHEEL_DIAMETER;
 
+    // this robot has two gear ratios, one for high speed, one for low
+
+    // this is for high speed
     public static final double DRIVE_GEAR_RATIO = 1.0 / 4.4;
 
+    // this is for low speed
     public static final double DRIVE_GEAR_RATIO2 = 1.0 / 12.86;
 
     // this distance between the centers of the wheels on opposite sides of the robot, in inches
