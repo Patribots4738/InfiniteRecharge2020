@@ -16,6 +16,9 @@ public class Robot extends TimedRobot {
   PIDMotorGroup leftMotors;
   PIDMotorGroup rightMotors;
 
+  DoubleSolenoid leftShifter;
+  DoubleSolenoid rightShifter;
+
   Drive drive;
   AutoDrive auto;
 
@@ -25,6 +28,9 @@ public class Robot extends TimedRobot {
 	public void robotInit() {
 
     path = new AutoPath("/home/lvuser/deploy/autopaths/Defualt.json");
+
+    leftShifter = new DoubleSolenoid(0,1);
+    rightShifter = new DoubleSolenoid(2,3);
 
     leftMotors = new PIDMotorGroup(new Falcon(1), new Falcon(2));
     rightMotors = new PIDMotorGroup(new Falcon(3), new Falcon(4));
@@ -62,10 +68,21 @@ public class Robot extends TimedRobot {
   public void disabledPeriodic() {}
   
 	@Override
-	public void teleopInit() {}
+	public void teleopInit() {
+
+    leftShifter.activateChannel(true);
+    rightShifter.activateChannel(true);
+
+  }
 
   @Override
   public void teleopPeriodic() {
+
+    boolean toggle = xbox.getToggle(XboxController.Buttons.A);
+
+    rightShifter.activateChannel(toggle);
+    leftShifter.activateChannel(toggle);
+
 
     drive.bananaArcade(-xbox.getAxis(XboxController.Axes.LeftY), xbox.getAxis(XboxController.Axes.RightX));
 
