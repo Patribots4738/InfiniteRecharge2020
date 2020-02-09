@@ -48,6 +48,10 @@ public class XboxController extends Gamepad {
 		return this.getAxis(3);
 	}
 
+	public double getAxis(Axes axis) {
+		return this.getAxis(axis.ordinal());
+	}
+
 	public boolean getButton(Buttons button) {
 		return this.getButton(button.ordinal());
 	}
@@ -75,4 +79,9 @@ public class XboxController extends Gamepad {
 	public enum Buttons {
 		A, B, X, Y, L, R, Select, Start, L3, R3
 	}
+	
+	public enum Axes {
+		LeftX, LeftY, LeftTrigger, RightTrigger, RightX, RightY;
+	}
+
 }

@@ -53,14 +53,10 @@ public class AutoDrive {
 
 	}
 
-	// appends an array of commands to the end of the commandQueue arraylist
-	public void addCommands(Command... commands) {
-		
-		for (int i = 0; i < commands.length; i++) {
+	// adds the path for the robot to follow, should be called before executing any commands
+	public void addPath(AutoPath path) {
 
-			commandQueue.add(commands[i]); 
-			
-		}
+		commandQueue = path.getCommandQueue();
 
 	}
 

@@ -1,7 +1,6 @@
 package frc.robot;
 
 import autonomous.*;
-import autonomous.Command.CommandType;
 import edu.wpi.first.wpilibj.TimedRobot;
 
 import wrappers.*;
@@ -10,33 +9,57 @@ import hardware.*;
 
 public class Robot extends TimedRobot {
 
-  DriverCamera cam;
+  AutoPath path;
+
+  PIDMotorGroup leftMotors;
+  PIDMotorGroup rightMotors;
+
+  Drive drive;
+  AutoDrive auto;
+
+  XboxController xbox;
 
 	@Override
 	public void robotInit() {
 
-    cam = new DriverCamera();
+    path = new AutoPath("/home/lvuser/deploy/autopaths/square.json");
+
+    leftMotors = new PIDMotorGroup(new Falcon(1), new Falcon(2));
+    rightMotors = new PIDMotorGroup(new Falcon(3), new Falcon(4));
+
+    drive = new Drive(leftMotors, rightMotors);
+    auto = new AutoDrive(leftMotors, rightMotors);
+
+    xbox = new XboxController(0);
 
 	}
 
 	@Override
-  public void robotPeriodic() {
+  public void robotPeriodic() {}
 
-    cam.retryConstructor();
-    
+	@Override
+	public void autonomousInit() {
+
+    auto.addPath(path);
+
   }
 
 	@Override
-	public void autonomousInit() {}
+  public void autonomousPeriodic() {
 
-	@Override
-  public void autonomousPeriodic() {}
+    auto.executeQueue();
+
+  }
   
 	@Override
 	public void teleopInit() {}
 
   @Override
-  public void teleopPeriodic() {}
+  public void teleopPeriodic() {
+
+    drive.bananaArcade(-xbox.getAxis(XboxController.Axes.LeftY), xbox.getAxis(XboxController.Axes.RightX));
+
+  }
   
   @Override
   public void testPeriodic() {}
