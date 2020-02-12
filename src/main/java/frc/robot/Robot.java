@@ -38,6 +38,7 @@ public class Robot extends TimedRobot {
     drive = new Drive(leftMotors, rightMotors);
     auto = new AutoDrive(leftMotors, rightMotors);
 
+
     xbox = new XboxController(0);
 
 	}
@@ -48,7 +49,9 @@ public class Robot extends TimedRobot {
 	@Override
 	public void autonomousInit() {
 
-    auto.addPath(path);
+    //auto.addPath(path);
+
+    auto.addCommands(new Command(Command.CommandType.MOVE, 18, 0.25));
 
   }
 

@@ -60,6 +60,16 @@ public class AutoDrive {
 
 	}
 
+	public void addCommands(Command... commands) {
+
+		for(int i = 0; i < commands.length; i++) {
+
+			commandQueue.add(commands[i]);
+
+		}
+
+	}
+
 	// returns a boolean detailing if the command at the supplied index could be removed
 	private boolean removeCommand(int index) {
 
