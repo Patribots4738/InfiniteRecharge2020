@@ -1,7 +1,5 @@
 package lowleveltools;
 
-import java.util.InputMismatchException;
-
 import edu.wpi.first.wpilibj.AnalogInput;
 import edu.wpi.first.wpilibj.AnalogOutput;
 import utils.MovingAverage;

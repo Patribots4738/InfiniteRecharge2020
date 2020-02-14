@@ -2,8 +2,6 @@ package utils;
 
 public class Calc {
 
-    private boolean shifted = false;
-
     // returns the y coordinate of @param x on the banana curve (graph on desmos: https://www.desmos.com/calculator/xxgjmyatz5)
     public static double bananaCurve(double x) {
 
