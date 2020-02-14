@@ -8,7 +8,7 @@ public class Drive {
     MotorGroup leftMotors;
     MotorGroup rightMotors;
 
-    private final double deadBand = 0.01;
+    private final double deadBand = 0.07;
 
     public Drive(MotorGroup leftMotors, MotorGroup rightMotors) {
 
@@ -113,6 +113,28 @@ public class Drive {
 
     }
 
+    public void smartTank(double leftStick, double rightStick) {
+
+        leftStick = deadBand(leftStick);
+        rightStick = deadBand(rightStick);
+
+        double leftMotorInput = leftStick;
+        double rightMotorInput = -rightStick;
+
+        if(Math.abs((Math.abs(leftStick) - Math.abs(rightStick))) < 0.07) {
+
+            double avg = ((Math.abs(leftStick) + Math.abs(rightStick)) / 2) * (Math.abs(leftStick) / leftStick);
+
+            leftMotorInput = avg;
+            rightMotorInput = -avg;
+
+        }
+
+        leftMotors.setSpeed(leftMotorInput);
+        rightMotors.setSpeed(rightMotorInput);
+
+    }
+
     public void curvature(double throttle, double turning) {
 
         throttle = deadBand(throttle);
@@ -124,7 +146,7 @@ public class Drive {
             
         } else {
 
-            double speedDifference = -Math.atan(turning * Math.PI) * throttle;
+            double speedDifference = (-Math.atan(turning * Math.PI) * throttle) * (Math.abs(throttle)/throttle);
 
             double leftMotorInput = throttle - speedDifference;
             double rightMotorInput = throttle + speedDifference;

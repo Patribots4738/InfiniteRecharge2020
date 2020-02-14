@@ -1,45 +1,45 @@
 package wrappers;
 
-import edu.wpi.first.wpilibj.DigitalInput;
+import lowleveltools.DigitalPort;
 
 public class Limitswitch {
 
-    DigitalInput limitswitch;
     TogglableButton switchButton;
+
+    DigitalPort DIOPort;
 
     public Limitswitch(int port) {
 
-        limitswitch = new DigitalInput(port);
-
         switchButton = new TogglableButton();
 
+        DIOPort = new DigitalPort(port);
+
     }
 
-    // returns the raw on/off from the limit switch
+    // get the raw value from the digital input/output port
     public boolean getState() {
 
-        return limitswitch.get();
+        return DIOPort.getState();
 
     }
 
-    // uses the togglableButton class to return true when the button is pressed
-    public boolean wasPressed() {
+    // these next three functions just access the base toggleableButton
+    // features with the state of the swtich as the boolean
+    public boolean getToggle() {
+
+        return switchButton.toggle(getState());
+
+    }
+
+    public boolean getPressed() {
 
         return switchButton.wasPressed(getState());
 
     }
 
-    // uses the togglableButton class to return true when the button is released
-    public boolean wasReleased() {
+    public boolean getReleased() {
 
         return switchButton.wasReleased(getState());
-
-    }
-
-    // uses the togglableButton class to get the togglestate
-    public boolean getToggle() {
-
-        return switchButton.toggle(getState());
 
     }
 

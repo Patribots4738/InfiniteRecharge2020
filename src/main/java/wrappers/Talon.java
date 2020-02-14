@@ -2,6 +2,7 @@ package wrappers;
 
 import interfaces.*;
 import utils.Constants;
+import utils.PIDLoop;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
@@ -10,6 +11,8 @@ import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 public class Talon implements PIDMotor{
 
     private TalonSRX motor;
+
+    private PIDLoop PIDLoop;
 
     public Talon(int canID){
 
@@ -25,6 +28,8 @@ public class Talon implements PIDMotor{
         motor.configPeakOutputReverse(-1, 20);
         motor.setSensorPhase(true);
 
+        PIDLoop = new PIDLoop(0, 0, 0);
+
     }
 
     public void setSensorPhase(boolean phase){
@@ -36,18 +41,21 @@ public class Talon implements PIDMotor{
     public void setP(double P) {
 
         motor.config_kP(0, P, 20);
+        PIDLoop.setP(P);
 
     }
 
     public void setI(double I) {
 
         motor.config_kI(0, I, 20);
+        PIDLoop.setI(I);
 
     }
 
     public void setD(double D) {
 
         motor.config_kD(0, D, 20);
+        PIDLoop.setD(D);
         
     }
 
@@ -61,7 +69,12 @@ public class Talon implements PIDMotor{
 
     public void setSpeed(double speed){
 
-        motor.set(ControlMode.PercentOutput, speed);
+        motor.configPeakOutputForward(1.0);
+        motor.configPeakOutputReverse(-1.0);
+    
+        double currentCommand = PIDLoop.getCommand(speed, getSpeed());
+
+        motor.set(ControlMode.PercentOutput, currentCommand);
         
     }
 

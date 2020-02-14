@@ -63,9 +63,12 @@ public class Robot extends TimedRobot {
 	@Override
   public void robotPeriodic() {}
 
-
 	@Override
 	public void autonomousInit() {
+
+    Nonstants.setShifted(true);
+
+    gearShifter.activateChannel(Nonstants.getShifted());
 
     // config motors for positional control
     leftMotors.setPID(1, 0, 0.1);
@@ -75,7 +78,7 @@ public class Robot extends TimedRobot {
 
     auto.addPath(path);
 
-  }
+  } 
 
 	@Override
   public void autonomousPeriodic() {
@@ -107,11 +110,33 @@ public class Robot extends TimedRobot {
   @Override
   public void teleopPeriodic() {
 
+    boolean inverted = xbox.getToggle(XboxController.Buttons.Y);
+
+    double multiplier = (inverted) ? -1.0 : 1.0;
+
+    //multiplier *= (Nonstants.getShifted()) ? 1.0 : 0.65;
+
     Nonstants.setShifted(!xbox.getToggle(XboxController.Buttons.A));
 
     gearShifter.activateChannel(Nonstants.getShifted());
 
-    drive.bananaArcade(-xbox.getAxis(XboxController.Axes.LeftY), xbox.getAxis(XboxController.Axes.RightX));
+    String modeString = "Fast: " + !Nonstants.getShifted() + " Mode: ";
+
+    if(xbox.getToggle(XboxController.Buttons.X)) {
+
+      modeString += "Banana";
+      drive.bananaArcade(-xbox.getAxis(XboxController.Axes.LeftY) * multiplier, xbox.getAxis(XboxController.Axes.RightX));
+
+    } else {
+
+      modeString += "Curvature";
+      drive.curvature(-xbox.getAxis(XboxController.Axes.LeftY) * multiplier, xbox.getAxis(XboxController.Axes.RightX));      
+
+    }
+
+    modeString += " Inverted: " + inverted;
+
+    System.out.println(modeString);
 
   }
   

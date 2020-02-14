@@ -55,13 +55,25 @@ public class AutoDrive {
 
 	}
 
-	// adds the path for the robot to follow, should be called before executing any commands
-	public void addPath(AutoPath path) {
+	// sets the path for the robot to follow, should be called before executing any commands
+	public void setPath(AutoPath path) {
 
 		commandQueue = path.getCommandQueue();
 
 	}
 
+	// adds the commands of the path to the current ones
+	public void addPath(AutoPath path) {
+
+		for(int i = 0; i < path.getCommandQueue().size(); i++) {
+
+			commandQueue.add(path.getCommandQueue().get(i));
+
+		}
+
+	}
+
+	// add commands to the command queue, in order
 	public void addCommands(Command... commands) {
 
 		for(int i = 0; i < commands.length; i++) {
@@ -121,7 +133,7 @@ public class AutoDrive {
 	public void executeQueue() {
 
 		// checks if there aren't any commands to save cpu cycles
-		if (commandQueue.size() == 0) {
+		if (queueIsEmpty()) {
 
 			running = false;
 			return;

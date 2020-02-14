@@ -69,6 +69,9 @@ public class Falcon implements PIDMotor{
 
     public void setSpeed(double speed) {
 
+        motor.configPeakOutputForward(1.0);
+        motor.configPeakOutputReverse(-1.0);
+    
         double currentCommand = PIDLoop.getCommand(speed, getSpeed());
 
         motor.set(ControlMode.PercentOutput, currentCommand);
