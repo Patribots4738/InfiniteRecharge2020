@@ -107,32 +107,15 @@ public class Robot extends TimedRobot {
   public void teleopPeriodic() {
 
     boolean inverted = xbox.getToggle(XboxController.Buttons.Y);
-
     double multiplier = (inverted) ? -1.0 : 1.0;
 
-    //multiplier *= (Nonstants.getShifted()) ? 1.0 : 0.65;
-
     Nonstants.setShifted(!xbox.getToggle(XboxController.Buttons.A));
-
+    
     gearShifter.activateChannel(Nonstants.getShifted());
 
-    String modeString = "Fast: " + !Nonstants.getShifted() + " Mode: ";
+    drive.curvature(-xbox.getAxis(XboxController.Axes.LeftY) * multiplier, xbox.getAxis(XboxController.Axes.RightX));
 
-    if(xbox.getToggle(XboxController.Buttons.X)) {
-
-      modeString += "Banana";
-      drive.bananaArcade(-xbox.getAxis(XboxController.Axes.LeftY) * multiplier, xbox.getAxis(XboxController.Axes.RightX));
-
-    } else {
-
-      modeString += "Curvature";
-      drive.curvature(-xbox.getAxis(XboxController.Axes.LeftY) * multiplier, xbox.getAxis(XboxController.Axes.RightX));      
-
-    }
-
-    modeString += " Inverted: " + inverted;
-
-    System.out.println(modeString);
+    System.out.println("Fast: " + !Nonstants.getShifted() + " Inverted: " + inverted);
 
   }
   
