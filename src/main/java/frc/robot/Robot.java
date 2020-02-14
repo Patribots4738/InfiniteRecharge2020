@@ -14,8 +14,6 @@ public class Robot extends TimedRobot {
 
   Compressor compressor;
 
-  boolean compressorState;
-
   PIDMotorGroup leftMotors;
   PIDMotorGroup rightMotors;
   
@@ -50,11 +48,9 @@ public class Robot extends TimedRobot {
 
     auto.reset();
 
-    compressorState = true;
-
     Nonstants.setShifted(true);
 
-    compressor.setClosedLoopControl(compressorState);
+    compressor.setClosedLoopControl(true);
 
     gearShifter.activateChannel(Nonstants.getShifted());
 
