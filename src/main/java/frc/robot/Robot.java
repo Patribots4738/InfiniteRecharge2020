@@ -1,6 +1,5 @@
 package frc.robot;
 
-import edu.wpi.first.wpilibj.Compressor;
 import edu.wpi.first.wpilibj.TimedRobot;
 
 import autonomous.*;
@@ -46,11 +45,11 @@ public class Robot extends TimedRobot {
     
     auto = new AutoDrive(leftMotors, rightMotors);
 
+    compressor.setState(true);
+
     auto.reset();
 
     Nonstants.setShifted(true);
-
-    compressor.setClosedLoopControl(true);
 
     gearShifter.activateChannel(Nonstants.getShifted());
 
@@ -110,7 +109,7 @@ public class Robot extends TimedRobot {
     double multiplier = (inverted) ? -1.0 : 1.0;
 
     Nonstants.setShifted(!xbox.getToggle(XboxController.Buttons.A));
-    
+
     gearShifter.activateChannel(Nonstants.getShifted());
 
     drive.curvature(-xbox.getAxis(XboxController.Axes.LeftY) * multiplier, xbox.getAxis(XboxController.Axes.RightX));
