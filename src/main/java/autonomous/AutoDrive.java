@@ -39,6 +39,8 @@ public class AutoDrive {
 			rightMotors.getPosition()
 		};
 
+		commandQueue = new ArrayList<Command>();
+
 	}
 
 	// resets the command queue and stops execution of currently running commands
@@ -152,6 +154,13 @@ public class AutoDrive {
 		if(leftError <= acceptableError && rightError <= acceptableError) {
 
 			removeCommand(0);
+
+			if(queueIsEmpty()) {
+
+				return;
+
+			}
+
 			executeCommand(commandQueue.get(0));
 
 			running = true;
@@ -160,5 +169,11 @@ public class AutoDrive {
 		}
 
 	}
+
+	private boolean queueIsEmpty() {
+
+		return commandQueue.size() == 0;
+
+	};
 
 } 

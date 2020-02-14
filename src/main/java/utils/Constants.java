@@ -5,13 +5,13 @@ public final class Constants {
     public static final boolean LOGGING = true;
 
     // in inches
-    public static final double TARGET_HEIGHT = 92;
+    public static final double TARGET_HEIGHT = 84.5;
 
     // in inches
-    public static final double LIMELIGHT_HEIGHT = 26.5;// 26;
+    public static final double LIMELIGHT_HEIGHT = 35;// 26;
 
     // in radians
-    public static final double LIMELIGHT_MOUNTING_ANGLE = Calc.degreesToRadians(16.462);
+    public static final double LIMELIGHT_MOUNTING_ANGLE = Calc.degreesToRadians(36);
 
     // the time, in seconds, of a single loop of the robot code
     public static final double LOOP_TIME = 0.02;
@@ -27,7 +27,6 @@ public final class Constants {
     public static final double DRIVE_WHEEL_CIRCUMFRENCE = Math.PI * DRIVE_WHEEL_DIAMETER;
 
     // this robot has two gear ratios, one for high speed, one for low
-
     // this is for high speed
     public static final double DRIVE_GEAR_RATIO = 1.0 / 4.4;
 
@@ -35,7 +34,7 @@ public final class Constants {
     public static final double DRIVE_GEAR_RATIO2 = 1.0 / 12.86;
 
     // this distance between the centers of the wheels on opposite sides of the robot, in inches
-    public static final double ROBOT_WHEEL_SPACING = 23.65;
+    public static final double ROBOT_WHEEL_SPACING = 23.9375;
 
     // the circumfrence of the circle formed by rotating the robot a full rotation in place
     public static final double ROBOT_WHEEL_CIRCLE_CIRCUMFRENCE = Math.PI * ROBOT_WHEEL_SPACING;
