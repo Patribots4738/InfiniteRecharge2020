@@ -94,6 +94,8 @@ public class Falcon implements PIDMotor{
 
     }
 
+    // in rotations of the output shaft
+    // (0.25 = quarter rotation, 1 = full rotation, 1.25 = 1 and a quarter rotations, etc)
     public double getPosition() {
 
         return motor.getSelectedSensorPosition() / ((double) Constants.FALCON_CLICKS);
