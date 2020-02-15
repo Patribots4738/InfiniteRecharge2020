@@ -41,7 +41,7 @@ public class Robot extends TimedRobot {
 
     xbox = new XboxController(0);
 
-    path = new AutoPath("/home/lvuser/deploy/autopaths/Test.json");
+    path = new AutoPath("/home/lvuser/deploy/autopaths/Hexagon.json");
     
     auto = new AutoDrive(leftMotors, rightMotors);
 
@@ -66,8 +66,8 @@ public class Robot extends TimedRobot {
     gearShifter.activateChannel(Nonstants.getShifted());
 
     // config motors for positional control
-    leftMotors.setPID(1, 0, 0.1);
-    rightMotors.setPID(1, 0, 0.1);
+    leftMotors.setPID(1.7, 0, 0.5);
+    rightMotors.setPID(1.7, 0, 0.5);
 
     auto.reset();
 
@@ -114,7 +114,7 @@ public class Robot extends TimedRobot {
 
     drive.curvature(-xbox.getAxis(XboxController.Axes.LeftY) * multiplier, xbox.getAxis(XboxController.Axes.RightX));
 
-    System.out.println("Fast: " + !Nonstants.getShifted() + " Inverted: " + inverted);
+    //System.out.println("Fast: " + !Nonstants.getShifted() + " Inverted: " + inverted);
 
   }
   

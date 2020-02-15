@@ -2,7 +2,7 @@ package utils;
 
 public final class Constants {
 
-    public static final boolean LOGGING = true;
+    public static final boolean LOGGING = false;
 
     // in inches
     public static final double TARGET_HEIGHT = 84.5;
@@ -22,8 +22,11 @@ public final class Constants {
     // the amount of encoder clicks per rotation in a Falcon 500 (Talon FX) encoder
     public static final int FALCON_CLICKS = 2048;
 
+    // the diameter of the drive wheels
+    // this should be 6.25, but the wheels wear over time
     public static final double DRIVE_WHEEL_DIAMETER = 6.0;
 
+    // the circumfrence of the drive wheels
     public static final double DRIVE_WHEEL_CIRCUMFRENCE = Math.PI * DRIVE_WHEEL_DIAMETER;
 
     // this robot has two gear ratios, one for high speed, one for low

@@ -30,7 +30,7 @@ public class AutoDrive {
 		this.leftMotors = leftMotors;
 		this.rightMotors = rightMotors;
 
-		acceptableError = 1.0;
+		acceptableError = 0.5;
 
 		running = false;
 
