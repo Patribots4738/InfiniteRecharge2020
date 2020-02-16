@@ -20,10 +20,26 @@ public class Robot extends TimedRobot {
 
   Drive drive;
   
-  XboxController xbox;
+  XboxController driver;
 
   AutoPath path;
   AutoDrive auto;
+
+
+  Shooter shooter;
+
+  Conveyor conveyor;
+
+  Limelight limelight;
+
+  Intake intake;
+
+  Elevator elevator;
+
+  ShooterController shooterControl;
+
+  XboxController operator;
+
 
 	@Override
 	public void robotInit() {
@@ -39,9 +55,9 @@ public class Robot extends TimedRobot {
 
     drive = new Drive(leftMotors, rightMotors);
 
-    xbox = new XboxController(0);
+    driver = new XboxController(0);
 
-    path = new AutoPath("/home/lvuser/deploy/autopaths/Hexagon.json");
+    path = new AutoPath("/home/lvuser/deploy/autopaths/Test.json");
     
     auto = new AutoDrive(leftMotors, rightMotors);
 
@@ -66,8 +82,8 @@ public class Robot extends TimedRobot {
     gearShifter.activateChannel(Nonstants.getShifted());
 
     // config motors for positional control
-    leftMotors.setPID(1.7, 0, 0.5);
-    rightMotors.setPID(1.7, 0, 0.5);
+    leftMotors.setPID(2, 0, 0);
+    rightMotors.setPID(2, 0, 0);
 
     auto.reset();
 
@@ -105,17 +121,61 @@ public class Robot extends TimedRobot {
   @Override
   public void teleopPeriodic() {
 
-    boolean inverted = xbox.getToggle(XboxController.Buttons.Y);
+    boolean inverted = driver.getToggle(XboxController.Buttons.L);
     double multiplier = (inverted) ? -1.0 : 1.0;
 
-    Nonstants.setShifted(!xbox.getToggle(XboxController.Buttons.A));
+    Nonstants.setShifted(!driver.getToggle(XboxController.Buttons.R));
 
     gearShifter.activateChannel(Nonstants.getShifted());
+    
+    drive.curvature(-driver.getAxis(XboxController.Axes.LeftY) * multiplier, driver.getAxis(XboxController.Axes.RightX));
 
-    drive.curvature(-xbox.getAxis(XboxController.Axes.LeftY) * multiplier, xbox.getAxis(XboxController.Axes.RightX));
 
-    //System.out.println("Fast: " + !Nonstants.getShifted() + " Inverted: " + inverted);
 
+    // skeleton of code for using the shooter
+    /*
+    boolean aiming = driver.getButton(XboxController.Buttons.A);
+
+    elevator.setElevator(operator.getAxis(XboxController.Axes.LeftY));
+    elevator.setLock(operator.getToggle(XboxController.Buttons.Select));
+
+    if(!aiming) {
+
+      drive.curvature(-driver.getAxis(XboxController.Axes.LeftY) * multiplier, driver.getAxis(XboxController.Axes.RightX));
+
+      intake.setDown(operator.getButton(XboxController.Buttons.R));
+
+      if(operator.getAxis(XboxController.Axes.RightTrigger) < 0.2) {
+
+        intake.setSuck(-operator.getAxis(XboxController.Axes.LeftTrigger));
+        conveyor.setConveyor(-operator.getAxis(XboxController.Axes.LeftTrigger));
+
+      } else {
+
+        intake.setSuck(operator.getAxis(XboxController.Axes.RightTrigger));
+        conveyor.setConveyor(operator.getAxis(XboxController.Axes.RightTrigger));
+
+      }
+
+      shooterControl.stop();
+
+    } else {
+
+      shooterControl.aim();
+
+      if(Nonstants.getAligned()) {
+
+        if(operator.getButton(XboxController.Buttons.A)) {
+
+          shooterControl.fire();
+
+        }
+
+      }
+
+    }
+    */
+    
   }
   
   @Override

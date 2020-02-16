@@ -24,7 +24,7 @@ public final class Constants {
 
     // the diameter of the drive wheels
     // this should be 6.25, but the wheels wear over time
-    public static final double DRIVE_WHEEL_DIAMETER = 6.0;
+    public static final double DRIVE_WHEEL_DIAMETER = 6.21875;
 
     // the circumfrence of the drive wheels
     public static final double DRIVE_WHEEL_CIRCUMFRENCE = Math.PI * DRIVE_WHEEL_DIAMETER;

@@ -102,7 +102,7 @@ public class XboxController extends Gamepad {
 
 	public enum Buttons {
 
-		A, B, X, Y, L, R, Select, Start, L3, R3
+		A, B, X, Y, L, R, Select, Start, LJ, RJ
 
 	}
 	

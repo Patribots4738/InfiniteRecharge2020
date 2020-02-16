@@ -8,8 +8,6 @@ public class Intake {
     Motor sucker;
 
     private final double gearRatio = 24.0 / 16.0;
-    
-    private final double suckSpeed = 0.35;
 
     private double[] PID = {1, 0, 0};
 
@@ -23,17 +21,9 @@ public class Intake {
 
     }
 
-    public void setSuck(boolean sucking) {
+    public void setSuck(double suckRate) {
 
-        if (sucking) {
-
-            sucker.setSpeed(suckSpeed);
-
-        } else {
-
-            sucker.setSpeed(0);
-
-        }
+        sucker.setSpeed(suckRate);
 
     }
 
