@@ -25,7 +25,7 @@ public class Robot extends TimedRobot {
   AutoPath path;
   AutoDrive auto;
 
-
+  /*
   Shooter shooter;
 
   Conveyor conveyor;
@@ -39,7 +39,7 @@ public class Robot extends TimedRobot {
   ShooterController shooterControl;
 
   XboxController operator;
-
+  */
 
 	@Override
 	public void robotInit() {
