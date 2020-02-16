@@ -132,7 +132,7 @@ public class Robot extends TimedRobot {
 
 
 
-    // skeleton of code for using the shooter
+    // skeleton of code for full robot control
     /*
     boolean aiming = driver.getButton(XboxController.Buttons.A);
 
