@@ -47,7 +47,6 @@ public class NTTable {
         return subtables;
 
     }
-
     // gets the path of the NetworkTable
     public String getTablePath() {
 

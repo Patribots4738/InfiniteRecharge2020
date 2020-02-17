@@ -1,5 +1,7 @@
 package utils;
 
+import hardware.Drive;
+
 public class Calc {
 
     // returns the y coordinate of @param x on the banana curve (graph on desmos: https://www.desmos.com/calculator/xxgjmyatz5)
@@ -32,7 +34,7 @@ public class Calc {
     // converts linear distance to rotations of the drive motors
     public static double inchesToDrive(double inches) {
 
-        return ((inches) / Constants.DRIVE_WHEEL_CIRCUMFRENCE) / ((Nonstants.shifted) ? (Constants.DRIVE_GEAR_RATIO2) : (Constants.DRIVE_GEAR_RATIO));
+        return ((inches) / Constants.DRIVE_WHEEL_CIRCUMFRENCE) / ((Drive.shifted) ? (Constants.DRIVE_GEAR_RATIO2) : (Constants.DRIVE_GEAR_RATIO));
         
     }
 

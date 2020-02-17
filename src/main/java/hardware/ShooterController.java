@@ -1,6 +1,5 @@
 package hardware;
 
-import utils.Nonstants;
 import wrappers.Limelight;
 
 public class ShooterController {
@@ -18,9 +17,11 @@ public class ShooterController {
 
     private double minSpeed = 0.02 * maxSpeed;
 
-    private double converter = 1.0 / ((Nonstants.shifted) ? 100.0 : 500.0);
+    private double converter = 1.0 / ((Shooter.readyToFire) ? 100.0 : 500.0);
 
     private double acceptableAngleError = 0.5;
+
+    public static boolean aligned = false;
 
     public ShooterController(Conveyor conveyor, Shooter shooter, Limelight limelight, Drive drive) {
 
@@ -48,9 +49,9 @@ public class ShooterController {
 
         shooter.setShooterSpeeds(limelight.getDistance());
 
-        conveyor.setConveyor(Nonstants.readyToFire);
+        conveyor.setConveyor(Shooter.readyToFire);
 
-        shooter.setFeeders(Nonstants.readyToFire);
+        shooter.setFeeders(Shooter.readyToFire);
 
     }
 
@@ -61,7 +62,7 @@ public class ShooterController {
 
         double angle = limelight.getHorizontalAngle();
 
-        Nonstants.aligned = Math.abs(angle) <= acceptableAngleError;
+        aligned = Math.abs(angle) <= acceptableAngleError;
 
         double speed = ((angle * converter) * maxSpeed) + minSpeed;
 

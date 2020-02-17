@@ -13,6 +13,8 @@ public class Shooter {
 
     SingleSolenoid blocker;
 
+    public static boolean readyToFire = false;
+
     private double feedRate = 0.5;
 
     // in percent
@@ -47,7 +49,7 @@ public class Shooter {
         topWheel.setSpeed(speeds[0]);
         bottomWheel.setSpeed(speeds[1]);
 
-        Nonstants.readyToFire = Calc.isBetween(topWheel.getSpeed(), speeds[0] * (1.0 - acceptableSpeedError), speeds[0] * (1 + acceptableSpeedError)) &&
+        readyToFire = Calc.isBetween(topWheel.getSpeed(), speeds[0] * (1.0 - acceptableSpeedError), speeds[0] * (1 + acceptableSpeedError)) &&
                                 (Calc.isBetween(bottomWheel.getSpeed(), speeds[1] * (1.0 - acceptableSpeedError), speeds[1] * (1 + acceptableSpeedError)));
 
         

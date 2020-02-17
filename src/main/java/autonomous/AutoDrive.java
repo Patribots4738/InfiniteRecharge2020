@@ -47,10 +47,9 @@ public class AutoDrive {
 	public void reset() {
 
 		commandQueue = new ArrayList<Command>();
-		completePositions[0] = 0;
-		completePositions[1] = 0;
 		leftMotors.resetEncoder();
 		rightMotors.resetEncoder();
+		completePositions = new double[] { 0, 0 };
 		running = false;
 
 	}

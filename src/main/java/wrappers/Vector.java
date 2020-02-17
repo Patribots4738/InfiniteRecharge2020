@@ -3,7 +3,7 @@ package wrappers;
 public class Vector {
 
 	public double x, y, z;
-	private boolean _isPolar = false; // Do not change this!!!
+	private boolean _isPolar = false; // Do not change this unless you know what you are doing
 
 	public Vector(double x, double y) {
 		this(x, y, 0);

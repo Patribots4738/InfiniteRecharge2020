@@ -5,6 +5,8 @@ import wrappers.*;
 
 public class Drive {
 
+    public static boolean shifted = true;
+
     MotorGroup leftMotors;
     MotorGroup rightMotors;
 

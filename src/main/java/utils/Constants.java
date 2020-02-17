@@ -1,5 +1,7 @@
 package utils;
 
+import networking.*;
+
 public final class Constants {
 
     public static final boolean LOGGING = false;
@@ -43,6 +45,8 @@ public final class Constants {
     public static final double ROBOT_WHEEL_CIRCLE_CIRCUMFRENCE = Math.PI * ROBOT_WHEEL_SPACING;
 
     public static final String[] COLORS = {"Yellow","Red","Green","Blue"};
+
+    public static final NTTable SMASHBOARD = new NTTable("/SmartDashboard");
 
     // Numeric values for colors are in the RGB color system
     private static final double[][] COLOR_AVERAGES = {

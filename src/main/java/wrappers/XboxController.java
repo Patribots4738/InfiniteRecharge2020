@@ -28,6 +28,18 @@ public class XboxController extends Gamepad {
 	9: right joystick
 	*/
 
+	public enum Buttons {
+
+		A, B, X, Y, L, R, Select, Start, LJ, RJ
+
+	}
+
+	public enum Axes {
+
+		LeftX, LeftY, LeftTrigger, RightTrigger, RightX, RightY;
+
+	}
+
 	public XboxController(int port) {
 
 		super(port);
@@ -36,13 +48,13 @@ public class XboxController extends Gamepad {
 
 	public Vector getLeftStick() {
 
-		return new Vector(this.getAxis(0), -this.getAxis(1));//this is inverted because for some reason full foward is -1
+		return new Vector(this.getAxis(0), -this.getAxis(1)); //this is inverted because for some reason full foward is -1
 
 	}
 
 	public Vector getRightStick() {
 
-		return new Vector(this.getAxis(4), -this.getAxis(5));//this is inverted because for some reason full foward is -1
+		return new Vector(this.getAxis(4), -this.getAxis(5)); //this is inverted because for some reason full foward is -1
 
 	}
 
@@ -97,18 +109,6 @@ public class XboxController extends Gamepad {
 	public void setRumble(RumbleType type, double rumble) {
 
 		this.setRumble(type, rumble);
-
-	}
-
-	public enum Buttons {
-
-		A, B, X, Y, L, R, Select, Start, LJ, RJ
-
-	}
-	
-	public enum Axes {
-
-		LeftX, LeftY, LeftTrigger, RightTrigger, RightX, RightY;
 
 	}
 
