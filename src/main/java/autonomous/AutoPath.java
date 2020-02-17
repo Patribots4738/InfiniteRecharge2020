@@ -1,6 +1,7 @@
 package autonomous;
 
 import java.io.*;
+import java.nio.file.*;
 import java.util.ArrayList;
 import java.util.Scanner;
 import java.util.regex.Matcher;
@@ -100,5 +101,32 @@ public class AutoPath {
         return commandQueue;
 
     }
+
+    public static String[] getAutoPaths() {
+
+        ArrayList<String> temp = new ArrayList<String>();
+
+        try {
+
+            Files.list(Paths.get("/home/lvuser/deploy/autopaths/")).forEach(path -> {
+
+                if (path.toString().contains("json")) {
+
+                    temp.add(path.toString());
+
+                }
+
+            });
+
+        } catch (Exception e) {
+
+            System.err.print("Files not found!");
+
+        }
+
+        return temp.toArray(new String[0]);
+
+    }
+
 
 }
