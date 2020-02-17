@@ -32,7 +32,7 @@ public class Calc {
     // converts linear distance to rotations of the drive motors
     public static double inchesToDrive(double inches) {
 
-        return ((inches) / Constants.DRIVE_WHEEL_CIRCUMFRENCE) / ((Nonstants.getShifted()) ? (Constants.DRIVE_GEAR_RATIO2) : (Constants.DRIVE_GEAR_RATIO));
+        return ((inches) / Constants.DRIVE_WHEEL_CIRCUMFRENCE) / ((Nonstants.shifted) ? (Constants.DRIVE_GEAR_RATIO2) : (Constants.DRIVE_GEAR_RATIO));
         
     }
 

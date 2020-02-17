@@ -47,8 +47,10 @@ public class Shooter {
         topWheel.setSpeed(speeds[0]);
         bottomWheel.setSpeed(speeds[1]);
 
-        Nonstants.setReadyToFire((Calc.isBetween(topWheel.getSpeed(), speeds[0] * (1.0 - acceptableSpeedError), speeds[0] * (1 + acceptableSpeedError))) &&
-                                (Calc.isBetween(bottomWheel.getSpeed(), speeds[1] * (1.0 - acceptableSpeedError), speeds[1] * (1 + acceptableSpeedError))));
+        Nonstants.readyToFire = Calc.isBetween(topWheel.getSpeed(), speeds[0] * (1.0 - acceptableSpeedError), speeds[0] * (1 + acceptableSpeedError)) &&
+                                (Calc.isBetween(bottomWheel.getSpeed(), speeds[1] * (1.0 - acceptableSpeedError), speeds[1] * (1 + acceptableSpeedError)));
+
+        
 
     }
 

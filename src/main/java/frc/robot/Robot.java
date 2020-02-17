@@ -65,9 +65,9 @@ public class Robot extends TimedRobot {
 
     auto.reset();
 
-    Nonstants.setShifted(true);
+    Nonstants.shifted = true;
 
-    gearShifter.activateChannel(Nonstants.getShifted());
+    gearShifter.activateChannel(Nonstants.shifted);
 
 	}
 
@@ -77,9 +77,9 @@ public class Robot extends TimedRobot {
 	@Override
 	public void autonomousInit() {
 
-    Nonstants.setShifted(true);
+    Nonstants.shifted = true;
 
-    gearShifter.activateChannel(Nonstants.getShifted());
+    gearShifter.activateChannel(Nonstants.shifted);
 
     // config motors for positional control
     leftMotors.setPID(2, 0, 0);
@@ -124,9 +124,9 @@ public class Robot extends TimedRobot {
     boolean inverted = driver.getToggle(XboxController.Buttons.L);
     double multiplier = (inverted) ? -1.0 : 1.0;
 
-    Nonstants.setShifted(!driver.getToggle(XboxController.Buttons.R));
+    Nonstants.shifted = !driver.getToggle(XboxController.Buttons.R);
 
-    gearShifter.activateChannel(Nonstants.getShifted());
+    gearShifter.activateChannel(Nonstants.shifted);
     
     drive.curvature(-driver.getAxis(XboxController.Axes.LeftY) * multiplier, driver.getAxis(XboxController.Axes.RightX));
 

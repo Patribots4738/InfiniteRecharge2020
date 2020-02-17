@@ -18,7 +18,7 @@ public class ShooterController {
 
     private double minSpeed = 0.02 * maxSpeed;
 
-    private double converter = 1.0 / ((Nonstants.getShifted()) ? 100.0 : 500.0);
+    private double converter = 1.0 / ((Nonstants.shifted) ? 100.0 : 500.0);
 
     private double acceptableAngleError = 0.5;
 
@@ -48,11 +48,9 @@ public class ShooterController {
 
         shooter.setShooterSpeeds(limelight.getDistance());
 
-        boolean readyToFire = Nonstants.getIsReadyToFire();
+        conveyor.setConveyor(Nonstants.readyToFire);
 
-        conveyor.setConveyor(readyToFire);
-
-        shooter.setFeeders(readyToFire);
+        shooter.setFeeders(Nonstants.readyToFire);
 
     }
 
@@ -63,7 +61,7 @@ public class ShooterController {
 
         double angle = limelight.getHorizontalAngle();
 
-        Nonstants.setAligned(Math.abs(angle) <= acceptableAngleError);
+        Nonstants.aligned = Math.abs(angle) <= acceptableAngleError;
 
         double speed = ((angle * converter) * maxSpeed) + minSpeed;
 
