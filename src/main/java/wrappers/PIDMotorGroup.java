@@ -4,26 +4,26 @@ import interfaces.*;
 
 public class PIDMotorGroup extends MotorGroup implements PIDMotor {
 
-    PIDMotor[] PIDMotors;
+    PIDMotor[] pidMotors;
 
     public PIDMotorGroup(PIDMotor... motors) {
 
         super(motors);
-        this.PIDMotors = motors;
+        this.pidMotors = motors;
 
     }
 
-    public PIDMotor[] getPidMotors() {
+    public PIDMotor[] getpidMotors() {
 
-        return this.PIDMotors;
+        return this.pidMotors;
 
     }
 
     public void setP(double p) {
 
-        for(int i = 0; i < motors.length; i++) {
+        for (PIDMotor motor : pidMotors) {
 
-            PIDMotors[i].setP(p);
+            motor.setP(p);
 
         }
 
@@ -31,9 +31,9 @@ public class PIDMotorGroup extends MotorGroup implements PIDMotor {
 
     public void setI(double i) {
 
-        for(int j = 0; j < motors.length; j++) {
+        for (PIDMotor motor : pidMotors) {
 
-            PIDMotors[j].setI(i);
+            motor.setI(i);
 
         }
 
@@ -41,19 +41,29 @@ public class PIDMotorGroup extends MotorGroup implements PIDMotor {
 
     public void setD(double d) {
 
-        for(int i = 0; i < motors.length; i++) {
+        for (PIDMotor motor : pidMotors) {
 
-            PIDMotors[i].setD(d);
+            motor.setD(d);
 
         }
 
     }    
 
+    public void setFF(double ff) {
+
+        for (PIDMotor motor : pidMotors) {
+
+            motor.setFF(ff);
+
+        }
+
+    }
+
     public void setPID(double p, double i, double d) {
 
-        for(int j = 0; j < motors.length; j++) {
+        for (PIDMotor motor : pidMotors) {
 
-            PIDMotors[j].setPID(p, i, d);
+            motor.setPID(p, i, d);
 
         }
 
@@ -61,9 +71,9 @@ public class PIDMotorGroup extends MotorGroup implements PIDMotor {
 
     public void setPosition(double rotations, double minSpeed, double maxSpeed) {
 
-        for(int i = 0; i < motors.length; i++) {
+        for (PIDMotor motor : pidMotors) {
 
-            PIDMotors[i].setPosition(rotations, minSpeed, maxSpeed);
+            motor.setPosition(rotations, minSpeed, maxSpeed);
 
         }
         
@@ -73,9 +83,9 @@ public class PIDMotorGroup extends MotorGroup implements PIDMotor {
 
         double positionSum = 0.0;
 
-        for(int i = 0; i < motors.length; i++) {
+        for (PIDMotor motor : pidMotors) {
 
-            positionSum += PIDMotors[i].getPosition();
+            positionSum += motor.getPosition();
 
         }
 
@@ -87,9 +97,9 @@ public class PIDMotorGroup extends MotorGroup implements PIDMotor {
 
         double speedSum = 0.0;
 
-        for(int i = 0; i < motors.length; i++) {
+        for (PIDMotor motor : pidMotors) {
 
-            speedSum += PIDMotors[i].getSpeed();
+            speedSum += motor.getSpeed();
 
         }
 
@@ -99,9 +109,9 @@ public class PIDMotorGroup extends MotorGroup implements PIDMotor {
 
     public void resetEncoder() {
 
-        for(int i = 0; i < motors.length; i++) {
+        for (PIDMotor motor : pidMotors) {
 
-            PIDMotors[i].resetEncoder();
+            motor.resetEncoder();
 
         }
 

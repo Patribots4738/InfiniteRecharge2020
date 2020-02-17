@@ -28,7 +28,6 @@ public class Gamepad {
 	 * @return Returns opposite state from when button was previously toggled.
 	 */
 	public boolean getToggle(int button) {
-		buttons[button].wasReleased(joystick.getRawButton(button + 1));
 		return buttons[button].toggle(joystick.getRawButton(button + 1));
 	}
 

@@ -59,6 +59,13 @@ public class Talon implements PIDMotor{
         
     }
 
+    public void setFF(double ff) {
+
+        motor.config_kF(0, ff, 0);
+        PIDLoop.setFF(ff);
+        
+    }
+
     public void setPID(double P, double I, double D) {
 
         setP(P);

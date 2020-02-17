@@ -12,17 +12,12 @@ public class TogglableButton {
 
 	// returns true the instant the button is pressed, and false otherwise
 	public boolean wasPressed(boolean currentButtonState) {
-
 		// checks if the button is currently down and the last loop the button was not down
-		if (currentButtonState == true && lastButtonState != true) {
+		boolean wasPressed = currentButtonState == true && lastButtonState != true;
 
-			lastButtonState = currentButtonState;
+		lastButtonState = currentButtonState;	
 
-			return true;
-
-		}
-
-		return false;
+		return wasPressed;
 
 	}
 
@@ -30,15 +25,11 @@ public class TogglableButton {
 	public boolean wasReleased(boolean currentButtonState) {
 
 		// checks if the button is currently up and the last loop the button was not up
-		if (currentButtonState == false && lastButtonState != false) {
+		boolean wasReleased = (currentButtonState == false) && (lastButtonState != false);
+		
+		lastButtonState = currentButtonState;
 
-			lastButtonState = currentButtonState;
-
-			return true;
-
-		}
-
-		return false;
+		return wasReleased;
 
 	}
 
