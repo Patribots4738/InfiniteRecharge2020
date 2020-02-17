@@ -20,9 +20,9 @@ public class Limelight {
     MovingAverage horizAngleAvg;
     MovingAverage vertAngleAvg;
 
-    public Limelight(NTTable limelightTable) {
+    public Limelight() {
 
-        this.limelightTable = limelightTable;
+        this.limelightTable = new NTTable("limelight");
 
         setLED(LEDMode.DEFAULT);
 

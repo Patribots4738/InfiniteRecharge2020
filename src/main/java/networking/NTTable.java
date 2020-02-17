@@ -1,6 +1,7 @@
 package networking;
 
 import edu.wpi.first.networktables.NetworkTable;
+import edu.wpi.first.networktables.NetworkTableInstance;
 import java.util.Set;
 
 public class NTTable {
@@ -8,9 +9,9 @@ public class NTTable {
     // the base Network table that this class wraps
     NetworkTable table;
 
-    public NTTable(NetworkTable table) {
+    public NTTable(String tableName) {
 
-        this.table = table;
+        table = NetworkTableInstance.getDefault().getTable(tableName);
 
     }
 
@@ -39,7 +40,7 @@ public class NTTable {
         for(int i = 0; i < subtables.length; i++) {
 
             // each of the subtables are added to the array
-            subtables[i] = new NTTable(table.getSubTable(subtableNames[i]));
+            subtables[i] = new NTTable(subtableNames[i]);
 
         }
 
