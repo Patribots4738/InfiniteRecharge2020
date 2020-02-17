@@ -1,6 +1,7 @@
 package utils;
 
 import hardware.Drive;
+import frc.robot.Robot;
 
 public class Calc {
 
@@ -34,7 +35,7 @@ public class Calc {
     // converts linear distance to rotations of the drive motors
     public static double inchesToDrive(double inches) {
 
-        return ((inches) / Constants.DRIVE_WHEEL_CIRCUMFRENCE) / ((Drive.shifted) ? (Constants.DRIVE_GEAR_RATIO2) : (Constants.DRIVE_GEAR_RATIO));
+        return ((inches) / Constants.DRIVE_WHEEL_CIRCUMFRENCE) / ((Robot.shifted) ? (Constants.DRIVE_GEAR_RATIO2) : (Constants.DRIVE_GEAR_RATIO));
         
     }
 

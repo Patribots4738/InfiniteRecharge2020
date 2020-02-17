@@ -10,6 +10,8 @@ import utils.*;
 import wrappers.*;
 
 public class Robot extends TimedRobot {
+    
+    public static boolean shifted = true;
 
     Compressor compressor;
 
@@ -63,7 +65,7 @@ public class Robot extends TimedRobot {
 
         auto.reset();
 
-        gearShifter.activateChannel(Drive.shifted);
+        gearShifter.activateChannel(shifted);
 
     }
 
@@ -73,9 +75,9 @@ public class Robot extends TimedRobot {
     @Override
     public void autonomousInit() {
 
-        Drive.shifted = true;
+        shifted = true;
 
-        gearShifter.activateChannel(Drive.shifted);
+        gearShifter.activateChannel(shifted);
 
         // config motors for positional control
         leftMotors.setPID(2, 0, 0);
@@ -120,9 +122,9 @@ public class Robot extends TimedRobot {
         boolean inverted = driver.getToggle(XboxController.Buttons.L);
         double multiplier = (inverted) ? -1.0 : 1.0;
 
-        Drive.shifted = !driver.getToggle(XboxController.Buttons.R);
+        shifted = !driver.getToggle(XboxController.Buttons.R);
 
-        gearShifter.activateChannel(Drive.shifted);
+        gearShifter.activateChannel(shifted);
         
         drive.curvature(-driver.getAxis(XboxController.Axes.LeftY) * multiplier, driver.getAxis(XboxController.Axes.RightX));
 
