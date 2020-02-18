@@ -100,10 +100,17 @@ public class AutoDrive {
 
 	}
 
+	public boolean queueIsEmpty() {
+
+		return commandQueue.size() == 0;
+
+	}
+
 	// this command will be called once to start executing a command
 	public void executeCommand(Command command) {
 
 		Command.CommandType commandType = command.getType();
+
 		double value = command.getValue();
 		double speed = command.getSpeed();
 
@@ -180,11 +187,5 @@ public class AutoDrive {
 		}
 
 	}
-
-	private boolean queueIsEmpty() {
-
-		return commandQueue.size() == 0;
-
-	};
 
 } 

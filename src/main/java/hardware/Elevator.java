@@ -1,15 +1,16 @@
 package hardware;
 
+import interfaces.PIDMotor;
 import wrappers.*;
 
 public class Elevator {
 
-    Falcon rightLifter;
-    Falcon leftLifter;
+    PIDMotor rightLifter;
+    PIDMotor leftLifter;
 
     SingleSolenoid lock;
 
-    public Elevator(Falcon rightLifter, Falcon leftLifter, SingleSolenoid lock) {
+    public Elevator(PIDMotor leftLifter, PIDMotor rightLifter, SingleSolenoid lock) {
         
         this.rightLifter = rightLifter;
         this.leftLifter = leftLifter;

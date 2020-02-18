@@ -6,7 +6,7 @@ public class Command {
 
     public enum CommandType {
 
-        MOVE, ROTATE;
+        MOVE, ROTATE, INTERRUPT;
         
     }
 
@@ -24,6 +24,13 @@ public class Command {
         this.type = type;
         this.value = ((type == CommandType.ROTATE) ? Calc.robotRotationsToDrive(value) : Calc.inchesToDrive(value)); 
         this.speed = speed;
+
+    }
+
+    // this constructor is for interupt commands
+    public Command(CommandType type) {
+
+        this.type = type;
 
     }
 

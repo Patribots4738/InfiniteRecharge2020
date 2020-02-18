@@ -20,7 +20,7 @@ public class DriverCamera {
 
             constructed = true;
 
-        } catch (Exception exception) {
+        } catch (Exception e) {
 
             System.err.println("Camera Not Found");
 
@@ -29,6 +29,16 @@ public class DriverCamera {
     }
 
     public void retryConstructor() {
+
+        try {
+
+            cam.setExposureManual(51);
+
+        } catch(Exception e) {
+
+            constructed = false;
+
+        }
 
         if(constructed) {
 
