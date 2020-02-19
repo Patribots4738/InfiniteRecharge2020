@@ -13,18 +13,17 @@ public class Robot extends TimedRobot {
 
     public static boolean shifted = true;
 
+    // time since autonomous firing began (in seconds)
     double shooterCount = 0.0;
 
-    double shootTime = 10000;
+    // time autonomous firing is supposed to last (in seconds)
+    double shootTime = 4.0;
 
     boolean firstTime;
-
 
     NTTable smashBoard;
 
     DriverCamera cam;
-
-    Compressor compressor;
 
     DoubleSolenoid gearShifter;
 
@@ -36,32 +35,13 @@ public class Robot extends TimedRobot {
     XboxController driver;
     XboxController operator;
 
-    PIDMotor topShooter;
-    PIDMotor bottomShooter;
-
-    SingleSolenoid shooterBlocker;
-
-    MotorGroup shooterFeeders;
-
     Shooter shooter;
-
-    PIDMotor intakeController;
-    Motor intakeSucker;
 
     Intake intake;
 
-    Motor conveyorDriver;
-
     Conveyor conveyor;
 
-    Limelight limelight;
-
     ShooterController shooterControl;
-
-    PIDMotor leftElevator;
-    PIDMotor rightElevator;
-
-    SingleSolenoid elevatorLock;
 
     Elevator elevator;
     
@@ -71,14 +51,13 @@ public class Robot extends TimedRobot {
     @Override
     public void robotInit() {
 
-// here begin all the constructors
-
+        // here begin all the constructors
+/*
         smashBoard = new NTTable("/SmartDashboard");
 
         cam = new DriverCamera();
 
-/*
-        compressor = new Compressor();
+        Compressor compressor = new Compressor();
 
         gearShifter = new DoubleSolenoid(2,3);
 
@@ -86,54 +65,52 @@ public class Robot extends TimedRobot {
         rightMotors = new PIDMotorGroup(new Falcon(3), new Falcon(4));
 
         drive = new Drive(leftMotors, rightMotors);
-*/
 
         driver = new XboxController(0);
 
-/*
         operator = new XboxController(1);               
 
-        topShooter = new Falcon(5);
-        bottomShooter = new Falcon(6);
+        PIDMotor topShooter = new Falcon(5);
+        PIDMotor bottomShooter = new Falcon(6);
 
         // placeholder port
-        shooterBlocker = new SingleSolenoid(0);
+        SingleSolenoid shooterBlocker = new SingleSolenoid(0);
 
         // placeholder motors
-        shooterFeeders = new MotorGroup();
+        MotorGroup shooterFeeders = new MotorGroup();
 
         shooter = new Shooter(topShooter, bottomShooter, shooterFeeders, shooterBlocker);
 
         // placeholder CAN ID
-        intakeController = new Falcon(0);
+        PIDMotor intakeController = new Falcon(0);
 
         // placeholder CAN ID
-        intakeSucker = new Victor(0);
+        Motor intakeSucker = new Victor(0);
 
         intake = new Intake(intakeSucker, intakeController);
 
         // placeholder CAN ID
-        conveyorDriver = new Victor(0);
+        Motor conveyorDriver = new Victor(0);
 
         conveyor = new Conveyor(conveyorDriver);
 
-        limelight = new Limelight();
+        Limelight limelight = new Limelight();
 
         shooterControl = new ShooterController(conveyor, shooter, limelight, drive);
 
         // placeholder CAN IDs
-        leftElevator = new Falcon(0);
-        rightElevator = new Falcon(0);
+        PIDMotor leftElevator = new Falcon(0);
+        PIDMotor rightElevator = new Falcon(0);
 
         // placeholder port
-        elevatorLock = new SingleSolenoid(1);
+        SingleSolenoid elevatorLock = new SingleSolenoid(1);
 
         elevator = new Elevator(leftElevator, rightElevator, elevatorLock);
 
         auto = new AutoDrive(leftMotors, rightMotors);
 */
 
-// the constructors end here, now everything gets configured
+        // the constructors end here, now everything gets configured
 
 /*
         compressor.setState(true);
@@ -161,16 +138,16 @@ public class Robot extends TimedRobot {
     @Override
     public void robotPeriodic() {
 
-        cam.retryConstructor();
+        //cam.retryConstructor();
 
     }
 
     @Override
     public void autonomousInit() {
 
+/*
         firstTime = true;
-
-        /*
+        
         shifted = true;
 
         gearShifter.activateChannel(shifted);
@@ -196,7 +173,7 @@ public class Robot extends TimedRobot {
 
             if(shooterCount < shootTime) {
 
-                shooterCount++;
+                shooterCount += 0.02;
 
                 shooterControl.aim();
 
@@ -238,19 +215,21 @@ public class Robot extends TimedRobot {
     public void disabledPeriodic() {}
 
     // temporary values for testing shooter, will not be present for final version
+/*
     double topSpeed = 0.0;
     double bottomSpeed = 0.0;
+*/
 
     @Override
     public void teleopInit() {
 
+/*
         topSpeed = 0.0;
         bottomSpeed = 0.0;
 
         firstTime = true;
 
         // config motors for velocity control
-/*
         leftMotors.setPID(0.5, 0, 0);
         rightMotors.setPID(0.5, 0, 0);
 
@@ -311,8 +290,7 @@ public class Robot extends TimedRobot {
         System.out.println("Commanded Bottom Speed: " + -bottomSpeed);
 */
 
-// here begins the code for controlling the full robot
-
+        // here begins the code for controlling the full robot
 /*
         boolean inverted = driver.getToggle(XboxController.Buttons.L);
         double multiplier = (inverted) ? -1.0 : 1.0;
