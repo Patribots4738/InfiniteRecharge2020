@@ -12,7 +12,7 @@ import wrappers.*;
 public class Robot extends TimedRobot {
 
     public static boolean shifted = true;
-
+    
     // time since autonomous firing began (in seconds)
     double shooterCount = 0.0;
 
@@ -205,12 +205,7 @@ public class Robot extends TimedRobot {
     // VERY NO TOUCH
     @Override
     public void disabledPeriodic() {}
-    // temporary values for testing shooter, will not be present for final version
-/*
-    double topSpeed = 0.0;
-    double bottomSpeed = 0.0;
-    double increment = 0.01;
-*/
+    
     @Override
     public void teleopInit() {
 /*
@@ -231,6 +226,71 @@ public class Robot extends TimedRobot {
 
     @Override
     public void teleopPeriodic() {
+        // here begins the code for controlling the full robot
+/*
+        boolean inverted = driver.getToggle(XboxController.Buttons.L);
+        double multiplier = (inverted) ? -1.0 : 1.0;
+
+        shifted = !driver.getToggle(XboxController.Buttons.R);
+
+        gearShifter.activateChannel(shifted);
+        
+        drive.curvature(-driver.getAxis(XboxController.Axes.LeftY) * multiplier, driver.getAxis(XboxController.Axes.RightX));
+
+
+        boolean aiming = driver.getButton(XboxController.Buttons.A);
+
+        elevator.setElevator(operator.getAxis(XboxController.Axes.LeftY));
+        elevator.setLock(operator.getToggle(XboxController.Buttons.Select));
+
+        if(!aiming) {
+
+            drive.curvature(-driver.getAxis(XboxController.Axes.LeftY) * multiplier, driver.getAxis(XboxController.Axes.RightX));
+
+            intake.setDown(operator.getButton(XboxController.Buttons.R));
+
+            if(operator.getAxis(XboxController.Axes.RightTrigger) < 0.2) {
+
+                intake.setSuck(-operator.getAxis(XboxController.Axes.LeftTrigger));
+                conveyor.setConveyor(-operator.getAxis(XboxController.Axes.LeftTrigger));
+
+            } else {
+
+                intake.setSuck(operator.getAxis(XboxController.Axes.RightTrigger));
+                conveyor.setConveyor(operator.getAxis(XboxController.Axes.RightTrigger));
+
+            }
+
+            shooterControl.stop();
+
+        } else {
+
+            shooterControl.aim();
+
+            if(ShooterController.aligned) {
+
+                if(operator.getButton(XboxController.Buttons.A)) {
+
+                    shooterControl.fire();
+
+                }
+
+            }
+
+        }
+*/
+    }
+    
+    @Override
+    public void testInit(){}
+    // temporary values for testing shooter, will not be present for final version
+/*
+    double topSpeed = 0.0;
+    double bottomSpeed = 0.0;
+    double increment = 0.01;
+*/
+    @Override
+    public void testPeriodic() {
 // here begins the code for testing the shooter
 /*
         boolean currentShooter = driver.getToggle(XboxController.Buttons.X);
@@ -306,65 +366,6 @@ public class Robot extends TimedRobot {
         System.out.println("Current Bottom Speed: " + bottomShooter.getSpeed());
         System.out.println("Commanded Bottom Speed: " + -bottomSpeed);
 */
-        // here begins the code for controlling the full robot
-/*
-        boolean inverted = driver.getToggle(XboxController.Buttons.L);
-        double multiplier = (inverted) ? -1.0 : 1.0;
-
-        shifted = !driver.getToggle(XboxController.Buttons.R);
-
-        gearShifter.activateChannel(shifted);
-        
-        drive.curvature(-driver.getAxis(XboxController.Axes.LeftY) * multiplier, driver.getAxis(XboxController.Axes.RightX));
-
-
-        boolean aiming = driver.getButton(XboxController.Buttons.A);
-
-        elevator.setElevator(operator.getAxis(XboxController.Axes.LeftY));
-        elevator.setLock(operator.getToggle(XboxController.Buttons.Select));
-
-        if(!aiming) {
-
-            drive.curvature(-driver.getAxis(XboxController.Axes.LeftY) * multiplier, driver.getAxis(XboxController.Axes.RightX));
-
-            intake.setDown(operator.getButton(XboxController.Buttons.R));
-
-            if(operator.getAxis(XboxController.Axes.RightTrigger) < 0.2) {
-
-                intake.setSuck(-operator.getAxis(XboxController.Axes.LeftTrigger));
-                conveyor.setConveyor(-operator.getAxis(XboxController.Axes.LeftTrigger));
-
-            } else {
-
-                intake.setSuck(operator.getAxis(XboxController.Axes.RightTrigger));
-                conveyor.setConveyor(operator.getAxis(XboxController.Axes.RightTrigger));
-
-            }
-
-            shooterControl.stop();
-
-        } else {
-
-            shooterControl.aim();
-
-            if(ShooterController.aligned) {
-
-                if(operator.getButton(XboxController.Buttons.A)) {
-
-                    shooterControl.fire();
-
-                }
-
-            }
-
-        }
-*/
     }
-    
-    @Override
-    public void testInit(){}
-
-    @Override
-    public void testPeriodic() {}
     
 }
