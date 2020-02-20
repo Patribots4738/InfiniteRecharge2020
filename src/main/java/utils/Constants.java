@@ -68,7 +68,7 @@ public final class Constants {
 
     };
 
-    public enum Color{
+    public enum Color {
 
         Yellow(COLOR_AVERAGES[0], COLOR_STANDARD_DEVIATIONS[0]), 
         Red(COLOR_AVERAGES[1], COLOR_STANDARD_DEVIATIONS[1]), 
@@ -84,7 +84,7 @@ public final class Constants {
         public final double BMAX;
         public final double BMIN;
     
-        Color(double averages[], double[] standardDeviations){
+        Color(double averages[], double[] standardDeviations) {
     
             RMAX = averages[0] + (2 * standardDeviations[0]);
             RMIN = averages[0] - (2 * standardDeviations[0]);

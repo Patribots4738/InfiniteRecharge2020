@@ -74,43 +74,63 @@ public class PIDLoop {
     }
 
     public void setP(double P) {
+
         this.P = P;
+
     }
 
     public double getP() {
+
         return this.P;
+
     }
 
     public void setI(double I) {
+
         this.I = I;
+
     }
     
     public double getI() {
+
         return this.I;
+
     }
 
     public void setD(double D) {
+
         this.D = D;
+        
     }
 
     public double getD() {
+
         return this.D;
+
     }
 
     public void setIzone(int Izone) {
+
         this.Izone = Izone;
+
     }
 
     public double getIzone() {
+
         return this.Izone;
+
     }
 
     public void setFF(double FF) {
+
         this.FF = FF;
+
     }
 
     public double getFF() {
+
         return this.FF;
+        
     }
 
     public double getCommand(double desiredCommand, double currentState) {

@@ -35,8 +35,10 @@ public class AutoDrive {
 		running = false;
 
 		completePositions = new double[]{
+
 			leftMotors.getPosition(),
 			rightMotors.getPosition()
+
 		};
 
 		commandQueue = new ArrayList<Command>();
@@ -47,9 +49,12 @@ public class AutoDrive {
 	public void reset() {
 
 		commandQueue = new ArrayList<Command>();
+
 		leftMotors.resetEncoder();
 		rightMotors.resetEncoder();
-		completePositions = new double[] { 0, 0 };
+
+		completePositions = new double[] {0, 0};
+
 		running = false;
 
 	}
@@ -86,7 +91,7 @@ public class AutoDrive {
 	// returns a boolean detailing if the command at the supplied index could be removed
 	private boolean removeCommand(int index) {
 
-		if (index < commandQueue.size()){
+		if(index < commandQueue.size()){
 
 			commandQueue.remove(index);
 
@@ -139,12 +144,12 @@ public class AutoDrive {
 	public void executeQueue() {
 
 		// checks if there aren't any commands to save cpu cycles
-		if (queueIsEmpty()) {
+		if(queueIsEmpty()) {
 
 			running = false;
 			return;
 
-		} else if (!running) {
+		} else if(!running) {
 
 			// starts executing commands if this is being called while commands aren't executing
 			executeCommand(commandQueue.get(0));
@@ -159,7 +164,7 @@ public class AutoDrive {
 		double leftError = Math.abs(completePositions[0] - leftWheelPosition);
 		double rightError = Math.abs(completePositions[1] - rightWheelPosition);
 
-		if (Constants.LOGGING) {
+		if(Constants.LOGGING) {
 
 			System.out.println("left wheel has moved: " + leftWheelPosition);
 			System.out.println("right wheel has moved: " + rightWheelPosition);

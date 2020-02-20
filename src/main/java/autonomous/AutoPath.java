@@ -52,6 +52,7 @@ public class AutoPath {
         Matcher matches = pattern.matcher(raw);
 
         int matchCount = 0;
+        
         while (matches.find()) {
 
             matchCount++;

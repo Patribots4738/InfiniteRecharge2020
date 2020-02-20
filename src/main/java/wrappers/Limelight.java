@@ -7,12 +7,16 @@ public class Limelight {
 
     // the different modes the LEDs can operate in
     public enum LEDMode {
+
         DEFAULT, OFF, BLINK, ON;
+
     }
 
     // the different modes the camera can operate in
     public enum CAMMode {
+
         VISION, CAMERA_STREAM;
+        
     }
 
     NTTable limelightTable;

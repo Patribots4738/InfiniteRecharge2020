@@ -15,7 +15,9 @@ public class MotorGroup implements Motor{
     public void setSpeed(double speed) {
 
         for(int j = 0; j < motors.length; j++) {
+
             motors[j].setSpeed(speed);
+            
         }
 
     }

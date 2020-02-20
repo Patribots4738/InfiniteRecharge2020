@@ -47,20 +47,24 @@ public class NTTable {
         return subtables;
 
     }
+
     // gets the path of the NetworkTable
     public String getTablePath() {
 
         return table.getPath();
 
     }
+
     // gets the value at the key in this NetworkTable
     public Object get(String key) {
 
         return table.getEntry(key).getValue().getValue();
 
     }
+    
     // sets the value at the key in this NetworkTable
     public void set(String key, Object value) {
+
         // this value is not bound to a specific type, so it can be set with any Object type
         table.getEntry(key).setValue(value);
 

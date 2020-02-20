@@ -1,6 +1,6 @@
 package interfaces;
 
-public interface PIDMotor extends Motor{
+public interface PIDMotor extends Motor {
 
     //@param p/i/d: internal PID control strength values
     public void setP(double p);
@@ -10,6 +10,7 @@ public interface PIDMotor extends Motor{
     public void setPID(double p, double i, double d);
     
     public void setPosition(double rotations, double minSpeed, double maxSpeed);
+    
     public double getPosition();
     public double getSpeed();
     public void resetEncoder();

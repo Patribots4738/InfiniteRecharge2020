@@ -6,12 +6,15 @@ public class TogglableButton {
 	private boolean toggleState;
 
 	public TogglableButton () {
+
 		lastButtonState = false;
 		toggleState = false;
+		
 	}
 
 	// returns true the instant the button is pressed, and false otherwise
 	public boolean wasPressed(boolean currentButtonState) {
+
 		// checks if the button is currently down and the last loop the button was not down
 		boolean wasPressed = currentButtonState == true && lastButtonState != true;
 
