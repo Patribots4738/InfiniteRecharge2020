@@ -12,7 +12,7 @@ import wrappers.*;
 public class Robot extends TimedRobot {
 
     public static boolean shifted = true;
-    
+
     // time since autonomous firing began (in seconds)
     double shooterCount = 0.0;
 
@@ -66,11 +66,10 @@ public class Robot extends TimedRobot {
         drive = new Drive(leftMotors, rightMotors);
 
         driver = new XboxController(0);
-
         operator = new XboxController(1);               
 
-        PIDMotor topShooter = new Falcon(5);
-        PIDMotor bottomShooter = new Falcon(6);
+        PIDMotor topShooterWheel = new Falcon(5);
+        PIDMotor bottomShooterWheel = new Falcon(6);
 
         // placeholder port
         SingleSolenoid shooterBlocker = new SingleSolenoid(0);
@@ -78,7 +77,7 @@ public class Robot extends TimedRobot {
         // placeholder motors
         MotorGroup shooterFeeders = new MotorGroup();
 
-        shooter = new Shooter(topShooter, bottomShooter, shooterFeeders, shooterBlocker);
+        shooter = new Shooter(topShooterWheel, bottomShooterWheel, shooterFeeders, shooterBlocker);
 
         // placeholder CAN ID
         PIDMotor intakeController = new Falcon(0);
@@ -117,8 +116,8 @@ public class Robot extends TimedRobot {
         // drive motors have their PID configured in telop and autonomous
         // init, as they need to be different between the two modes
 
-        topShooter.setPID(2.1, 0.15, 0.15);
-        bottomShooter.setPID(2.1, 0.15, 0.15);
+        topShooterWheel.setPID(2.1, 0.15, 0.15);
+        bottomShooterWheel.setPID(2.1, 0.15, 0.15);
 
         // placeholder PID values
         intakeController.setPID(0, 0, 0);
@@ -202,7 +201,7 @@ public class Robot extends TimedRobot {
     @Override 
     public void disabledInit() {}
 
-    // VERY NO TOUCH
+    // VERY EXTRA NO TOUCH
     @Override
     public void disabledPeriodic() {}
     
@@ -357,13 +356,13 @@ public class Robot extends TimedRobot {
 
         }
 
-        topShooter.setSpeed(topSpeed);
-        bottomShooter.setSpeed(-bottomSpeed);
+        topShooterWheel.setSpeed(topSpeed);
+        bottomShooterWheel.setSpeed(-bottomSpeed);
 
         System.out.println("Current increment: " + increment + "\n");
-        System.out.println("Current Top Speed: " + topShooter.getSpeed());
+        System.out.println("Current Top Speed: " + topShooterWheel.getSpeed());
         System.out.println("Commanded Top Speed: " + topSpeed + "\n");
-        System.out.println("Current Bottom Speed: " + bottomShooter.getSpeed());
+        System.out.println("Current Bottom Speed: " + bottomShooterWheel.getSpeed());
         System.out.println("Commanded Bottom Speed: " + -bottomSpeed);
 */
     }

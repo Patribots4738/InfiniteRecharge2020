@@ -1,8 +1,15 @@
 package wrappers;
 
 import edu.wpi.first.wpilibj.Joystick;
+import edu.wpi.first.wpilibj.GenericHID.RumbleType;
 
 public class Gamepad {
+
+	public enum Directions {
+
+		N, NE, E, SE, S, SW, W, NW
+		
+	}
 
 	Joystick joystick;
 
@@ -86,9 +93,12 @@ public class Gamepad {
 
 	}
 
-	public enum Directions {
+	public void setRumble(boolean isLeftRumble, double value) {
 
-		N, NE, E, SE, S, SW, W, NW
-		
+		RumbleType type = (isLeftRumble) ? RumbleType.kLeftRumble : RumbleType.kRightRumble;
+
+		joystick.setRumble(type, value);
+
 	}
+
 }

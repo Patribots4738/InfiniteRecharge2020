@@ -1,6 +1,7 @@
 package wrappers;
 
 import edu.wpi.first.wpilibj.GenericHID.RumbleType;
+import utils.Vector;
 
 public class XboxController extends Gamepad {
 
@@ -106,9 +107,10 @@ public class XboxController extends Gamepad {
 
 	}
 
-	public void setRumble(RumbleType type, double rumble) {
+	public void setRumble(boolean isLeftRumble, double rumble) {
 
-		this.setRumble(type, rumble);
+
+		this.setRumble(isLeftRumble, rumble);
 
 	}
 
