@@ -41,6 +41,8 @@ public class Robot extends TimedRobot {
 
     Conveyor conveyor;
 
+    Limelight limelight;
+
     ShooterController shooterControl;
 
     Elevator elevator;
@@ -92,7 +94,7 @@ public class Robot extends TimedRobot {
 
         conveyor = new Conveyor(conveyorDriver);
 
-        Limelight limelight = new Limelight();
+        limelight = new Limelight();
 
         shooterControl = new ShooterController(conveyor, shooter, limelight, drive);
 
@@ -199,7 +201,14 @@ public class Robot extends TimedRobot {
 
     // NO TOUCH
     @Override 
-    public void disabledInit() {}
+    public void disabledInit() {
+/*
+        driver.setRumble(true, 0.0);
+        driver.setRumble(false, 0.0);
+        operator.setRumble(true, 0.0);
+        operator.setRumble(false, 0.0);
+*/
+    }
 
     // VERY EXTRA NO TOUCH
     @Override
@@ -236,13 +245,17 @@ public class Robot extends TimedRobot {
         
         drive.curvature(-driver.getAxis(XboxController.Axes.LeftY) * multiplier, driver.getAxis(XboxController.Axes.RightX));
 
-
         boolean aiming = driver.getButton(XboxController.Buttons.A);
 
         elevator.setElevator(operator.getAxis(XboxController.Axes.LeftY));
         elevator.setLock(operator.getToggle(XboxController.Buttons.Select));
 
         if(!aiming) {
+
+            operator.setRumble(true, 0.0);
+            operator.setRumble(false, 0.0);
+            driver.setRumble(true, 0.0);
+            driver.setRumble(false, 0.0);
 
             drive.curvature(-driver.getAxis(XboxController.Axes.LeftY) * multiplier, driver.getAxis(XboxController.Axes.RightX));
 
@@ -264,9 +277,26 @@ public class Robot extends TimedRobot {
 
         } else {
 
-            shooterControl.aim();
+            // buzz driver controller if they try to line up without the limelight finding a target,
+            // and stop the buzzing and start lining up if the limelight finds a target
+            if(!limelight.targetFound()) {
+
+                driver.setRumble(true, 0.2);
+                driver.setRumble(false, 0.2);
+
+            } else {
+
+                driver.setRumble(true, 0.0);
+                driver.setRumble(false, 0.0);
+
+                shooterControl.aim();
+
+            }            
 
             if(ShooterController.aligned) {
+
+                operator.setRumble(true, 0.5);
+                operator.setRumble(false, 0.5);
 
                 if(operator.getButton(XboxController.Buttons.A)) {
 
