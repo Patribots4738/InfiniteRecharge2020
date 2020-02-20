@@ -50,7 +50,6 @@ public class Robot extends TimedRobot {
 
     @Override
     public void robotInit() {
-
         // here begin all the constructors
 /*
         smashBoard = new NTTable("/SmartDashboard");
@@ -109,9 +108,7 @@ public class Robot extends TimedRobot {
 
         auto = new AutoDrive(leftMotors, rightMotors);
 */
-
         // the constructors end here, now everything gets configured
-
 /*
         compressor.setState(true);
 
@@ -132,7 +129,6 @@ public class Robot extends TimedRobot {
 
         auto.reset();
 */
-
     }
 
     @Override
@@ -144,7 +140,6 @@ public class Robot extends TimedRobot {
 
     @Override
     public void autonomousInit() {
-
 /*
         firstTime = true;
         
@@ -162,12 +157,10 @@ public class Robot extends TimedRobot {
 
         auto.addPath(new AutoPath("home/lvuser/deploy/autopaths/Default.json"));
 */
-
     } 
 
     @Override
     public void autonomousPeriodic() {
-
 /*
         if (auto.queueIsEmpty()) {
 
@@ -203,7 +196,6 @@ public class Robot extends TimedRobot {
 
         }
 */
-
     }
 
     // NO TOUCH
@@ -213,19 +205,18 @@ public class Robot extends TimedRobot {
     // VERY NO TOUCH
     @Override
     public void disabledPeriodic() {}
-
     // temporary values for testing shooter, will not be present for final version
 /*
     double topSpeed = 0.0;
     double bottomSpeed = 0.0;
+    double increment = 0.01;
 */
-
     @Override
     public void teleopInit() {
-
 /*
         topSpeed = 0.0;
         bottomSpeed = 0.0;
+        increment = 0.01;
 
         firstTime = true;
 
@@ -236,31 +227,57 @@ public class Robot extends TimedRobot {
         leftMotors.resetEncoder();
         rightMotors.resetEncoder();
 */
-
     }
 
     @Override
     public void teleopPeriodic() {
-
 // here begins the code for testing the shooter
-
 /*
-        if(driver.getButton(XboxController.Buttons.A)) {
+        boolean currentShooter = driver.getToggle(XboxController.Buttons.X);
 
-            topSpeed += 0.01;
-            bottomSpeed += 0.01;
+        if(driver.getButtonDown(XboxController.Buttons.A)) {
+
+            increment *= 2.0;
 
         }
 
-        if(driver.getButton(XboxController.Buttons.B)) {
+        if(driver.getButtonDown(XboxController.Buttons.B)) {
 
-            topSpeed -= 0.01;
-            bottomSpeed -= 0.01;
+            increment *= 0.5;
+
+        }
+
+        if(driver.getPOV(Gamepad.Directions.N)) {
+
+            if(currentShooter) {
+
+                bottomSpeed += increment;
+
+            } else {
+
+                topSpeed += increment;
+
+            }
+
+        }
+
+        if(driver.getPOV(Gamepad.Directions.S)) {
+
+            if(currentShooter) {
+
+                bottomSpeed -= increment;
+
+            } else {
+
+                topSpeed -= increment;
+
+            }
 
         }
 
         if(driver.getToggle(XboxController.Buttons.Y)) {
 
+            increment = 0.01;
             topSpeed = 0.0;
             bottomSpeed = 0.0;
 
@@ -283,13 +300,12 @@ public class Robot extends TimedRobot {
         topShooter.setSpeed(topSpeed);
         bottomShooter.setSpeed(-bottomSpeed);
 
+        System.out.println("Current increment: " + increment + "\n");
         System.out.println("Current Top Speed: " + topShooter.getSpeed());
-        System.out.println("Commanded Top Speed: " + topSpeed);
-        System.out.println();
+        System.out.println("Commanded Top Speed: " + topSpeed + "\n");
         System.out.println("Current Bottom Speed: " + bottomShooter.getSpeed());
         System.out.println("Commanded Bottom Speed: " + -bottomSpeed);
 */
-
         // here begins the code for controlling the full robot
 /*
         boolean inverted = driver.getToggle(XboxController.Buttons.L);
@@ -343,12 +359,11 @@ public class Robot extends TimedRobot {
 
         }
 */
-        
     }
     
     @Override
     public void testInit(){}
-    
+
     @Override
     public void testPeriodic() {}
     
