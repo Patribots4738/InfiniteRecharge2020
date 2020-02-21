@@ -70,8 +70,8 @@ public class Robot extends TimedRobot {
         driver = new XboxController(0);
         operator = new XboxController(1);               
 
-        PIDMotor topShooterWheel = new Falcon(5);
-        PIDMotor bottomShooterWheel = new Falcon(6);
+        PIDMotor topShooterWheel = new Falcon(6);
+        PIDMotor bottomShooterWheel = new Falcon(5);
 
         // placeholder port
         SingleSolenoid shooterBlocker = new SingleSolenoid(0);
@@ -324,13 +324,13 @@ public class Robot extends TimedRobot {
 /*
         boolean currentShooter = driver.getToggle(XboxController.Buttons.X);
 
-        if(driver.getButtonDown(XboxController.Buttons.A)) {
+        if(driver.getButtonDown(XboxController.Buttons.R)) {
 
             increment *= 2.0;
 
         }
 
-        if(driver.getButtonDown(XboxController.Buttons.B)) {
+        if(driver.getButtonDown(XboxController.Buttons.L)) {
 
             increment *= 0.5;
 
@@ -364,6 +364,18 @@ public class Robot extends TimedRobot {
 
         }
 
+        if(driver.getButtonDown(XboxController.Buttons.A)) {
+
+            topSpeed += increment;
+
+        }
+
+        if(driver.getButtonDown(XboxController.Buttons.B)) {
+
+            bottomSpeed -= increment;
+
+        }
+
         if(driver.getToggle(XboxController.Buttons.Y)) {
 
             increment = 0.01;
@@ -372,16 +384,26 @@ public class Robot extends TimedRobot {
 
         }
 
-        if(topSpeed > 1.0 || bottomSpeed > 1.0) {
+        if(topSpeed > 1.0) {
 
             topSpeed = 1.0;
+
+        }
+
+        if(bottomSpeed > 1.0) {
+
             bottomSpeed = 1.0;
 
         }
 
-        if(topSpeed < 0.0 || bottomSpeed < 0.0) {
+        if(topSpeed < 0.0) {
 
             topSpeed = 0.0;
+
+        }
+
+        if(bottomSpeed < 0.0) {
+
             bottomSpeed = 0.0;
 
         }
