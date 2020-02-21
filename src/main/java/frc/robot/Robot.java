@@ -366,13 +366,29 @@ public class Robot extends TimedRobot {
 
         if(driver.getButtonDown(XboxController.Buttons.A)) {
 
-            topSpeed += increment;
+            if(currentShooter) {
+
+                bottomSpeed += increment;
+
+            } else {
+
+                topSpeed += increment;
+
+            }
 
         }
 
-        if(driver.getButtonDown(XboxController.Buttons.B)) {
+        if(driver.getButtonDown(XboxController.Buttons.A)) {
 
-            bottomSpeed -= increment;
+            if(currentShooter) {
+
+                bottomSpeed -= increment;
+
+            } else {
+
+                topSpeed -= increment;
+
+            }
 
         }
 
