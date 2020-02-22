@@ -4,8 +4,6 @@ import networking.*;
 
 public final class Constants {
 
-    public static final boolean LOGGING = false;
-
     // in inches
     public static final double TARGET_HEIGHT = 84.5;
 

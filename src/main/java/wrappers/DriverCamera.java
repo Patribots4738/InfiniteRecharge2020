@@ -28,7 +28,7 @@ public class DriverCamera {
 
     }
 
-    public void retryConstructor() {
+    public void retryConnection() {
 
         try {
 

@@ -13,6 +13,8 @@ public class AutoPath {
 
     private File file;
 
+    private ArrayList<Command> commandQueue;
+
     private Scanner reader;
 
     private String raw;
@@ -41,7 +43,9 @@ public class AutoPath {
 
             System.err.print("File not found: " + filePath);
 
-        }        
+        }
+        
+        commandQueue = this.getCommands();
 
     }
 
@@ -85,7 +89,7 @@ public class AutoPath {
 
     }
 
-    public ArrayList<Command> getCommandQueue() {
+    private ArrayList<Command> getCommands() {
 
         double[][] commandVals = this.getDoubleArray();
 
@@ -98,6 +102,12 @@ public class AutoPath {
             commandQueue.add(new Command(type, commandVals[i][1], commandVals[i][2]));
 
         }
+
+        return commandQueue;
+
+    }
+
+    public ArrayList<Command> getCommandQueue() {
 
         return commandQueue;
 

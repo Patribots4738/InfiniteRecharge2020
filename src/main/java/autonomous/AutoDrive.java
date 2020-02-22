@@ -12,7 +12,7 @@ public class AutoDrive {
 
 	// details how close we can get to the specified end position of a command
 	// before calling it complete and moving to the next one
-	private double acceptableError;
+	private double acceptableError = 0.25;
 
 	// the positions the left and right motorgroups should
 	// be at when the currently running command has been completed,
@@ -30,8 +30,6 @@ public class AutoDrive {
 		this.leftMotors = leftMotors;
 		this.rightMotors = rightMotors;
 
-		acceptableError = 0.25;
-
 		running = false;
 
 		completePositions = new double[]{
@@ -48,14 +46,19 @@ public class AutoDrive {
 	// resets the command queue and stops execution of currently running commands
 	public void reset() {
 
-		commandQueue = new ArrayList<Command>();
+		running = false;
 
 		leftMotors.resetEncoder();
 		rightMotors.resetEncoder();
 
-		completePositions = new double[] {0, 0};
+		completePositions = new double[] {
 
-		running = false;
+			leftMotors.getPosition(), 
+			rightMotors.getPosition()
+		
+		};
+
+		commandQueue = new ArrayList<Command>();
 
 	}
 
@@ -124,13 +127,14 @@ public class AutoDrive {
 		
 		if(commandType == Command.CommandType.MOVE) {
 			
+			// sets the right motor to rotate opposite of the left
 			completePositions[1] -= value;
 
 			leftMotors.setPosition(completePositions[0], -speed, speed);
 			rightMotors.setPosition(completePositions[1], -speed, speed);
 
-		} else if(commandType == Command.CommandType.ROTATE) { // the command is a rotate command
-			// sets the right motor to rotate opposite of the left
+		} else if(commandType == Command.CommandType.ROTATE) {
+
 			completePositions[1] += value;
 
 			leftMotors.setPosition(completePositions[0], -speed, speed);
@@ -163,16 +167,6 @@ public class AutoDrive {
 
 		double leftError = Math.abs(completePositions[0] - leftWheelPosition);
 		double rightError = Math.abs(completePositions[1] - rightWheelPosition);
-
-		if(Constants.LOGGING) {
-
-			System.out.println("left wheel has moved: " + leftWheelPosition);
-			System.out.println("right wheel has moved: " + rightWheelPosition);
-			System.out.println();
-			System.out.println("leftError is: " + leftError);
-			System.out.println("rightError is: " + rightError);
-
-		}
 
 		if(leftError <= acceptableError && rightError <= acceptableError) {
 
