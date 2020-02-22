@@ -58,7 +58,7 @@ public class Robot extends TimedRobot {
         // here begin all the constructors
 
         smashBoard = new NTTable("/SmartDashboard");
-
+/*
         cam = new DriverCamera();
 
         Compressor compressor = new Compressor();
@@ -132,19 +132,19 @@ public class Robot extends TimedRobot {
         rightElevator.setPID(0, 0, 0);
 
         auto.reset();
-
+*/
     }
 
     @Override
     public void robotPeriodic() {
 
-        cam.retryConnection();
+        //cam.retryConnection();
 
     }
 
     @Override
     public void autonomousInit() {
-
+/*
         firstTime = true;
         
         shifted = true;
@@ -160,12 +160,12 @@ public class Robot extends TimedRobot {
         path = new AutoPath(smashBoard.get("selectedPath").toString());
 
         auto.addPath(new AutoPath("home/lvuser/deploy/autopaths/Default.json"));
-
+*/
     } 
 
     @Override
     public void autonomousPeriodic() {
-
+/*
         if (auto.queueIsEmpty()) {
 
             if(shooterCount < shootTime) {
@@ -199,18 +199,18 @@ public class Robot extends TimedRobot {
             auto.executeQueue();
 
         }
-
+*/
     }
     // NO TOUCH
     @Override 
     public void disabledInit() {
-
+/*
         driver.setRumble(true, 0.0);
         driver.setRumble(false, 0.0);
 
         operator.setRumble(true, 0.0);
         operator.setRumble(false, 0.0);
-
+*/
     }
     // VERY EXTRA NO TOUCH
     @Override
@@ -218,7 +218,7 @@ public class Robot extends TimedRobot {
     
     @Override
     public void teleopInit() {
-
+/*
         firstTime = true;
 
         // config motors for velocity control
@@ -227,13 +227,13 @@ public class Robot extends TimedRobot {
 
         leftMotors.resetEncoder();
         rightMotors.resetEncoder();
-
+*/
     }
 
     @Override
     public void teleopPeriodic() {
         // here begins the code for controlling the full robot
-
+/*
         boolean inverted = driver.getToggle(XboxController.Buttons.L);
         double multiplier = (inverted) ? -1.0 : 1.0;
 
@@ -305,21 +305,29 @@ public class Robot extends TimedRobot {
             }
 
         }
-
+*/
     }
     
     @Override
     public void testInit(){}
     // temporary values for testing shooter, will not be present for final version
-
+/*
     double topSpeed = 0.0;
     double bottomSpeed = 0.0;
     double increment = 0.01;
+*/
+
+    boolean test = true;
 
     @Override
     public void testPeriodic() {
-        // here begins the code for testing the shooter
 
+        test = !test;
+
+        smashBoard.set("test", test);
+
+        // here begins the code for testing the shooter
+/*
         boolean currentShooter = driver.getToggle(XboxController.Buttons.X);
 
         if(driver.getButtonDown(XboxController.Buttons.R)) {
@@ -402,7 +410,7 @@ public class Robot extends TimedRobot {
         System.out.println("Commanded Top Speed: " + topSpeed + "\n");
         System.out.println("Current Bottom Speed: " + bottomShooterWheel.getSpeed());
         System.out.println("Commanded Bottom Speed: " + -bottomSpeed);
-
+*/
     }
     
 }
