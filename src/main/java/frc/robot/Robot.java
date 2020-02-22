@@ -46,6 +46,8 @@ public class Robot extends TimedRobot {
 
     Limelight limelight;
 
+    MotorGroup shooterFeeders;
+
     ShooterController shooterControl;
 
     Elevator elevator;
@@ -69,19 +71,19 @@ public class Robot extends TimedRobot {
         rightMotors = new PIDMotorGroup(new Falcon(3), new Falcon(4));
 
         drive = new Drive(leftMotors, rightMotors);
-
+*/
         driver = new XboxController(0);
+/*
         operator = new XboxController(1);               
-
+*/
         topShooterWheel = new Falcon(6);
         bottomShooterWheel = new Falcon(5);
-
+/*
         // placeholder port
         SingleSolenoid shooterBlocker = new SingleSolenoid(0);
-
-        // placeholder motors
-        MotorGroup shooterFeeders = new MotorGroup();
-
+*/
+        shooterFeeders = new MotorGroup(new Talon(10), new Talon(9));
+/*
         shooter = new Shooter(topShooterWheel, bottomShooterWheel, shooterFeeders, shooterBlocker);
 
         // placeholder CAN ID
@@ -120,10 +122,10 @@ public class Robot extends TimedRobot {
 
         // drive motors have their PID configured in telop and autonomous
         // init, as they need to be different between the two modes
-
-        topShooterWheel.setPID(2.1, 0.15, 0.15);
-        bottomShooterWheel.setPID(2.1, 0.15, 0.15);
-
+*/
+        topShooterWheel.setPID(1.7, 0.15, 0.15);
+        bottomShooterWheel.setPID(1.7, 0.15, 0.15);
+/*
         // placeholder PID values
         intakeController.setPID(0, 0, 0);
 
@@ -309,25 +311,33 @@ public class Robot extends TimedRobot {
     }
     
     @Override
-    public void testInit(){}
+    public void testInit(){
+
+        topSpeed = 0.0;
+        bottomSpeed = 0.0;
+        increment = 0.01;
+        
+
+    }
     // temporary values for testing shooter, will not be present for final version
-/*
+
     double topSpeed = 0.0;
     double bottomSpeed = 0.0;
     double increment = 0.01;
-*/
 
     boolean test = true;
 
     @Override
     public void testPeriodic() {
-
+/*
         test = !test;
 
         smashBoard.set("test", test);
 
-        // here begins the code for testing the shooter
-/*
+      // here begins the code for testing the shooter
+
+        shooterFeeders.setSpeed(-driver.getAxis(XboxController.Axes.RightTrigger));
+
         boolean currentShooter = driver.getToggle(XboxController.Buttons.X);
 
         if(driver.getButtonDown(XboxController.Buttons.R)) {
@@ -356,7 +366,7 @@ public class Robot extends TimedRobot {
 
         }
 
-        if(driver.getPOV(Gamepad.Directions.S) || driver.getButtonDown(XboxController.Buttons.A)) {
+        if(driver.getPOV(Gamepad.Directions.S) || driver.getButtonDown(XboxController.Buttons.B)) {
 
             if(currentShooter) {
 
@@ -370,7 +380,7 @@ public class Robot extends TimedRobot {
 
         }
 
-        if(driver.getToggle(XboxController.Buttons.Y)) {
+        if(driver.getButton(XboxController.Buttons.Y)) {
 
             increment = 0.01;
             topSpeed = 0.0;
@@ -410,7 +420,7 @@ public class Robot extends TimedRobot {
         System.out.println("Commanded Top Speed: " + topSpeed + "\n");
         System.out.println("Current Bottom Speed: " + bottomShooterWheel.getSpeed());
         System.out.println("Commanded Bottom Speed: " + -bottomSpeed);
-*/
+        */
     }
     
 }
