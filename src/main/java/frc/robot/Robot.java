@@ -316,7 +316,6 @@ public class Robot extends TimedRobot {
         topSpeed = 0.0;
         bottomSpeed = 0.0;
         increment = 0.01;
-        
 
     }
     // temporary values for testing shooter, will not be present for final version
@@ -329,14 +328,16 @@ public class Robot extends TimedRobot {
 
     @Override
     public void testPeriodic() {
-/*
+
         test = !test;
 
         smashBoard.set("test", test);
 
+        double feedRate = 0.5;
+
       // here begins the code for testing the shooter
 
-        shooterFeeders.setSpeed(-driver.getAxis(XboxController.Axes.RightTrigger));
+        shooterFeeders.setSpeed((driver.getToggle(XboxController.Buttons.RJ)) ? -feedRate : 0.0);
 
         boolean currentShooter = driver.getToggle(XboxController.Buttons.X);
 
@@ -420,7 +421,7 @@ public class Robot extends TimedRobot {
         System.out.println("Commanded Top Speed: " + topSpeed + "\n");
         System.out.println("Current Bottom Speed: " + bottomShooterWheel.getSpeed());
         System.out.println("Commanded Bottom Speed: " + -bottomSpeed);
-        */
+        
     }
     
 }
