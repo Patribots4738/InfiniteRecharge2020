@@ -5,6 +5,7 @@ import interfaces.*;
 public class Intake {
 
     PIDMotor angleController;
+    
     Motor sucker;
 
     private final double gearRatio = 24.0 / 16.0;

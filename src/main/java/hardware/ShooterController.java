@@ -35,12 +35,10 @@ public class ShooterController {
 
     }
 
-    // stops the shooter and turns off the limelight's LED
+    // stops the shooter
     public void stop() {
 
         shooter.stop();
-
-        limelight.setLED(Limelight.LEDMode.OFF);
 
     }
 
@@ -57,8 +55,6 @@ public class ShooterController {
 
     // this aligns the robot with the vision target found by the limelight
     public void aim() {
-
-        limelight.setLED(Limelight.LEDMode.ON);
 
         double angle = limelight.getHorizontalAngle();
 

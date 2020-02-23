@@ -335,7 +335,7 @@ public class Robot extends TimedRobot {
 
         double feedRate = 0.5;
 
-      // here begins the code for testing the shooter
+        // here begins the code for testing the shooter
 
         shooterFeeders.setSpeed((driver.getToggle(XboxController.Buttons.RJ)) ? -feedRate : 0.0);
 
@@ -416,7 +416,8 @@ public class Robot extends TimedRobot {
         topShooterWheel.setSpeed(topSpeed);
         bottomShooterWheel.setSpeed(-bottomSpeed);
 
-        System.out.println("Current increment: " + increment + "\n");
+        System.out.println("Current increment: " + increment);
+        System.out.println("Current wheel: " + ((currentShooter) ? "bottom" : "top") + "\n");
         System.out.println("Current Top Speed: " + topShooterWheel.getSpeed());
         System.out.println("Commanded Top Speed: " + topSpeed + "\n");
         System.out.println("Current Bottom Speed: " + bottomShooterWheel.getSpeed());
