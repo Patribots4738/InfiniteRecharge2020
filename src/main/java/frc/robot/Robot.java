@@ -16,7 +16,7 @@ public class Robot extends TimedRobot {
     // time since autonomous firing began (in seconds)
     double shooterCount = 0.0;
 
-    // time autonomous firing is supposed to last (in seconds)
+    // time autonomous firing is supposed to last (in seconds) PLACEHOLDER
     double shootTime = 4.0;
 
     boolean firstTime;
@@ -65,6 +65,7 @@ public class Robot extends TimedRobot {
 
         Compressor compressor = new Compressor();
 
+        // PLACEHOLDER ports
         gearShifter = new DoubleSolenoid(2,3);
 
         leftMotors = new PIDMotorGroup(new Falcon(1), new Falcon(2));
@@ -79,22 +80,22 @@ public class Robot extends TimedRobot {
         topShooterWheel = new Falcon(6);
         bottomShooterWheel = new Falcon(5);
 /*
-        // placeholder port
+        // PLACEHOLDER port
         SingleSolenoid shooterBlocker = new SingleSolenoid(0);
 */
         shooterFeeders = new MotorGroup(new Talon(10), new Talon(9));
 /*
         shooter = new Shooter(topShooterWheel, bottomShooterWheel, shooterFeeders, shooterBlocker);
 
-        // placeholder CAN ID
+        // PLACEHOLDER CAN ID
         PIDMotor intakeController = new Falcon(0);
 
-        // placeholder CAN ID
+        // PLACEHOLDER CAN ID
         Motor intakeSucker = new Victor(0);
 
         intake = new Intake(intakeSucker, intakeController);
 
-        // placeholder CAN ID
+        // PLACEHOLDER CAN ID
         Motor conveyorDriver = new Victor(0);
 
         conveyor = new Conveyor(conveyorDriver);
@@ -103,11 +104,11 @@ public class Robot extends TimedRobot {
 
         shooterControl = new ShooterController(conveyor, shooter, limelight, drive);
 
-        // placeholder CAN IDs
+        // PLACEHOLDER CAN IDs
         PIDMotor leftElevator = new Falcon(0);
         PIDMotor rightElevator = new Falcon(0);
 
-        // placeholder port
+        // PLACEHOLDER port
         SingleSolenoid elevatorLock = new SingleSolenoid(1);
 
         elevator = new Elevator(leftElevator, rightElevator, elevatorLock);
@@ -120,16 +121,16 @@ public class Robot extends TimedRobot {
 
         gearShifter.activateChannel(shifted);
 
-        // drive motors have their PID configured in telop and autonomous
+        // drive motors have their PID configured in teleop and autonomous
         // init, as they need to be different between the two modes
 */
         topShooterWheel.setPID(1.7, 0.15, 0.15);
         bottomShooterWheel.setPID(1.7, 0.15, 0.15);
 /*
-        // placeholder PID values
+        // PLACEHOLDER PID values
         intakeController.setPID(0, 0, 0);
 
-        // placeholder PID values
+        // PLACEHOLDER PID values
         leftElevator.setPID(0, 0, 0);
         rightElevator.setPID(0, 0, 0);
 
@@ -207,6 +208,8 @@ public class Robot extends TimedRobot {
     @Override 
     public void disabledInit() {
 /*
+        firstTime = true;
+
         driver.setRumble(true, 0.0);
         driver.setRumble(false, 0.0);
 
@@ -221,8 +224,6 @@ public class Robot extends TimedRobot {
     @Override
     public void teleopInit() {
 /*
-        firstTime = true;
-
         // config motors for velocity control
         leftMotors.setPID(0.5, 0, 0);
         rightMotors.setPID(0.5, 0, 0);
@@ -242,8 +243,6 @@ public class Robot extends TimedRobot {
         shifted = !driver.getToggle(XboxController.Buttons.R);
 
         gearShifter.activateChannel(shifted);
-        
-        drive.curvature(-driver.getAxis(XboxController.Axes.LeftY) * multiplier, driver.getAxis(XboxController.Axes.RightX));
 
         boolean aiming = driver.getButton(XboxController.Buttons.A);
 
@@ -259,7 +258,7 @@ public class Robot extends TimedRobot {
 
             drive.curvature(-driver.getAxis(XboxController.Axes.LeftY) * multiplier, driver.getAxis(XboxController.Axes.RightX));
 
-            intake.setDown(operator.getButton(XboxController.Buttons.R));
+            intake.setDown(operator.getToggle(XboxController.Buttons.R));
 
             if(operator.getAxis(XboxController.Axes.RightTrigger) < 0.2) {
 

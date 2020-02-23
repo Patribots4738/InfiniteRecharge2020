@@ -32,7 +32,7 @@ public class Talon implements PIDMotor{
 
     }
 
-    public void setSensorPhase(boolean phase){
+    public void setSensorPhase(boolean phase) {
 
         motor.setSensorPhase(phase);
 

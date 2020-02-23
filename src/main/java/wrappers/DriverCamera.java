@@ -11,7 +11,7 @@ public class DriverCamera {
 
     public DriverCamera() {
 
-        try{
+        try {
 
             cam = CameraServer.getInstance().startAutomaticCapture();
             cam.setResolution(240, 160);

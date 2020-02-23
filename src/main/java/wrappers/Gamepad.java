@@ -20,15 +20,10 @@ public class Gamepad {
 	public Gamepad(int port) {
 
 		this.port = port;
+
 		joystick = new Joystick(port);
 
 		int buttonCount = joystick.getButtonCount();
-
-		if (buttonCount < 10) {
-
-			buttonCount = 10;
-
-		}
 
 		buttons = new TogglableButton[buttonCount];
 

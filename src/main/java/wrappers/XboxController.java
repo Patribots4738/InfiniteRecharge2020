@@ -20,18 +20,6 @@ public class XboxController extends Gamepad {
 
 	}
 
-	public double getRightTrigger() {
-
-		return this.getAxis(2);
-		
-	}
-
-	public double getLeftTrigger() {
-
-		return this.getAxis(3);
-
-	}
-
 	public double getAxis(Axes axis) {
 
 		return this.getAxis(axis.ordinal());

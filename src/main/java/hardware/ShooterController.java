@@ -60,7 +60,7 @@ public class ShooterController {
 
         aligned = Math.abs(angle) <= acceptableAngleError;
 
-        double speed = ((angle * converter) * maxSpeed) + minSpeed;
+        double speed = (angle * converter * maxSpeed) + minSpeed;
 
         if(speed > maxSpeed) {
 
@@ -68,7 +68,7 @@ public class ShooterController {
 
         }
 
-        drive.bananaTank(speed, speed);
+        drive.bananaTank(speed, -speed);
 
     }
 

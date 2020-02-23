@@ -17,7 +17,7 @@ public class Shooter {
 
     private double feedRate = 0.5;
 
-    // in percent
+    // in decimal percent
     private double acceptableSpeedError = 0.05;
 
     public Shooter(PIDMotor topWheel, PIDMotor bottomWheel, MotorGroup feeders, SingleSolenoid blocker) {
@@ -63,11 +63,13 @@ public class Shooter {
 
         blocker.set(false);
 
+        readyToFire = false;
+
     }
 
     public void setFeeders(boolean on) {
 
-        blocker.set(on);
+        blocker.set(!on);
 
         feeders.setSpeed((on) ? feedRate : 0);
 

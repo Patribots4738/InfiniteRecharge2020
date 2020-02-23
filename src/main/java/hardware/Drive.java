@@ -38,10 +38,10 @@ public class Drive {
         turning = deadBand(turning);
 
         double leftMotorInput = (throttle + turning);
-        double rightMotorInput = -(throttle - turning);
+        double rightMotorInput = (throttle - turning);
 
         leftMotors.setSpeed(leftMotorInput);
-        rightMotors.setSpeed(rightMotorInput);
+        rightMotors.setSpeed(-rightMotorInput);
 
     }
 

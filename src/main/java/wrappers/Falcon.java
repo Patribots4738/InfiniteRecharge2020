@@ -7,7 +7,7 @@ import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
 
-public class Falcon implements PIDMotor{
+public class Falcon implements PIDMotor {
 
     TalonFX motor;
 

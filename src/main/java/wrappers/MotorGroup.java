@@ -2,7 +2,7 @@ package wrappers;
 
 import interfaces.*;
 
-public class MotorGroup implements Motor{
+public class MotorGroup implements Motor {
 
     Motor[] motors;
 
