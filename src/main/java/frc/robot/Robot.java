@@ -2,14 +2,20 @@ package frc.robot;
 
 import edu.wpi.first.wpilibj.TimedRobot;
 
+import edu.wpi.first.wpilibj.Servo;
+import edu.wpi.first.wpilibj.Timer;
+
 import autonomous.*;
 import hardware.*;
 import interfaces.*;
+import lowleveltools.*;
 import networking.*;
 import utils.*;
 import wrappers.*;
 
 public class Robot extends TimedRobot {
+
+    PWMPort servo;
 
     public static boolean shifted = true;
 
@@ -24,6 +30,8 @@ public class Robot extends TimedRobot {
     NTTable smashBoard;
 
     DriverCamera cam;
+
+    Compressor compressor;
 
     DoubleSolenoid gearShifter;
 
@@ -55,55 +63,59 @@ public class Robot extends TimedRobot {
     AutoPath path;
     AutoDrive auto;
 
+    ColorSensor colorSensor;
+
+    boolean seenBall;
+
     @Override
     public void robotInit() {
         // here begin all the constructors
 
+        seenBall = false;
+
+        colorSensor = new ColorSensor();
+
         smashBoard = new NTTable("/SmartDashboard");
-/*
+
         cam = new DriverCamera();
 
-        Compressor compressor = new Compressor();
+        compressor = new Compressor();
 
         // PLACEHOLDER ports
-        gearShifter = new DoubleSolenoid(2,3);
+        gearShifter = new DoubleSolenoid(7,6);
 
         leftMotors = new PIDMotorGroup(new Falcon(1), new Falcon(2));
         rightMotors = new PIDMotorGroup(new Falcon(3), new Falcon(4));
 
         drive = new Drive(leftMotors, rightMotors);
-*/
+
         driver = new XboxController(0);
-/*
         operator = new XboxController(1);               
-*/
+
         topShooterWheel = new Falcon(6);
         bottomShooterWheel = new Falcon(5);
-/*
-        // PLACEHOLDER port
-        SingleSolenoid shooterBlocker = new SingleSolenoid(0);
-*/
+
+        DoubleSolenoid shooterBlocker = new DoubleSolenoid(2,3);
+
         shooterFeeders = new MotorGroup(new Talon(10), new Talon(9));
-/*
+
         shooter = new Shooter(topShooterWheel, bottomShooterWheel, shooterFeeders, shooterBlocker);
 
         // PLACEHOLDER CAN ID
-        PIDMotor intakeController = new Falcon(0);
+        PIDMotor intakeController = new Falcon(11);
 
-        // PLACEHOLDER CAN ID
-        Motor intakeSucker = new Victor(0);
+        Motor intakeSucker = new Talon(8);
 
         intake = new Intake(intakeSucker, intakeController);
 
-        // PLACEHOLDER CAN ID
-        Motor conveyorDriver = new Victor(0);
+        Motor conveyorDriver = new Talon(7);
 
         conveyor = new Conveyor(conveyorDriver);
 
-        limelight = new Limelight();
+        //limelight = new Limelight();
 
-        shooterControl = new ShooterController(conveyor, shooter, limelight, drive);
-
+        //shooterControl = new ShooterController(conveyor, shooter, limelight, drive);
+/*
         // PLACEHOLDER CAN IDs
         PIDMotor leftElevator = new Falcon(0);
         PIDMotor rightElevator = new Falcon(0);
@@ -114,7 +126,7 @@ public class Robot extends TimedRobot {
         elevator = new Elevator(leftElevator, rightElevator, elevatorLock);
 
         auto = new AutoDrive(leftMotors, rightMotors);
-
+*/
         // the constructors end here, now everything gets configured
 
         compressor.setState(true);
@@ -123,13 +135,13 @@ public class Robot extends TimedRobot {
 
         // drive motors have their PID configured in teleop and autonomous
         // init, as they need to be different between the two modes
-*/
+
         topShooterWheel.setPID(1.7, 0.15, 0.15);
         bottomShooterWheel.setPID(1.7, 0.15, 0.15);
-/*
-        // PLACEHOLDER PID values
-        intakeController.setPID(0, 0, 0);
 
+        // PLACEHOLDER PID values
+        intakeController.setPID(1, 0, 0);
+/*
         // PLACEHOLDER PID values
         leftElevator.setPID(0, 0, 0);
         rightElevator.setPID(0, 0, 0);
@@ -142,6 +154,8 @@ public class Robot extends TimedRobot {
     public void robotPeriodic() {
 
         //cam.retryConnection();
+
+        compressor.setState(true);
 
     }
 
@@ -207,7 +221,7 @@ public class Robot extends TimedRobot {
     // NO TOUCH
     @Override 
     public void disabledInit() {
-/*
+
         firstTime = true;
 
         driver.setRumble(true, 0.0);
@@ -215,7 +229,7 @@ public class Robot extends TimedRobot {
 
         operator.setRumble(true, 0.0);
         operator.setRumble(false, 0.0);
-*/
+
     }
     // VERY EXTRA NO TOUCH
     @Override
@@ -223,20 +237,19 @@ public class Robot extends TimedRobot {
     
     @Override
     public void teleopInit() {
-/*
+
         // config motors for velocity control
         leftMotors.setPID(0.5, 0, 0);
         rightMotors.setPID(0.5, 0, 0);
 
         leftMotors.resetEncoder();
         rightMotors.resetEncoder();
-*/
+
     }
 
     @Override
     public void teleopPeriodic() {
         // here begins the code for controlling the full robot
-/*
         boolean inverted = driver.getToggle(XboxController.Buttons.L);
         double multiplier = (inverted) ? -1.0 : 1.0;
 
@@ -244,6 +257,8 @@ public class Robot extends TimedRobot {
 
         gearShifter.activateChannel(shifted);
 
+        double intakeMultiplier = 0.5;
+/*
         boolean aiming = driver.getButton(XboxController.Buttons.A);
 
         elevator.setElevator(operator.getAxis(XboxController.Axes.LeftY));
@@ -255,23 +270,152 @@ public class Robot extends TimedRobot {
             operator.setRumble(false, 0.0);
             driver.setRumble(true, 0.0);
             driver.setRumble(false, 0.0);
-
+*/
             drive.curvature(-driver.getAxis(XboxController.Axes.LeftY) * multiplier, driver.getAxis(XboxController.Axes.RightX));
 
             intake.setDown(operator.getToggle(XboxController.Buttons.R));
 
             if(operator.getAxis(XboxController.Axes.RightTrigger) < 0.2) {
 
-                intake.setSuck(-operator.getAxis(XboxController.Axes.LeftTrigger));
-                conveyor.setConveyor(-operator.getAxis(XboxController.Axes.LeftTrigger));
+                intake.setSuck(operator.getAxis(XboxController.Axes.LeftTrigger) * intakeMultiplier);
 
             } else {
 
-                intake.setSuck(operator.getAxis(XboxController.Axes.RightTrigger));
-                conveyor.setConveyor(operator.getAxis(XboxController.Axes.RightTrigger));
+                intake.setSuck(-operator.getAxis(XboxController.Axes.RightTrigger) * intakeMultiplier);
 
             }
 
+            if(operator.getButtonDown(XboxController.Buttons.LJ)) {
+
+                conveyor.resetTime();
+
+            }
+
+            conveyor.setConveyor(conveyor.increment());
+
+/* DELETE THIS  
+*/
+compressor.setState(true);
+
+boolean feeding = operator.getToggle(XboxController.Buttons.RJ);
+
+shooter.setBlocker(feeding);
+
+shooter.setFeeders(feeding);
+
+boolean currentShooter = operator.getToggle(XboxController.Buttons.X);
+
+if(operator.getButton(XboxController.Buttons.B)) {
+
+    conveyor.setSpeed(-0.35);
+
+}
+
+if(operator.getButton(XboxController.Buttons.Y)) {
+
+    conveyor.setSpeed(0.35);
+
+}
+
+if(operator.getButtonDown(XboxController.Buttons.R)) {
+
+    increment *= 2.0;
+
+}
+
+if(operator.getButtonDown(XboxController.Buttons.L)) {
+
+    increment *= 0.5;
+
+}
+
+if(operator.getPOV(Gamepad.Directions.N) || operator.getButtonDown(XboxController.Buttons.A)) {
+
+    if(currentShooter) {
+
+        bottomSpeed += increment;
+
+    } else {
+
+        topSpeed += increment;
+
+    }
+
+}
+
+if(operator.getPOV(Gamepad.Directions.S) || operator.getButtonDown(XboxController.Buttons.B)) {
+
+    if(currentShooter) {
+
+        bottomSpeed -= increment;
+
+    } else {
+
+        topSpeed -= increment;
+
+    }
+
+}
+
+if(operator.getButton(XboxController.Buttons.Y)) {
+
+    increment = 0.01;
+    topSpeed = 0.0;
+    bottomSpeed = 0.0;
+
+}
+
+if(topSpeed > 1.0) {
+
+    topSpeed = 1.0;
+
+}
+
+if(bottomSpeed > 1.0) {
+
+    bottomSpeed = 1.0;
+
+}
+
+if(topSpeed < 0.0) {
+
+    topSpeed = 0.0;
+
+}
+
+if(bottomSpeed < 0.0) {
+
+    bottomSpeed = 0.0;
+
+}
+/*
+if(colorSensor.getRGBIR()[3] < 2.6) {
+
+    System.out.println("ball");
+    conveyor.setSpeed(0.5);
+
+}
+
+if(seenBall = true && colorSensor.getRGBIR()[3] < 2.6) {
+
+    seenBall = false;
+    conveyor.setSpeed(0.5);
+
+}
+*/
+shooter.setRawSpeeds(topSpeed, topSpeed);
+/*
+System.out.println("Current increment: " + increment);
+System.out.println("Current wheel: " + ((currentShooter) ? "bottom" : "top") + "\n");
+System.out.println("Current Top Speed: " + topShooterWheel.getSpeed());
+System.out.println("Commanded Top Speed: " + topSpeed + "\n");
+System.out.println("Current Bottom Speed: " + bottomShooterWheel.getSpeed());
+System.out.println("Commanded Bottom Speed: " + -bottomSpeed);
+   */         
+/*
+*/
+
+/*
             shooterControl.stop();
 
         } else {
@@ -323,20 +467,24 @@ public class Robot extends TimedRobot {
     double bottomSpeed = 0.0;
     double increment = 0.01;
 
+    int servoPos = 0;
+
     boolean test = true;
 
     @Override
     public void testPeriodic() {
 
-        test = !test;
-
-        smashBoard.set("test", test);
-
-        double feedRate = 0.5;
-
         // here begins the code for testing the shooter
 
-        shooterFeeders.setSpeed((driver.getToggle(XboxController.Buttons.RJ)) ? -feedRate : 0.0);
+        boolean feeding = driver.getToggle(XboxController.Buttons.RJ);
+
+        intake.setDown(driver.getToggle(XboxController.Buttons.LJ));
+
+        shooter.setFeeders(feeding);
+
+        conveyor.setConveyor(feeding);
+
+        intake.setSuck((feeding) ? 0.5 : 0.0);
 
         boolean currentShooter = driver.getToggle(XboxController.Buttons.X);
 
@@ -412,8 +560,7 @@ public class Robot extends TimedRobot {
 
         }
 
-        topShooterWheel.setSpeed(topSpeed);
-        bottomShooterWheel.setSpeed(-bottomSpeed);
+        shooter.setRawSpeeds(topSpeed, bottomSpeed);
 
         System.out.println("Current increment: " + increment);
         System.out.println("Current wheel: " + ((currentShooter) ? "bottom" : "top") + "\n");
@@ -421,7 +568,7 @@ public class Robot extends TimedRobot {
         System.out.println("Commanded Top Speed: " + topSpeed + "\n");
         System.out.println("Current Bottom Speed: " + bottomShooterWheel.getSpeed());
         System.out.println("Commanded Bottom Speed: " + -bottomSpeed);
-        
+
     }
-    
+  
 }

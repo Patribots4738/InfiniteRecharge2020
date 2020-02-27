@@ -11,16 +11,16 @@ public class Shooter {
 
     MotorGroup feeders;    
 
-    SingleSolenoid blocker;
+    DoubleSolenoid blocker;
 
     public static boolean readyToFire = false;
 
-    private double feedRate = 0.5;
+    private double feedRate = -0.5;
 
     // in decimal percent
     private double acceptableSpeedError = 0.05;
 
-    public Shooter(PIDMotor topWheel, PIDMotor bottomWheel, MotorGroup feeders, SingleSolenoid blocker) {
+    public Shooter(PIDMotor topWheel, PIDMotor bottomWheel, MotorGroup feeders, DoubleSolenoid blocker) {
 
         this.topWheel = topWheel;
         this.bottomWheel = bottomWheel;
@@ -54,6 +54,19 @@ public class Shooter {
         
     }
 
+    public void setRawSpeeds(double topSpeed, double bottomSpeed) {
+
+        topWheel.setSpeed(topSpeed);
+        bottomWheel.setSpeed(-bottomSpeed);
+
+    }
+
+    public void setBlocker(boolean on) {
+
+        blocker.activateChannel(on);
+
+    }
+
     public void stop() {
         
         topWheel.setSpeed(0);
@@ -61,15 +74,15 @@ public class Shooter {
 
         feeders.setSpeed(0);
 
-        blocker.set(false);
+        blocker.activateChannel(false);
 
         readyToFire = false;
 
     }
 
     public void setFeeders(boolean on) {
-
-        blocker.set(!on);
+        
+        blocker.activateChannel(on);
 
         feeders.setSpeed((on) ? feedRate : 0);
 

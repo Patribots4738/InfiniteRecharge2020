@@ -6,6 +6,8 @@ import utils.MovingAverage;
 
 public class AnalogPort{
 
+    // NOT TESTED, NEEDS WORK
+
     // Raw analog port class for reading a writing voltage to an analog port on the rio
 
     AnalogInput input;

@@ -8,6 +8,8 @@ public class Compressor {
 
         comp = new edu.wpi.first.wpilibj.Compressor();
 
+        comp.setClosedLoopControl(true);
+
     }
 
     public void setState(boolean on) {
