@@ -2,9 +2,6 @@ package frc.robot;
 
 import edu.wpi.first.wpilibj.TimedRobot;
 
-import edu.wpi.first.wpilibj.Servo;
-import edu.wpi.first.wpilibj.Timer;
-
 import autonomous.*;
 import hardware.*;
 import interfaces.*;
@@ -15,15 +12,9 @@ import wrappers.*;
 
 public class Robot extends TimedRobot {
 
-    PWMPort servo;
-
     public static boolean shifted = true;
 
-    // time since autonomous firing began (in seconds)
-    double shooterCount = 0.0;
-
-    // time autonomous firing is supposed to last (in seconds) PLACEHOLDER
-    double shootTime = 4.0;
+    Countdown shootTimer;
 
     boolean firstTime;
 
@@ -43,6 +34,7 @@ public class Robot extends TimedRobot {
     XboxController driver;
     XboxController operator;
 
+    // once testing is done, make these no longer global variables
     PIDMotor topShooterWheel;
     PIDMotor bottomShooterWheel;
 
@@ -54,6 +46,7 @@ public class Robot extends TimedRobot {
 
     Limelight limelight;
 
+    // once testing is done, make these no longer global variables
     MotorGroup shooterFeeders;
 
     ShooterController shooterControl;
@@ -63,17 +56,9 @@ public class Robot extends TimedRobot {
     AutoPath path;
     AutoDrive auto;
 
-    ColorSensor colorSensor;
-
-    boolean seenBall;
-
     @Override
     public void robotInit() {
         // here begin all the constructors
-
-        seenBall = false;
-
-        colorSensor = new ColorSensor();
 
         smashBoard = new NTTable("/SmartDashboard");
 
@@ -81,7 +66,6 @@ public class Robot extends TimedRobot {
 
         compressor = new Compressor();
 
-        // PLACEHOLDER ports
         gearShifter = new DoubleSolenoid(7,6);
 
         leftMotors = new PIDMotorGroup(new Falcon(1), new Falcon(2));
@@ -92,16 +76,17 @@ public class Robot extends TimedRobot {
         driver = new XboxController(0);
         operator = new XboxController(1);               
 
+        // once testing is done, make these no longer global variables
         topShooterWheel = new Falcon(6);
         bottomShooterWheel = new Falcon(5);
 
         DoubleSolenoid shooterBlocker = new DoubleSolenoid(2,3);
 
+        // once testing is done, make this no longer a global variable
         shooterFeeders = new MotorGroup(new Talon(10), new Talon(9));
 
         shooter = new Shooter(topShooterWheel, bottomShooterWheel, shooterFeeders, shooterBlocker);
 
-        // PLACEHOLDER CAN ID
         PIDMotor intakeController = new Falcon(11);
 
         Motor intakeSucker = new Talon(8);
@@ -112,9 +97,9 @@ public class Robot extends TimedRobot {
 
         conveyor = new Conveyor(conveyorDriver);
 
-        //limelight = new Limelight();
+        limelight = new Limelight();
 
-        //shooterControl = new ShooterController(conveyor, shooter, limelight, drive);
+        shooterControl = new ShooterController(conveyor, shooter, limelight, drive);
 /*
         // PLACEHOLDER CAN IDs
         PIDMotor leftElevator = new Falcon(0);
@@ -124,9 +109,9 @@ public class Robot extends TimedRobot {
         SingleSolenoid elevatorLock = new SingleSolenoid(1);
 
         elevator = new Elevator(leftElevator, rightElevator, elevatorLock);
-
-        auto = new AutoDrive(leftMotors, rightMotors);
 */
+        auto = new AutoDrive(leftMotors, rightMotors);
+
         // the constructors end here, now everything gets configured
 
         compressor.setState(true);
@@ -145,9 +130,9 @@ public class Robot extends TimedRobot {
         // PLACEHOLDER PID values
         leftElevator.setPID(0, 0, 0);
         rightElevator.setPID(0, 0, 0);
-
-        auto.reset();
 */
+        auto.reset();
+
     }
 
     @Override
@@ -161,12 +146,14 @@ public class Robot extends TimedRobot {
 
     @Override
     public void autonomousInit() {
-/*
+
         firstTime = true;
         
         shifted = true;
 
         gearShifter.activateChannel(shifted);
+
+        shootTimer = new Countdown(4.0);
 
         // config motors for positional control
         leftMotors.setPID(2, 0, 0);
@@ -177,17 +164,15 @@ public class Robot extends TimedRobot {
         path = new AutoPath(smashBoard.get("selectedPath").toString());
 
         auto.addPath(new AutoPath("home/lvuser/deploy/autopaths/Default.json"));
-*/
+
     } 
 
     @Override
     public void autonomousPeriodic() {
-/*
+
         if (auto.queueIsEmpty()) {
 
-            if(shooterCount < shootTime) {
-
-                shooterCount += 0.02;
+            if(shootTimer.isRunning()) {
 
                 shooterControl.aim();
 
@@ -216,8 +201,9 @@ public class Robot extends TimedRobot {
             auto.executeQueue();
 
         }
-*/
+
     }
+
     // NO TOUCH
     @Override 
     public void disabledInit() {
@@ -231,6 +217,7 @@ public class Robot extends TimedRobot {
         operator.setRumble(false, 0.0);
 
     }
+    
     // VERY EXTRA NO TOUCH
     @Override
     public void disabledPeriodic() {}
@@ -247,9 +234,8 @@ public class Robot extends TimedRobot {
 
     }
 
-    @Override
-    public void teleopPeriodic() {
-        // here begins the code for controlling the full robot
+    public void drive() {
+
         boolean inverted = driver.getToggle(XboxController.Buttons.L);
         double multiplier = (inverted) ? -1.0 : 1.0;
 
@@ -257,12 +243,39 @@ public class Robot extends TimedRobot {
 
         gearShifter.activateChannel(shifted);
 
+        drive.curvature(-driver.getAxis(XboxController.Axes.LeftY) * multiplier, driver.getAxis(XboxController.Axes.RightX));
+
+    }
+
+    public void operate() {
+
         double intakeMultiplier = 0.5;
-/*
-        boolean aiming = driver.getButton(XboxController.Buttons.A);
+        double conveyorMultiplier = 0.5;
 
         elevator.setElevator(operator.getAxis(XboxController.Axes.LeftY));
         elevator.setLock(operator.getToggle(XboxController.Buttons.Select));
+
+        intake.setDown(operator.getToggle(XboxController.Buttons.R));
+
+        if(operator.getAxis(XboxController.Axes.RightTrigger) < 0.2) {
+
+            intake.setSuck(operator.getAxis(XboxController.Axes.LeftTrigger) * intakeMultiplier);
+            conveyor.setSpeed(-operator.getAxis(XboxController.Axes.LeftTrigger) * conveyorMultiplier);
+
+        } else {
+
+            intake.setSuck(-operator.getAxis(XboxController.Axes.RightTrigger) * intakeMultiplier);
+            conveyor.setSpeed(operator.getAxis(XboxController.Axes.RightTrigger) * conveyorMultiplier);
+
+        }
+
+    }
+
+    @Override
+    public void teleopPeriodic() {
+        // here begins the code for controlling the full robot
+
+        boolean aiming = driver.getButton(XboxController.Buttons.A);
 
         if(!aiming) {
 
@@ -270,152 +283,11 @@ public class Robot extends TimedRobot {
             operator.setRumble(false, 0.0);
             driver.setRumble(true, 0.0);
             driver.setRumble(false, 0.0);
-*/
-            drive.curvature(-driver.getAxis(XboxController.Axes.LeftY) * multiplier, driver.getAxis(XboxController.Axes.RightX));
 
-            intake.setDown(operator.getToggle(XboxController.Buttons.R));
+            drive();
 
-            if(operator.getAxis(XboxController.Axes.RightTrigger) < 0.2) {
+            operate();
 
-                intake.setSuck(operator.getAxis(XboxController.Axes.LeftTrigger) * intakeMultiplier);
-
-            } else {
-
-                intake.setSuck(-operator.getAxis(XboxController.Axes.RightTrigger) * intakeMultiplier);
-
-            }
-
-            if(operator.getButtonDown(XboxController.Buttons.LJ)) {
-
-                conveyor.resetTime();
-
-            }
-
-            conveyor.setConveyor(conveyor.increment());
-
-/* DELETE THIS  
-*/
-compressor.setState(true);
-
-boolean feeding = operator.getToggle(XboxController.Buttons.RJ);
-
-shooter.setBlocker(feeding);
-
-shooter.setFeeders(feeding);
-
-boolean currentShooter = operator.getToggle(XboxController.Buttons.X);
-
-if(operator.getButton(XboxController.Buttons.B)) {
-
-    conveyor.setSpeed(-0.35);
-
-}
-
-if(operator.getButton(XboxController.Buttons.Y)) {
-
-    conveyor.setSpeed(0.35);
-
-}
-
-if(operator.getButtonDown(XboxController.Buttons.R)) {
-
-    increment *= 2.0;
-
-}
-
-if(operator.getButtonDown(XboxController.Buttons.L)) {
-
-    increment *= 0.5;
-
-}
-
-if(operator.getPOV(Gamepad.Directions.N) || operator.getButtonDown(XboxController.Buttons.A)) {
-
-    if(currentShooter) {
-
-        bottomSpeed += increment;
-
-    } else {
-
-        topSpeed += increment;
-
-    }
-
-}
-
-if(operator.getPOV(Gamepad.Directions.S) || operator.getButtonDown(XboxController.Buttons.B)) {
-
-    if(currentShooter) {
-
-        bottomSpeed -= increment;
-
-    } else {
-
-        topSpeed -= increment;
-
-    }
-
-}
-
-if(operator.getButton(XboxController.Buttons.Y)) {
-
-    increment = 0.01;
-    topSpeed = 0.0;
-    bottomSpeed = 0.0;
-
-}
-
-if(topSpeed > 1.0) {
-
-    topSpeed = 1.0;
-
-}
-
-if(bottomSpeed > 1.0) {
-
-    bottomSpeed = 1.0;
-
-}
-
-if(topSpeed < 0.0) {
-
-    topSpeed = 0.0;
-
-}
-
-if(bottomSpeed < 0.0) {
-
-    bottomSpeed = 0.0;
-
-}
-/*
-if(colorSensor.getRGBIR()[3] < 2.6) {
-
-    System.out.println("ball");
-    conveyor.setSpeed(0.5);
-
-}
-
-if(seenBall = true && colorSensor.getRGBIR()[3] < 2.6) {
-
-    seenBall = false;
-    conveyor.setSpeed(0.5);
-
-}
-*/
-shooter.setRawSpeeds(topSpeed, topSpeed);
-/*
-System.out.println("Current increment: " + increment);
-System.out.println("Current wheel: " + ((currentShooter) ? "bottom" : "top") + "\n");
-System.out.println("Current Top Speed: " + topShooterWheel.getSpeed());
-System.out.println("Commanded Top Speed: " + topSpeed + "\n");
-System.out.println("Current Bottom Speed: " + bottomShooterWheel.getSpeed());
-System.out.println("Commanded Bottom Speed: " + -bottomSpeed);
-   */         
-/*
-*/
-
-/*
             shooterControl.stop();
 
         } else {
@@ -450,9 +322,11 @@ System.out.println("Commanded Bottom Speed: " + -bottomSpeed);
             }
 
         }
-*/
+
     }
-    
+
+    // everything from here down is temporary for testing
+
     @Override
     public void testInit(){
 
@@ -460,108 +334,96 @@ System.out.println("Commanded Bottom Speed: " + -bottomSpeed);
         bottomSpeed = 0.0;
         increment = 0.01;
 
-    }
-    // temporary values for testing shooter, will not be present for final version
+        teleopInit();
 
+    }
+
+    // temporary values for testing shooter, will not be present for final version
     double topSpeed = 0.0;
     double bottomSpeed = 0.0;
     double increment = 0.01;
 
-    int servoPos = 0;
-
-    boolean test = true;
-
-    @Override
-    public void testPeriodic() {
-
+    public void testShooter() {
+        
         // here begins the code for testing the shooter
+        compressor.setState(true);
 
-        boolean feeding = driver.getToggle(XboxController.Buttons.RJ);
-
-        intake.setDown(driver.getToggle(XboxController.Buttons.LJ));
-
+        boolean feeding = operator.getToggle(XboxController.Buttons.Y);
+        
+        shooter.setBlocker(feeding);
+        
         shooter.setFeeders(feeding);
+        
+        boolean currentShooter = operator.getToggle(XboxController.Buttons.X);
 
-        conveyor.setConveyor(feeding);
-
-        intake.setSuck((feeding) ? 0.5 : 0.0);
-
-        boolean currentShooter = driver.getToggle(XboxController.Buttons.X);
-
-        if(driver.getButtonDown(XboxController.Buttons.R)) {
-
+        boolean sameSpeed = operator.getToggle(XboxController.Buttons.Start);
+        
+        if(operator.getButtonDown(XboxController.Buttons.A)) {
+        
             increment *= 2.0;
-
+        
         }
-
-        if(driver.getButtonDown(XboxController.Buttons.L)) {
-
+        
+        if(operator.getButtonDown(XboxController.Buttons.B)) {
+        
             increment *= 0.5;
-
+        
         }
-
-        if(driver.getPOV(Gamepad.Directions.N) || driver.getButtonDown(XboxController.Buttons.A)) {
-
+        
+        if(operator.getPOV(Gamepad.Directions.N)) {
+        
             if(currentShooter) {
-
+        
                 bottomSpeed += increment;
-
+        
             } else {
-
+        
                 topSpeed += increment;
-
+        
             }
-
+        
         }
-
-        if(driver.getPOV(Gamepad.Directions.S) || driver.getButtonDown(XboxController.Buttons.B)) {
-
+        
+        if(operator.getPOV(Gamepad.Directions.S)) {
+        
             if(currentShooter) {
-
+        
                 bottomSpeed -= increment;
-
+        
             } else {
-
+        
                 topSpeed -= increment;
-
+        
             }
-
+        
         }
-
-        if(driver.getButton(XboxController.Buttons.Y)) {
-
-            increment = 0.01;
-            topSpeed = 0.0;
-            bottomSpeed = 0.0;
-
-        }
-
+        
         if(topSpeed > 1.0) {
-
+        
             topSpeed = 1.0;
-
+        
         }
-
+        
         if(bottomSpeed > 1.0) {
-
+        
             bottomSpeed = 1.0;
-
+        
         }
-
+        
         if(topSpeed < 0.0) {
-
+        
             topSpeed = 0.0;
-
+        
         }
-
+        
         if(bottomSpeed < 0.0) {
-
+        
             bottomSpeed = 0.0;
-
+        
         }
-
-        shooter.setRawSpeeds(topSpeed, bottomSpeed);
-
+        
+        shooter.setRawSpeeds(topSpeed, ((sameSpeed) ? topSpeed : bottomSpeed));
+        
         System.out.println("Current increment: " + increment);
         System.out.println("Current wheel: " + ((currentShooter) ? "bottom" : "top") + "\n");
         System.out.println("Current Top Speed: " + topShooterWheel.getSpeed());
@@ -570,5 +432,14 @@ System.out.println("Commanded Bottom Speed: " + -bottomSpeed);
         System.out.println("Commanded Bottom Speed: " + -bottomSpeed);
 
     }
-  
+
+    @Override
+    public void testPeriodic() {
+
+        drive();
+        operate();
+        testShooter();
+
+    }
+
 }
