@@ -1,5 +1,6 @@
 package hardware;
 
+import frc.robot.Robot;
 import wrappers.Limelight;
 
 public class ShooterController {
@@ -13,13 +14,13 @@ public class ShooterController {
     Drive drive;
 
     // all of these doubles are placeholders pending testing
-    private double maxSpeed = 0.4;
+    private double maxSpeed = 0.3;
 
-    private double minSpeed = 0.02 * maxSpeed;
+    private double minSpeed = 0.22 * maxSpeed;
 
-    private double converter = 1.0 / ((Shooter.readyToFire) ? 100.0 : 500.0);
+    private double converter = 1.0 / 15.0;
 
-    private double acceptableAngleError = 0.5;
+    private double acceptableAngleError = 0.65;
 
     public static boolean aligned = false;
 
@@ -40,6 +41,8 @@ public class ShooterController {
 
         shooter.stop();
 
+        conveyor.setSpeed(0);
+
     }
 
     // this spins up the shooter and sets the conveyor and feeders based on wether the shooter is up to speed
@@ -56,11 +59,15 @@ public class ShooterController {
     // this aligns the robot with the vision target found by the limelight
     public void aim() {
 
-        double angle = limelight.getHorizontalAngle();
+        double offset = 3.55;
+
+        double angle = limelight.getHorizontalAngle() - offset;
 
         aligned = Math.abs(angle) <= acceptableAngleError;
 
-        double speed = (angle * converter * maxSpeed) + minSpeed;
+        double speed = ((angle * converter) * maxSpeed);
+
+        speed += (minSpeed * Math.signum(angle));
 
         if(speed > maxSpeed) {
 

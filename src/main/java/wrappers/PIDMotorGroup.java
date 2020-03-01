@@ -69,6 +69,16 @@ public class PIDMotorGroup extends MotorGroup implements PIDMotor {
 
     }
 
+    public void setPercent(double percent) {
+
+        for(PIDMotor motor : pidMotors) {
+
+            motor.setPercent(percent);
+
+        }
+
+    }
+
     public void setPosition(double rotations, double minSpeed, double maxSpeed) {
 
         for (PIDMotor motor : pidMotors) {

@@ -85,6 +85,12 @@ public class SparkMax implements PIDMotor {
 
     }
 
+    public void setPercent(double percent) {
+
+        pidController.setReference(percent, ControlType.kDutyCycle);
+
+    }
+
     public void setPosition(double rotations, double minSpeed, double maxSpeed) {
 
         pidController.setOutputRange(minSpeed, maxSpeed);

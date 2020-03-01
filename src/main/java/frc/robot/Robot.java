@@ -14,6 +14,8 @@ public class Robot extends TimedRobot {
 
     public static boolean shifted = true;
 
+    boolean autoAligned = false;
+
     Countdown shootTimer;
 
     boolean firstTime;
@@ -59,6 +61,8 @@ public class Robot extends TimedRobot {
     @Override
     public void robotInit() {
         // here begin all the constructors
+
+        Timer.init();
 
         smashBoard = new NTTable("/SmartDashboard");
 
@@ -140,6 +144,8 @@ public class Robot extends TimedRobot {
 
         //cam.retryConnection();
 
+        gearShifter.activateChannel(shifted);
+
         compressor.setState(true);
 
     }
@@ -153,7 +159,7 @@ public class Robot extends TimedRobot {
 
         gearShifter.activateChannel(shifted);
 
-        shootTimer = new Countdown(4.0);
+        shootTimer = new Countdown(10.0);
 
         // config motors for positional control
         leftMotors.setPID(2, 0, 0);
@@ -161,9 +167,13 @@ public class Robot extends TimedRobot {
 
         auto.reset();
 
-        path = new AutoPath(smashBoard.get("selectedPath").toString());
+        path = new AutoPath("home/lvuser/deploy/autopaths/Default.json");//smashBoard.get("selectedPath").toString());
 
         auto.addPath(new AutoPath("home/lvuser/deploy/autopaths/Default.json"));
+
+        shooterControl.stop();
+
+        autoAligned = false;
 
     } 
 
@@ -174,9 +184,18 @@ public class Robot extends TimedRobot {
 
             if(shootTimer.isRunning()) {
 
+                leftMotors.setPID(0.5, 0, 0);
+                rightMotors.setPID(0.5, 0, 0);
+
                 shooterControl.aim();
 
                 if(ShooterController.aligned) {
+
+                    autoAligned = ShooterController.aligned;
+
+                }
+
+                if(autoAligned) {
 
                     shooterControl.fire();
 
@@ -186,11 +205,16 @@ public class Robot extends TimedRobot {
 
                 if(firstTime) {
 
+                    leftMotors.setPID(2, 0, 0);
+                    rightMotors.setPID(2, 0, 0);
+
                     auto.addPath(new AutoPath("/home/lvuser/deploy/autopaths/Blank.json"));
 
                     auto.addPath(path);
 
                     firstTime = false;
+
+                    shooterControl.stop();
 
                 }
 
@@ -236,31 +260,45 @@ public class Robot extends TimedRobot {
 
     public void drive() {
 
+        boolean trainingWheels = true;
+
         boolean inverted = driver.getToggle(XboxController.Buttons.L);
-        double multiplier = (inverted) ? -1.0 : 1.0;
+        double multiplier = ((inverted) ? -1.0 : 1.0);
+
+        if(trainingWheels) {
+
+            multiplier *= 0.15;
+
+        }
 
         shifted = !driver.getToggle(XboxController.Buttons.R);
 
-        gearShifter.activateChannel(shifted);
+        if(trainingWheels) {
 
-        drive.curvature(-driver.getAxis(XboxController.Axes.LeftY) * multiplier, driver.getAxis(XboxController.Axes.RightX));
+            drive.bananaArcade(-driver.getAxis(XboxController.Axes.LeftY) * multiplier, driver.getAxis(XboxController.Axes.RightX));
 
+        } else {
+
+            drive.curvature(-driver.getAxis(XboxController.Axes.LeftY) * multiplier, driver.getAxis(XboxController.Axes.RightX));
+
+        }
     }
 
     public void operate() {
 
-        double intakeMultiplier = 0.5;
-        double conveyorMultiplier = 0.5;
+        double intakeMultiplier = 0.3;
+        double conveyorMultiplier = 0.8;
 
-        elevator.setElevator(operator.getAxis(XboxController.Axes.LeftY));
-        elevator.setLock(operator.getToggle(XboxController.Buttons.Select));
+        //elevator.setElevator(operator.getAxis(XboxController.Axes.LeftY));
+        //elevator.setLock(operator.getToggle(XboxController.Buttons.Select));
 
         intake.setDown(operator.getToggle(XboxController.Buttons.R));
 
         if(operator.getAxis(XboxController.Axes.RightTrigger) < 0.2) {
 
             intake.setSuck(operator.getAxis(XboxController.Axes.LeftTrigger) * intakeMultiplier);
-            conveyor.setSpeed(-operator.getAxis(XboxController.Axes.LeftTrigger) * conveyorMultiplier);
+            //conveyor.setSpeed(-operator.getAxis(XboxController.Axes.LeftTrigger) * conveyorMultiplier);
+            conveyor.setSpeed(0);
 
         } else {
 
@@ -288,13 +326,15 @@ public class Robot extends TimedRobot {
 
             operate();
 
-            shooterControl.stop();
+            shooter.stop();
 
         } else {
 
+            shifted = true;
+
             // buzz driver controller if they try to line up without the limelight finding a target,
             // and stop the buzzing and start lining up if the limelight finds a target
-            if(!limelight.targetFound()) {
+/*          if(!limelight.targetFound()) {
 
                 driver.setRumble(true, 0.2);
                 driver.setRumble(false, 0.2);
@@ -303,10 +343,10 @@ public class Robot extends TimedRobot {
 
                 driver.setRumble(true, 0.0);
                 driver.setRumble(false, 0.0);
-
+*/
                 shooterControl.aim();
 
-            }            
+           // }            
 
             if(ShooterController.aligned) {
 
@@ -316,6 +356,12 @@ public class Robot extends TimedRobot {
                 if(operator.getButton(XboxController.Buttons.A)) {
 
                     shooterControl.fire();
+
+                } else {
+
+                    shooterControl.stop();
+
+                    conveyor.setConveyor(operator.getButton(XboxController.Buttons.B));
 
                 }
 
@@ -353,24 +399,28 @@ public class Robot extends TimedRobot {
         shooter.setBlocker(feeding);
         
         shooter.setFeeders(feeding);
+
+        conveyor.setConveyor(feeding);
+
+        intake.setSuck((feeding) ? -0.2 : 0);
         
         boolean currentShooter = operator.getToggle(XboxController.Buttons.X);
 
         boolean sameSpeed = operator.getToggle(XboxController.Buttons.Start);
         
-        if(operator.getButtonDown(XboxController.Buttons.A)) {
+        if(operator.getButtonDown(XboxController.Buttons.RJ)) {
         
             increment *= 2.0;
         
         }
         
-        if(operator.getButtonDown(XboxController.Buttons.B)) {
+        if(operator.getButtonDown(XboxController.Buttons.LJ)) {
         
             increment *= 0.5;
         
         }
         
-        if(operator.getPOV(Gamepad.Directions.N)) {
+        if(operator.getPOV(Gamepad.Directions.N) || operator.getButtonDown(XboxController.Buttons.A)) {
         
             if(currentShooter) {
         
@@ -384,7 +434,7 @@ public class Robot extends TimedRobot {
         
         }
         
-        if(operator.getPOV(Gamepad.Directions.S)) {
+        if(operator.getPOV(Gamepad.Directions.S) || operator.getButtonDown(XboxController.Buttons.B)) {
         
             if(currentShooter) {
         
@@ -430,16 +480,27 @@ public class Robot extends TimedRobot {
         System.out.println("Commanded Top Speed: " + topSpeed + "\n");
         System.out.println("Current Bottom Speed: " + bottomShooterWheel.getSpeed());
         System.out.println("Commanded Bottom Speed: " + -bottomSpeed);
-
+        
     }
 
     @Override
     public void testPeriodic() {
 
+        boolean aiming = driver.getButton(XboxController.Buttons.A);
+        
         drive();
         operate();
         testShooter();
 
+        
+        if(aiming) {
+
+            System.out.println(limelight.getDistance());
+            shooterControl.aim();
+            System.out.println(ShooterController.aligned);
+
+        }
+        
     }
 
 }

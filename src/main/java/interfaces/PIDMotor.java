@@ -10,6 +10,8 @@ public interface PIDMotor extends Motor {
     public void setPID(double p, double i, double d);
     
     public void setPosition(double rotations, double minSpeed, double maxSpeed);
+
+    public void setPercent(double percent);
     
     public double getPosition();
     public double getSpeed();

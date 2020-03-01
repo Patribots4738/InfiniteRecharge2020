@@ -85,6 +85,12 @@ public class Talon implements PIDMotor{
         
     }
 
+    public void setPercent(double percent) {
+
+        motor.set(ControlMode.PercentOutput, percent);
+
+    }
+
     public void setPosition(double rotations, double minSpeed, double maxSpeed) {
 
         motor.configPeakOutputReverse(minSpeed, 20);

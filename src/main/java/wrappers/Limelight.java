@@ -23,6 +23,7 @@ public class Limelight {
     
     MovingAverage horizAngleAvg;
     MovingAverage vertAngleAvg;
+    MovingAverage distanceAvg;
 
     public Limelight() {
 
@@ -35,6 +36,7 @@ public class Limelight {
         // creates average value samples to pad the values from changing too drastically.
         horizAngleAvg = new MovingAverage(10);
         vertAngleAvg = new MovingAverage(10);
+        distanceAvg = new MovingAverage(10);
 
     }
 
@@ -104,7 +106,9 @@ public class Limelight {
         double distance = (Constants.TARGET_HEIGHT - Constants.LIMELIGHT_HEIGHT)
                           / Math.tan(Constants.LIMELIGHT_MOUNTING_ANGLE + Calc.degreesToRadians(getVerticalAngle()));
 
-        return distance;
+        distanceAvg.addValue(distance);
+
+        return distanceAvg.getAverage();
 
     }
 

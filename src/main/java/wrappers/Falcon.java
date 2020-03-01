@@ -78,6 +78,12 @@ public class Falcon implements PIDMotor {
 
     }
 
+    public void setPercent(double percent) {
+
+        motor.set(ControlMode.PercentOutput, percent);
+
+    }
+
     public double getSpeed() {
 
         // the 22000.0 is to convert between the weird encoder base units and percent output

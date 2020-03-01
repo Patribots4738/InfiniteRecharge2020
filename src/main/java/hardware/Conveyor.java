@@ -6,7 +6,7 @@ public class Conveyor {
 
     Motor conveyor;
 
-    private double conveyorSpeed = 0.3;
+    private double conveyorSpeed = 0.75;
 
     public Conveyor(Motor conveyor) {
 

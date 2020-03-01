@@ -33,11 +33,51 @@ public class Shooter {
 
     private double[] distanceToSpeeds(double distance) {
 
-        // PLACEHOLDER MATH 
-        double topWheelSpeed = 0;
-        double bottomWheelSpeed = 0;
+        double topWheelSpeed = getTopSpeed(distance);
+        double bottomWheelSpeed = getBottomSpeed(distance);
+
+        if(distance > 200) {
+
+            
+
+        }
+
         
         return new double[]{topWheelSpeed, bottomWheelSpeed};
+
+    }
+
+    private double getTopSpeed(double distance) {
+
+        double const1 = (-2.15 * (Math.pow(10.0, -9.0)));
+        double const2 = (1.99 * (Math.pow(10.0, -6.0)));
+        double const3 = (-6.428 * (Math.pow(10.0, -4.0)));
+        double const4 = (0.0835);
+        double const5 = (-3.02);
+
+        double degree4 = (Math.pow(distance, 4)) * const1;
+        double degree3 = (Math.pow(distance, 3)) * const2;
+        double degree2 = (Math.pow(distance, 2)) * const3;
+        double degree1 = distance * const4;
+
+        return degree4 + degree3 + degree2 + degree1 + const5;
+
+    }
+
+    private double getBottomSpeed(double distance) {
+
+        double const1 = (3.04 * (Math.pow(10.0, -9.0)));
+        double const2 = (-2.92 * (Math.pow(10.0, -6.0)));
+        double const3 = (1 * (Math.pow(10.0, -3.0)));
+        double const4 = (-0.143);
+        double const5 = (7.58);
+
+        double degree4 = (Math.pow(distance, 4)) * const1;
+        double degree3 = (Math.pow(distance, 3)) * const2;
+        double degree2 = (Math.pow(distance, 2)) * const3;
+        double degree1 = distance * const4;
+
+        return degree4 + degree3 + degree2 + degree1 + const5;
 
     }
 
@@ -47,11 +87,13 @@ public class Shooter {
         double[] speeds = distanceToSpeeds(distance);
 
         topWheel.setSpeed(speeds[0]);
-        bottomWheel.setSpeed(speeds[1]);
+        bottomWheel.setSpeed(-speeds[1]);
 
-        readyToFire = Calc.isBetween(topWheel.getSpeed(), speeds[0] * (1.0 - acceptableSpeedError), speeds[0] * (1 + acceptableSpeedError)) &&
-                     (Calc.isBetween(bottomWheel.getSpeed(), speeds[1] * (1.0 - acceptableSpeedError), speeds[1] * (1 + acceptableSpeedError)));
-        
+        boolean topReady = Calc.isBetween(topWheel.getSpeed(), speeds[0] - acceptableSpeedError, speeds[0] + acceptableSpeedError);
+        boolean bottomReady = Calc.isBetween(Math.abs(bottomWheel.getSpeed()), speeds[1] - acceptableSpeedError, speeds[1] + acceptableSpeedError);
+
+        readyToFire = topReady && bottomReady;
+
     }
 
     public void setRawSpeeds(double topSpeed, double bottomSpeed) {
@@ -69,8 +111,8 @@ public class Shooter {
 
     public void stop() {
         
-        topWheel.setSpeed(0);
-        bottomWheel.setSpeed(0);
+        topWheel.setPercent(0);
+        bottomWheel.setPercent(0);
 
         feeders.setSpeed(0);
 

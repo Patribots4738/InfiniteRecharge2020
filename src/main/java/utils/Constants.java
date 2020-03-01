@@ -5,13 +5,13 @@ import networking.*;
 public final class Constants {
 
     // in inches
-    public static final double TARGET_HEIGHT = 84.5;
+    public static final double TARGET_HEIGHT = 92;
 
     // in inches
-    public static final double LIMELIGHT_HEIGHT = 35;// 26;
+    public static final double LIMELIGHT_HEIGHT = 40.125;// 26;
 
     // in radians
-    public static final double LIMELIGHT_MOUNTING_ANGLE = Calc.degreesToRadians(36);
+    public static final double LIMELIGHT_MOUNTING_ANGLE = Calc.degreesToRadians(18.35414);
 
     // the time, in seconds, of a single loop of the robot code
     public static final double LOOP_TIME = 0.02;
