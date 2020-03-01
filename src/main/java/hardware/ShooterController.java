@@ -1,6 +1,5 @@
 package hardware;
 
-import frc.robot.Robot;
 import wrappers.Limelight;
 
 public class ShooterController {

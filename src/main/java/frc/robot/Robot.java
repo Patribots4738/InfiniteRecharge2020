@@ -5,7 +5,6 @@ import edu.wpi.first.wpilibj.TimedRobot;
 import autonomous.*;
 import hardware.*;
 import interfaces.*;
-import lowleveltools.*;
 import networking.*;
 import utils.*;
 import wrappers.*;
@@ -13,8 +12,6 @@ import wrappers.*;
 public class Robot extends TimedRobot {
 
     public static boolean shifted = true;
-
-    boolean autoAligned = false;
 
     Countdown shootTimer;
 
@@ -173,8 +170,6 @@ public class Robot extends TimedRobot {
 
         shooterControl.stop();
 
-        autoAligned = false;
-
     } 
 
     @Override
@@ -191,22 +186,16 @@ public class Robot extends TimedRobot {
 
                 if(ShooterController.aligned) {
 
-                    autoAligned = ShooterController.aligned;
-
-                }
-
-                if(autoAligned) {
-
                     shooterControl.fire();
 
                 }
 
             } else {
 
-                if(firstTime) {
+                leftMotors.setPID(2, 0, 0);
+                rightMotors.setPID(2, 0, 0);
 
-                    leftMotors.setPID(2, 0, 0);
-                    rightMotors.setPID(2, 0, 0);
+                if(firstTime) {
 
                     auto.addPath(new AutoPath("/home/lvuser/deploy/autopaths/Blank.json"));
 
@@ -267,7 +256,7 @@ public class Robot extends TimedRobot {
 
         if(trainingWheels) {
 
-            multiplier *= 0.15;
+            multiplier *= 0.2;
 
         }
 
