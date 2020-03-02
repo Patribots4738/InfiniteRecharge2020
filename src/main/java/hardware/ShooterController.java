@@ -58,7 +58,7 @@ public class ShooterController {
     // this aligns the robot with the vision target found by the limelight
     public void aim() {
 
-        double offset = 3.55;
+        double offset = (limelight.getDistance() > 200) ? (1.68) : (3.55);
 
         double angle = limelight.getHorizontalAngle() - offset;
 

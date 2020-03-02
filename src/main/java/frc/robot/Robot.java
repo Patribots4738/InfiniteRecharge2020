@@ -45,9 +45,6 @@ public class Robot extends TimedRobot {
 
     Limelight limelight;
 
-    // once testing is done, make these no longer global variables
-    MotorGroup shooterFeeders;
-
     ShooterController shooterControl;
 
     Elevator elevator;
@@ -84,7 +81,7 @@ public class Robot extends TimedRobot {
         DoubleSolenoid shooterBlocker = new DoubleSolenoid(2,3);
 
         // once testing is done, make this no longer a global variable
-        shooterFeeders = new MotorGroup(new Talon(10), new Talon(9));
+        MotorGroup shooterFeeders = new MotorGroup(new Talon(10), new Talon(9));
 
         shooter = new Shooter(topShooterWheel, bottomShooterWheel, shooterFeeders, shooterBlocker);
 
@@ -249,7 +246,7 @@ public class Robot extends TimedRobot {
 
     public void drive() {
 
-        boolean trainingWheels = true;
+        boolean trainingWheels = false;
 
         boolean inverted = driver.getToggle(XboxController.Buttons.L);
         double multiplier = ((inverted) ? -1.0 : 1.0);
@@ -323,7 +320,7 @@ public class Robot extends TimedRobot {
 
             // buzz driver controller if they try to line up without the limelight finding a target,
             // and stop the buzzing and start lining up if the limelight finds a target
-/*          if(!limelight.targetFound()) {
+            if(limelight.getHorizontalAngle() == 0.0) {
 
                 driver.setRumble(true, 0.2);
                 driver.setRumble(false, 0.2);
@@ -332,10 +329,10 @@ public class Robot extends TimedRobot {
 
                 driver.setRumble(true, 0.0);
                 driver.setRumble(false, 0.0);
-*/
+
                 shooterControl.aim();
 
-           // }            
+            }
 
             if(ShooterController.aligned) {
 
@@ -353,6 +350,11 @@ public class Robot extends TimedRobot {
                     conveyor.setConveyor(operator.getButton(XboxController.Buttons.B));
 
                 }
+
+            } else {
+
+                operator.setRumble(true, 0.0);
+                operator.setRumble(false, 0.0);
 
             }
 

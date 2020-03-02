@@ -38,10 +38,10 @@ public class Shooter {
 
         if(distance > 200) {
 
-            
+            topWheelSpeed = 0.185 + (distance / 60000.0);
+            bottomWheelSpeed = 0.695 + (distance / 50000.0);
 
         }
-
         
         return new double[]{topWheelSpeed, bottomWheelSpeed};
 
@@ -93,6 +93,12 @@ public class Shooter {
         boolean bottomReady = Calc.isBetween(Math.abs(bottomWheel.getSpeed()), speeds[1] - acceptableSpeedError, speeds[1] + acceptableSpeedError);
 
         readyToFire = topReady && bottomReady;
+
+        System.out.println("topReady: " + topReady);
+        System.out.println("bottomReady: " + bottomReady);
+        System.out.println("Commanded speed: " + -speeds[1]);
+        System.out.println("Current speed: " + bottomWheel.getSpeed());
+        System.out.println("ready: " + readyToFire);
 
     }
 
