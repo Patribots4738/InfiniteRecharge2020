@@ -161,7 +161,7 @@ public class Robot extends TimedRobot {
 
         auto.reset();
 
-        path = new AutoPath("home/lvuser/deploy/autopaths/Default.json");//smashBoard.get("selectedPath").toString());
+        path = new AutoPath("home/lvuser/deploy/autopaths/Center-Center.json");//smashBoard.get("selectedPath").toString());
 
         auto.addPath(new AutoPath("home/lvuser/deploy/autopaths/Default.json"));
 
@@ -172,6 +172,8 @@ public class Robot extends TimedRobot {
     @Override
     public void autonomousPeriodic() {
 
+        System.out.println("Command Queue Size: " + auto.queueSize());
+
         if (auto.queueIsEmpty()) {
 
             if(shootTimer.isRunning()) {
@@ -179,13 +181,12 @@ public class Robot extends TimedRobot {
                 leftMotors.setPID(0.5, 0, 0);
                 rightMotors.setPID(0.5, 0, 0);
 
-                shooterControl.aim();
-
                 if(ShooterController.aligned) {
 
                     shooterControl.fire();
-
                 }
+
+                shooterControl.aim();
 
             } else {
 
@@ -207,6 +208,7 @@ public class Robot extends TimedRobot {
             }
 
         } else {
+System.out.println("WE HAVE EXECUTE COMMAND");
 
             auto.executeQueue();
 
