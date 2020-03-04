@@ -108,7 +108,7 @@ public class Robot extends TimedRobot {
         PIDMotor rightElevator = new Falcon(0);
 
         // PLACEHOLDER port
-        SingleSolenoid elevatorLock = new SingleSolenoid(1);
+        DoubleSolenoid elevatorLock = new DoubleSolenoid(0,0);
 
         elevator = new Elevator(leftElevator, rightElevator, elevatorLock);
 */

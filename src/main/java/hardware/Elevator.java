@@ -8,9 +8,9 @@ public class Elevator {
     PIDMotor rightLifter;
     PIDMotor leftLifter;
 
-    SingleSolenoid lock;
+    DoubleSolenoid lock;
 
-    public Elevator(PIDMotor leftLifter, PIDMotor rightLifter, SingleSolenoid lock) {
+    public Elevator(PIDMotor leftLifter, PIDMotor rightLifter, DoubleSolenoid lock) {
         
         this.rightLifter = rightLifter;
         this.leftLifter = leftLifter;
@@ -31,7 +31,7 @@ public class Elevator {
 
     public void setLock(boolean isLocked) {
 
-        lock.set(isLocked);
+        lock.activateChannel(isLocked);
 
     }
 
