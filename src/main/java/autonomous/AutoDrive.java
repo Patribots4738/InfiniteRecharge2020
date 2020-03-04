@@ -50,12 +50,9 @@ public class AutoDrive {
 		leftMotors.resetEncoder();
 		rightMotors.resetEncoder();
 
-		completePositions = new double[] {
-
-			leftMotors.getPosition(), 
-			rightMotors.getPosition()
-		
-		};
+		completePositions = new double[2];
+		completePositions[0] = leftMotors.getPosition();
+		completePositions[1] = rightMotors.getPosition();
 
 		commandQueue = new ArrayList<Command>();
 
@@ -113,14 +110,23 @@ public class AutoDrive {
 
 	}
 
-	public double queueSize() {
+	public ArrayList<Command> getQueue() {
 
-		return commandQueue.size();
+		return commandQueue;
+
+	}
+
+	public void forceStart() {
+
+		// set running to false to jumpstart the auto
+		running = false;
 
 	}
 
 	// this command will be called once to start executing a command
 	public void executeCommand(Command command) {
+
+		System.out.println("executing a command");
 
 		Command.CommandType commandType = command.getType();
 
@@ -186,7 +192,6 @@ public class AutoDrive {
 			executeCommand(commandQueue.get(0));
 
 			running = true;
-			return;
 
 		}
 

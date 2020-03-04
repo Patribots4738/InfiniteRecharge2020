@@ -11,15 +11,18 @@ import wrappers.*;
 
 public class Robot extends TimedRobot {
 
-    public static boolean shifted = true;
-
-    Countdown shootTimer;
+    public static boolean shifted;
 
     boolean firstTime;
 
+    double shootTime;
+
+    Countdown shootTimer;
+
     NTTable smashBoard;
 
-    DriverCamera cam;
+    DriverCamera forwardCam;
+    DriverCamera reverseCam;
 
     Compressor compressor;
 
@@ -32,10 +35,6 @@ public class Robot extends TimedRobot {
 
     XboxController driver;
     XboxController operator;
-
-    // once testing is done, make these no longer global variables
-    PIDMotor topShooterWheel;
-    PIDMotor bottomShooterWheel;
 
     Shooter shooter;
 
@@ -56,11 +55,20 @@ public class Robot extends TimedRobot {
     public void robotInit() {
         // here begin all the constructors
 
+        shifted = true;
+
+        firstTime = true;
+
         Timer.init();
+
+        shootTime = 8.5;
+
+        shootTimer = new Countdown(shootTime);
 
         smashBoard = new NTTable("/SmartDashboard");
 
-        cam = new DriverCamera();
+        forwardCam = new DriverCamera(1);
+        reverseCam = new DriverCamera(0);
 
         compressor = new Compressor();
 
@@ -74,22 +82,18 @@ public class Robot extends TimedRobot {
         driver = new XboxController(0);
         operator = new XboxController(1);               
 
-        // once testing is done, make these no longer global variables
-        topShooterWheel = new Falcon(6);
-        bottomShooterWheel = new Falcon(5);
+        PIDMotor topShooterWheel = new Falcon(6);
+        PIDMotor bottomShooterWheel = new Falcon(5);
 
         DoubleSolenoid shooterBlocker = new DoubleSolenoid(2,3);
 
-        // once testing is done, make this no longer a global variable
         MotorGroup shooterFeeders = new MotorGroup(new Talon(10), new Talon(9));
 
         shooter = new Shooter(topShooterWheel, bottomShooterWheel, shooterFeeders, shooterBlocker);
 
-        PIDMotor intakeController = new Falcon(11);
-
         Motor intakeSucker = new Talon(8);
 
-        intake = new Intake(intakeSucker, intakeController);
+        intake = new Intake(intakeSucker);
 
         Motor conveyorDriver = new Talon(7);
 
@@ -122,8 +126,6 @@ public class Robot extends TimedRobot {
         topShooterWheel.setPID(1.7, 0.15, 0.15);
         bottomShooterWheel.setPID(1.7, 0.15, 0.15);
 
-        // PLACEHOLDER PID values
-        intakeController.setPID(1, 0, 0);
 /*
         // PLACEHOLDER PID values
         leftElevator.setPID(0, 0, 0);
@@ -136,7 +138,8 @@ public class Robot extends TimedRobot {
     @Override
     public void robotPeriodic() {
 
-        //cam.retryConnection();
+        //forwardCam.retryConnection();
+        //reverseCam.retryConnection();
 
         gearShifter.activateChannel(shifted);
 
@@ -153,7 +156,7 @@ public class Robot extends TimedRobot {
 
         gearShifter.activateChannel(shifted);
 
-        shootTimer = new Countdown(10.0);
+        shootTimer.reset();
 
         // config motors for positional control
         leftMotors.setPID(2, 0, 0);
@@ -161,7 +164,9 @@ public class Robot extends TimedRobot {
 
         auto.reset();
 
-        path = new AutoPath("home/lvuser/deploy/autopaths/Center-Center.json");//smashBoard.get("selectedPath").toString());
+        //path = new AutoPath("home/lvuser/deploy/autopaths/" + smashBoard.get("autoPath").toString() + ".json");
+
+        path = new AutoPath("home/lvuser/deploy/autopaths/Default.json");
 
         auto.addPath(new AutoPath("home/lvuser/deploy/autopaths/Default.json"));
 
@@ -172,7 +177,7 @@ public class Robot extends TimedRobot {
     @Override
     public void autonomousPeriodic() {
 
-        System.out.println("Command Queue Size: " + auto.queueSize());
+        smashBoard.set("enabled", true);
 
         if (auto.queueIsEmpty()) {
 
@@ -201,6 +206,8 @@ public class Robot extends TimedRobot {
 
                     firstTime = false;
 
+                    auto.forceStart();
+
                     shooterControl.stop();
 
                 }
@@ -208,7 +215,6 @@ public class Robot extends TimedRobot {
             }
 
         } else {
-System.out.println("WE HAVE EXECUTE COMMAND");
 
             auto.executeQueue();
 
@@ -232,7 +238,11 @@ System.out.println("WE HAVE EXECUTE COMMAND");
     
     // VERY EXTRA NO TOUCH
     @Override
-    public void disabledPeriodic() {}
+    public void disabledPeriodic() {
+
+        smashBoard.set("enabled", false);
+
+    }
     
     @Override
     public void teleopInit() {
@@ -253,41 +263,36 @@ System.out.println("WE HAVE EXECUTE COMMAND");
         boolean inverted = driver.getToggle(XboxController.Buttons.L);
         double multiplier = ((inverted) ? -1.0 : 1.0);
 
-        if(trainingWheels) {
-
-            multiplier *= 0.2;
-
-        }
+        smashBoard.set("reversed", inverted);
 
         shifted = !driver.getToggle(XboxController.Buttons.R);
 
         if(trainingWheels) {
 
+            multiplier *= 0.6;
+
             drive.bananaArcade(-driver.getAxis(XboxController.Axes.LeftY) * multiplier, driver.getAxis(XboxController.Axes.RightX));
-
-        } else {
-
-            drive.curvature(-driver.getAxis(XboxController.Axes.LeftY) * multiplier, driver.getAxis(XboxController.Axes.RightX));
+            return;
 
         }
+
+        drive.curvature(-driver.getAxis(XboxController.Axes.LeftY) * multiplier, driver.getAxis(XboxController.Axes.RightX));
+
     }
 
     public void operate() {
 
-        double intakeMultiplier = 0.3;
+        double intakeMultiplier = 0.35;
         double conveyorMultiplier = 0.8;
 
         //elevator.setElevator(operator.getAxis(XboxController.Axes.LeftY));
         //elevator.setLock(operator.getToggle(XboxController.Buttons.Select));
 
-        intake.setDown(operator.getToggle(XboxController.Buttons.R));
-
         if(operator.getAxis(XboxController.Axes.RightTrigger) < 0.2) {
 
             intake.setSuck(operator.getAxis(XboxController.Axes.LeftTrigger) * intakeMultiplier);
-            //conveyor.setSpeed(-operator.getAxis(XboxController.Axes.LeftTrigger) * conveyorMultiplier);
-            conveyor.setSpeed(0);
-
+            conveyor.setSpeed(-operator.getAxis(XboxController.Axes.LeftTrigger) * conveyorMultiplier);
+            
         } else {
 
             intake.setSuck(-operator.getAxis(XboxController.Axes.RightTrigger) * intakeMultiplier);
@@ -299,7 +304,10 @@ System.out.println("WE HAVE EXECUTE COMMAND");
 
     @Override
     public void teleopPeriodic() {
+
         // here begins the code for controlling the full robot
+
+        smashBoard.set("enabled", true);
 
         boolean aiming = driver.getButton(XboxController.Buttons.A);
 
@@ -320,15 +328,16 @@ System.out.println("WE HAVE EXECUTE COMMAND");
 
             shifted = true;
 
-            // buzz driver controller if they try to line up without the limelight finding a target,
-            // and stop the buzzing and start lining up if the limelight finds a target
+            // the angle between the limelight and the target is never exactly 0 unless it can't see the target
             if(limelight.getHorizontalAngle() == 0.0) {
 
+                // buzz driver controller if they try to line up without the limelight finding a target,
                 driver.setRumble(true, 0.2);
                 driver.setRumble(false, 0.2);
 
             } else {
 
+                // and stop the buzzing and start lining up if the limelight finds a target
                 driver.setRumble(true, 0.0);
                 driver.setRumble(false, 0.0);
 
@@ -338,6 +347,7 @@ System.out.println("WE HAVE EXECUTE COMMAND");
 
             if(ShooterController.aligned) {
 
+                // start buzzing the operator controller if they're ready to fire
                 operator.setRumble(true, 0.5);
                 operator.setRumble(false, 0.5);
 
@@ -349,12 +359,13 @@ System.out.println("WE HAVE EXECUTE COMMAND");
 
                     shooterControl.stop();
 
-                    conveyor.setConveyor(operator.getButton(XboxController.Buttons.B));
-
                 }
+
+                //conveyor.setConveyor(operator.getButton(XboxController.Buttons.B));
 
             } else {
 
+                // and stop buzzing the operator controller
                 operator.setRumble(true, 0.0);
                 operator.setRumble(false, 0.0);
 
@@ -362,138 +373,18 @@ System.out.println("WE HAVE EXECUTE COMMAND");
 
         }
 
-    }
+        shooterControl.eval();
 
-    // everything from here down is temporary for testing
+        smashBoard.set("firing", Shooter.readyToFire);
+        smashBoard.set("readyToFire", ShooterController.aligned);
+        smashBoard.set("aligned", !(limelight.getHorizontalAngle() == 0.0));
 
-    @Override
-    public void testInit(){
-
-        topSpeed = 0.0;
-        bottomSpeed = 0.0;
-        increment = 0.01;
-
-        teleopInit();
-
-    }
-
-    // temporary values for testing shooter, will not be present for final version
-    double topSpeed = 0.0;
-    double bottomSpeed = 0.0;
-    double increment = 0.01;
-
-    public void testShooter() {
-        
-        // here begins the code for testing the shooter
-        compressor.setState(true);
-
-        boolean feeding = operator.getToggle(XboxController.Buttons.Y);
-        
-        shooter.setBlocker(feeding);
-        
-        shooter.setFeeders(feeding);
-
-        conveyor.setConveyor(feeding);
-
-        intake.setSuck((feeding) ? -0.2 : 0);
-        
-        boolean currentShooter = operator.getToggle(XboxController.Buttons.X);
-
-        boolean sameSpeed = operator.getToggle(XboxController.Buttons.Start);
-        
-        if(operator.getButtonDown(XboxController.Buttons.RJ)) {
-        
-            increment *= 2.0;
-        
-        }
-        
-        if(operator.getButtonDown(XboxController.Buttons.LJ)) {
-        
-            increment *= 0.5;
-        
-        }
-        
-        if(operator.getPOV(Gamepad.Directions.N) || operator.getButtonDown(XboxController.Buttons.A)) {
-        
-            if(currentShooter) {
-        
-                bottomSpeed += increment;
-        
-            } else {
-        
-                topSpeed += increment;
-        
-            }
-        
-        }
-        
-        if(operator.getPOV(Gamepad.Directions.S) || operator.getButtonDown(XboxController.Buttons.B)) {
-        
-            if(currentShooter) {
-        
-                bottomSpeed -= increment;
-        
-            } else {
-        
-                topSpeed -= increment;
-        
-            }
-        
-        }
-        
-        if(topSpeed > 1.0) {
-        
-            topSpeed = 1.0;
-        
-        }
-        
-        if(bottomSpeed > 1.0) {
-        
-            bottomSpeed = 1.0;
-        
-        }
-        
-        if(topSpeed < 0.0) {
-        
-            topSpeed = 0.0;
-        
-        }
-        
-        if(bottomSpeed < 0.0) {
-        
-            bottomSpeed = 0.0;
-        
-        }
-        
-        shooter.setRawSpeeds(topSpeed, ((sameSpeed) ? topSpeed : bottomSpeed));
-        
-        System.out.println("Current increment: " + increment);
-        System.out.println("Current wheel: " + ((currentShooter) ? "bottom" : "top") + "\n");
-        System.out.println("Current Top Speed: " + topShooterWheel.getSpeed());
-        System.out.println("Commanded Top Speed: " + topSpeed + "\n");
-        System.out.println("Current Bottom Speed: " + bottomShooterWheel.getSpeed());
-        System.out.println("Commanded Bottom Speed: " + -bottomSpeed);
-        
     }
 
     @Override
-    public void testPeriodic() {
+    public void testInit(){}
 
-        boolean aiming = driver.getButton(XboxController.Buttons.A);
-        
-        drive();
-        operate();
-        testShooter();
-
-        
-        if(aiming) {
-
-            System.out.println(limelight.getDistance());
-            shooterControl.aim();
-            System.out.println(ShooterController.aligned);
-
-        }
-        
-    }
+    @Override
+    public void testPeriodic() {}
 
 }

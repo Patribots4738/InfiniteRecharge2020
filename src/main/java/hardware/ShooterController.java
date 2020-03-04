@@ -15,9 +15,9 @@ public class ShooterController {
     // all of these doubles are placeholders pending testing
     private double maxSpeed = 0.3;
 
-    private double minSpeed = 0.22 * maxSpeed;
+    private double minSpeed = 0.17 * maxSpeed;
 
-    private double converter = 1.0 / 15.0;
+    private double converter = 1.0 / 15;
 
     private double acceptableAngleError = 0.65;
 
@@ -41,6 +41,18 @@ public class ShooterController {
         shooter.stop();
 
         conveyor.setSpeed(0);
+
+    }
+
+    public void eval() {
+
+        double offset = (limelight.getDistance() > 200) ? (1.68) : (3.55);
+
+        double angle = limelight.getHorizontalAngle() - offset;
+
+        aligned = Math.abs(angle) <= acceptableAngleError; 
+        
+        shooter.eval(limelight.getDistance());
 
     }
 

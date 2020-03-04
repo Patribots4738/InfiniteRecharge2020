@@ -7,13 +7,17 @@ public class DriverCamera {
 
     UsbCamera cam;
 
+    int camNum;
+
     boolean constructed = false;
 
-    public DriverCamera() {
+    public DriverCamera(int camNum) {
+
+        this.camNum = camNum;
 
         try {
 
-            cam = CameraServer.getInstance().startAutomaticCapture();
+            cam = CameraServer.getInstance().startAutomaticCapture(camNum);
             cam.setResolution(240, 160);
             cam.setFPS(30);
             cam.setExposureManual(50);
@@ -48,7 +52,7 @@ public class DriverCamera {
 
         try {
 
-            cam = CameraServer.getInstance().startAutomaticCapture();
+            cam = CameraServer.getInstance().startAutomaticCapture(camNum);
             cam.setResolution(240, 160);
             cam.setFPS(30);
             cam.setExposureManual(50);
