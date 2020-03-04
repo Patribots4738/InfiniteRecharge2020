@@ -102,7 +102,7 @@ public class Robot extends TimedRobot {
         limelight = new Limelight();
 
         shooterControl = new ShooterController(conveyor, shooter, limelight, drive);
-/*
+
         // PLACEHOLDER CAN IDs
         PIDMotor leftElevator = new Falcon(0);
         PIDMotor rightElevator = new Falcon(0);
@@ -111,7 +111,7 @@ public class Robot extends TimedRobot {
         DoubleSolenoid elevatorLock = new DoubleSolenoid(0,0);
 
         elevator = new Elevator(leftElevator, rightElevator, elevatorLock);
-*/
+
         auto = new AutoDrive(leftMotors, rightMotors);
 
         // the constructors end here, now everything gets configured
@@ -126,11 +126,10 @@ public class Robot extends TimedRobot {
         topShooterWheel.setPID(1.7, 0.15, 0.15);
         bottomShooterWheel.setPID(1.7, 0.15, 0.15);
 
-/*
         // PLACEHOLDER PID values
-        leftElevator.setPID(0, 0, 0);
-        rightElevator.setPID(0, 0, 0);
-*/
+        leftElevator.setPID(0.5, 0, 0);
+        rightElevator.setPID(0.5, 0, 0);
+
         auto.reset();
 
     }
@@ -164,11 +163,23 @@ public class Robot extends TimedRobot {
 
         auto.reset();
 
-        //path = new AutoPath("home/lvuser/deploy/autopaths/" + smashBoard.get("autoPath").toString() + ".json");
-
-        path = new AutoPath("home/lvuser/deploy/autopaths/Default.json");
-
+        // add universal default path
         auto.addPath(new AutoPath("home/lvuser/deploy/autopaths/Default.json"));
+
+        String smashBoardPath = smashBoard.get("autoPath").toString();
+
+        // 9 is the smallest possible size of a valid string for the path,
+        // all valid paths are 9 or more, and all nonvalid ones are less
+        if(smashBoardPath.length() < 9) {
+
+            path = new AutoPath("home/lvuser/deploy/autopaths/" + smashBoardPath  + ".json");
+
+        } else {
+            
+            // if the smashBoard path is invalid, just back up again
+            path = new AutoPath("home/lvuser/deploy/autopaths/Default.json");
+
+        }
 
         shooterControl.stop();
 
@@ -206,7 +217,7 @@ public class Robot extends TimedRobot {
 
                     firstTime = false;
 
-                    auto.forceStart();
+                    auto.jumpstart();
 
                     shooterControl.stop();
 
@@ -285,8 +296,8 @@ public class Robot extends TimedRobot {
         double intakeMultiplier = 0.35;
         double conveyorMultiplier = 0.8;
 
-        //elevator.setElevator(operator.getAxis(XboxController.Axes.LeftY));
-        //elevator.setLock(operator.getToggle(XboxController.Buttons.Select));
+        elevator.setElevator(operator.getAxis(XboxController.Axes.LeftY));
+        elevator.setLock(operator.getToggle(XboxController.Buttons.Select));
 
         if(operator.getAxis(XboxController.Axes.RightTrigger) < 0.2) {
 
@@ -307,16 +318,18 @@ public class Robot extends TimedRobot {
 
         // here begins the code for controlling the full robot
 
+        // set the rumbles to 0 to disable them, unless they're later reset
+        // also resets them to 0 if they aren't being told to do stuff later
+        operator.setRumble(true, 0.0);
+        operator.setRumble(false, 0.0);
+        driver.setRumble(true, 0.0);
+        driver.setRumble(false, 0.0);
+
         smashBoard.set("enabled", true);
 
         boolean aiming = driver.getButton(XboxController.Buttons.A);
 
         if(!aiming) {
-
-            operator.setRumble(true, 0.0);
-            operator.setRumble(false, 0.0);
-            driver.setRumble(true, 0.0);
-            driver.setRumble(false, 0.0);
 
             drive();
 
@@ -332,14 +345,10 @@ public class Robot extends TimedRobot {
             if(limelight.getHorizontalAngle() == 0.0) {
 
                 // buzz driver controller if they try to line up without the limelight finding a target,
-                driver.setRumble(true, 0.2);
-                driver.setRumble(false, 0.2);
+                driver.setRumble(true, 0.5);
+                driver.setRumble(false, 0.5);
 
             } else {
-
-                // and stop the buzzing and start lining up if the limelight finds a target
-                driver.setRumble(true, 0.0);
-                driver.setRumble(false, 0.0);
 
                 shooterControl.aim();
 
@@ -362,12 +371,6 @@ public class Robot extends TimedRobot {
                 }
 
                 //conveyor.setConveyor(operator.getButton(XboxController.Buttons.B));
-
-            } else {
-
-                // and stop buzzing the operator controller
-                operator.setRumble(true, 0.0);
-                operator.setRumble(false, 0.0);
 
             }
 

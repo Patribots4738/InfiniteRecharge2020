@@ -116,7 +116,7 @@ public class AutoDrive {
 
 	}
 
-	public void forceStart() {
+	public void jumpstart() {
 
 		// set running to false to jumpstart the auto
 		running = false;
