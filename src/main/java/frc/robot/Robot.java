@@ -124,14 +124,10 @@ public class Robot extends TimedRobot {
         gearShifter.activateChannel(shifted);
 
         // drive motors have their PID configured in teleop and autonomous
-        // init, as they need to be different between the two modes
+        // init, as th   ey need to be different between the two modes
 
         topShooterWheel.setPID(1.7, 0.15, 0.15);
         bottomShooterWheel.setPID(1.7, 0.15, 0.15);
-
-        // PLACEHOLDER PID values
-        leftElevator.setPID(0, 0, 0);
-        rightElevator.setPID(0, 0, 0);
 
         auto.reset();
 
@@ -305,8 +301,9 @@ public class Robot extends TimedRobot {
 
         double intakeMultiplier = 0.35;
         double conveyorMultiplier = 0.8;
+        double elevatorMultiplier = 0.5;
 
-        elevator.setElevator(-operator.getAxis(XboxController.Axes.LeftY));
+        elevator.setElevator(-operator.getAxis(XboxController.Axes.LeftY) * elevatorMultiplier);
 
         elevator.setLock(operator.getToggle(XboxController.Buttons.Start));
 
@@ -342,7 +339,7 @@ public class Robot extends TimedRobot {
 
         if(!aiming) {
 
-            //drive();
+            drive();
 
             operate();
 

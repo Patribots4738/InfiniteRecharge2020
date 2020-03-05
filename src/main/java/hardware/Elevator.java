@@ -43,8 +43,8 @@ public class Elevator {
 
         }
 
-        rightLifter.setSpeed(speed);
-        leftLifter.setSpeed(-speed);
+        rightLifter.setPercent(speed);
+        leftLifter.setPercent(-speed);
 
     }
 
