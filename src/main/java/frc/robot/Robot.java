@@ -2,8 +2,6 @@ package frc.robot;
 
 import edu.wpi.first.wpilibj.TimedRobot;
 
-import com.revrobotics.CANDigitalInput.LimitSwitch;
-
 import autonomous.*;
 import hardware.*;
 import interfaces.*;
@@ -69,8 +67,25 @@ public class Robot extends TimedRobot {
 
         smashBoard = new NTTable("/SmartDashboard");
 
-        forwardCam = new DriverCamera(1);
-        reverseCam = new DriverCamera(0);
+        try {
+            
+            forwardCam = new DriverCamera(1);
+
+        } catch (Exception e) {
+
+            System.err.println("forward camera failed to start!");
+
+        }
+
+        try {
+
+            reverseCam = new DriverCamera(0);
+
+        } catch (Exception e) {
+
+            System.err.println("reverse camera failed to start!");
+
+        }
 
         compressor = new Compressor();
 
@@ -111,7 +126,7 @@ public class Robot extends TimedRobot {
         Limitswitch topSwitch = new Limitswitch(0);
         Limitswitch bottomSwitch = new Limitswitch(1);
 
-        DoubleSolenoid elevatorLock = new DoubleSolenoid(0,1);
+        DoubleSolenoid elevatorLock = new DoubleSolenoid(1,0);
 
         elevator = new Elevator(leftElevator, rightElevator, elevatorLock, topSwitch, bottomSwitch);
 
@@ -169,12 +184,12 @@ public class Robot extends TimedRobot {
 
         // 9 is the smallest possible size of a valid string for the path,
         // all valid paths are 9 or more, and all nonvalid ones are less
-        if(smashBoardPath.length() < 9) {
-
+        if(smashBoardPath.length() > 8) {
+            System.out.println("ADDED PATH");
             path = new AutoPath("home/lvuser/deploy/autopaths/" + smashBoardPath  + ".json");
 
         } else {
-            
+            System.out.println("DEFAULT ADDED");
             // if the smashBoard path is invalid, just do the default path again
             path = new AutoPath("home/lvuser/deploy/autopaths/Default.json");
 
