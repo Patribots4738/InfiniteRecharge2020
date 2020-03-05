@@ -8,7 +8,7 @@ public final class Constants {
     public static final double TARGET_HEIGHT = 92;
 
     // in inches
-    public static final double LIMELIGHT_HEIGHT = 40.125;// 26;
+    public static final double LIMELIGHT_HEIGHT = 40.125;
 
     // in radians
     public static final double LIMELIGHT_MOUNTING_ANGLE = Calc.degreesToRadians(18.35414);
@@ -24,7 +24,7 @@ public final class Constants {
 
     // the diameter of the drive wheels
     // this should be 6.25, but the wheels wear over time
-    public static final double DRIVE_WHEEL_DIAMETER = 6.21875;
+    public static final double DRIVE_WHEEL_DIAMETER = 6.25; //was 6.21875
 
     // the circumfrence of the drive wheels
     public static final double DRIVE_WHEEL_CIRCUMFRENCE = Math.PI * DRIVE_WHEEL_DIAMETER;

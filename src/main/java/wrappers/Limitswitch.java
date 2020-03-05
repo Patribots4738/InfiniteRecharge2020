@@ -1,25 +1,23 @@
 package wrappers;
 
-import lowleveltools.DigitalPort;
-
 public class Limitswitch {
 
     TogglableButton switchButton;
 
-    DigitalPort DIOPort;
+    edu.wpi.first.wpilibj.DigitalInput DIOPort;    
 
     public Limitswitch(int port) {
 
         switchButton = new TogglableButton();
 
-        DIOPort = new DigitalPort(port);
+        DIOPort = new edu.wpi.first.wpilibj.DigitalInput(port);
 
     }
 
     // get the raw value from the digital input/output port
     public boolean getState() {
 
-        return DIOPort.getState();
+        return DIOPort.get();
 
     }
 

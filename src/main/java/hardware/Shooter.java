@@ -89,17 +89,8 @@ public class Shooter {
         topWheel.setSpeed(speeds[0]);
         bottomWheel.setSpeed(-speeds[1]);
 
-        boolean topReady = Calc.isBetween(topWheel.getSpeed(), speeds[0] - acceptableSpeedError, speeds[0] + acceptableSpeedError);
-        boolean bottomReady = Calc.isBetween(Math.abs(bottomWheel.getSpeed()), speeds[1] - acceptableSpeedError, speeds[1] + acceptableSpeedError);
-
-        readyToFire = topReady && bottomReady;
-/*
-        System.out.println("topReady: " + topReady);
-        System.out.println("bottomReady: " + bottomReady);
-        System.out.println("Commanded speed: " + -speeds[1]);
-        System.out.println("Current speed: " + bottomWheel.getSpeed());
-        System.out.println("ready: " + readyToFire);
-*/
+        eval(distance);
+        
     }
 
     public void eval(double distance) {

@@ -2,6 +2,8 @@ package frc.robot;
 
 import edu.wpi.first.wpilibj.TimedRobot;
 
+import com.revrobotics.CANDigitalInput.LimitSwitch;
+
 import autonomous.*;
 import hardware.*;
 import interfaces.*;
@@ -103,14 +105,15 @@ public class Robot extends TimedRobot {
 
         shooterControl = new ShooterController(conveyor, shooter, limelight, drive);
 
-        // PLACEHOLDER CAN IDs
-        PIDMotor leftElevator = new Falcon(0);
-        PIDMotor rightElevator = new Falcon(0);
+        PIDMotor leftElevator = new Falcon(12);
+        PIDMotor rightElevator = new Falcon(11);
 
-        // PLACEHOLDER port
-        DoubleSolenoid elevatorLock = new DoubleSolenoid(0,0);
+        Limitswitch topSwitch = new Limitswitch(0);
+        Limitswitch bottomSwitch = new Limitswitch(1);
 
-        elevator = new Elevator(leftElevator, rightElevator, elevatorLock);
+        DoubleSolenoid elevatorLock = new DoubleSolenoid(0,1);
+
+        elevator = new Elevator(leftElevator, rightElevator, elevatorLock, topSwitch, bottomSwitch);
 
         auto = new AutoDrive(leftMotors, rightMotors);
 
@@ -127,8 +130,8 @@ public class Robot extends TimedRobot {
         bottomShooterWheel.setPID(1.7, 0.15, 0.15);
 
         // PLACEHOLDER PID values
-        leftElevator.setPID(0.5, 0, 0);
-        rightElevator.setPID(0.5, 0, 0);
+        leftElevator.setPID(0, 0, 0);
+        rightElevator.setPID(0, 0, 0);
 
         auto.reset();
 
@@ -176,7 +179,7 @@ public class Robot extends TimedRobot {
 
         } else {
             
-            // if the smashBoard path is invalid, just back up again
+            // if the smashBoard path is invalid, just do the default path again
             path = new AutoPath("home/lvuser/deploy/autopaths/Default.json");
 
         }
@@ -197,12 +200,12 @@ public class Robot extends TimedRobot {
                 leftMotors.setPID(0.5, 0, 0);
                 rightMotors.setPID(0.5, 0, 0);
 
+                shooterControl.aim();
+
                 if(ShooterController.aligned) {
 
                     shooterControl.fire();
                 }
-
-                shooterControl.aim();
 
             } else {
 
@@ -241,7 +244,6 @@ public class Robot extends TimedRobot {
 
         driver.setRumble(true, 0.0);
         driver.setRumble(false, 0.0);
-
         operator.setRumble(true, 0.0);
         operator.setRumble(false, 0.0);
 
@@ -274,17 +276,25 @@ public class Robot extends TimedRobot {
         boolean inverted = driver.getToggle(XboxController.Buttons.L);
         double multiplier = ((inverted) ? -1.0 : 1.0);
 
+        double maxSpeed = 1.0;
+
+        if(trainingWheels) {
+
+            maxSpeed = 0.6;
+
+        }
+
+        multiplier *= maxSpeed;
+
         smashBoard.set("reversed", inverted);
 
         shifted = !driver.getToggle(XboxController.Buttons.R);
 
         if(trainingWheels) {
 
-            multiplier *= 0.6;
-
             drive.bananaArcade(-driver.getAxis(XboxController.Axes.LeftY) * multiplier, driver.getAxis(XboxController.Axes.RightX));
             return;
-
+            
         }
 
         drive.curvature(-driver.getAxis(XboxController.Axes.LeftY) * multiplier, driver.getAxis(XboxController.Axes.RightX));
@@ -296,8 +306,9 @@ public class Robot extends TimedRobot {
         double intakeMultiplier = 0.35;
         double conveyorMultiplier = 0.8;
 
-        elevator.setElevator(operator.getAxis(XboxController.Axes.LeftY));
-        elevator.setLock(operator.getToggle(XboxController.Buttons.Select));
+        elevator.setElevator(-operator.getAxis(XboxController.Axes.LeftY));
+
+        elevator.setLock(operator.getToggle(XboxController.Buttons.Start));
 
         if(operator.getAxis(XboxController.Axes.RightTrigger) < 0.2) {
 
@@ -331,7 +342,7 @@ public class Robot extends TimedRobot {
 
         if(!aiming) {
 
-            drive();
+            //drive();
 
             operate();
 
@@ -370,8 +381,6 @@ public class Robot extends TimedRobot {
 
                 }
 
-                //conveyor.setConveyor(operator.getButton(XboxController.Buttons.B));
-
             }
 
         }
@@ -385,7 +394,7 @@ public class Robot extends TimedRobot {
     }
 
     @Override
-    public void testInit(){}
+    public void testInit() {}
 
     @Override
     public void testPeriodic() {}
