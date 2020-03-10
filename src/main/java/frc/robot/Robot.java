@@ -21,7 +21,7 @@ public class Robot extends TimedRobot {
 
     Countdown shootTimer;
 
-    //NTTable smashBoard;
+    NTTable smashBoard;
 
     Compressor compressor;
 
@@ -66,7 +66,7 @@ public class Robot extends TimedRobot {
 
         shootTimer = new Countdown(shootTime);
 
-        //smashBoard = new NTTable("/SmartDashboard");
+        smashBoard = new NTTable("/SmartDashboard");
 
         compressor = new Compressor();
 
@@ -134,8 +134,6 @@ public class Robot extends TimedRobot {
         gearShifter.activateChannel(shifted);
 
         compressor.setState(true);
-        
-        //smashBoard.set("EMERGENCY", emergencyManual);
 
     }
 
@@ -156,24 +154,8 @@ public class Robot extends TimedRobot {
 
         auto.reset();
 
-        // add universal default path
-        //auto.addPath(new AutoPath("home/lvuser/deploy/autopaths/Default.json"));
-/*
-        String smashBoardPath;
+        auto.addPath(new AutoPath("home/lvuser/deploy/autopaths/Default.json"));
 
-        try {
-
-            smashBoardPath = smashBoard.get("autoPath").toString();
-
-        } catch (Exception e) {
-
-            // if the smashBoard doesn't return anything, just do nothing
-            smashBoardPath = "Blank";
-
-        }
-
-        path = new AutoPath("home/lvuser/deploy/autopaths/" + smashBoardPath + ".json");
-*/
         shooterControl.stop();
 
     } 
@@ -221,8 +203,6 @@ public class Robot extends TimedRobot {
 
         }
 
-        //smashBoard.set("enabled", true);
-
     }
 
     // NO TOUCH
@@ -246,8 +226,6 @@ public class Robot extends TimedRobot {
         operator.setRumble(false, 0.0);
         driver.setRumble(true, 0.0);
         driver.setRumble(false, 0.0);
-
-        //smashBoard.set("enabled", false);
 
     }
     
@@ -292,9 +270,7 @@ public class Robot extends TimedRobot {
 
             drive.curvature(-driver.getAxis(XboxController.Axes.LeftY) * multiplier, driver.getAxis(XboxController.Axes.RightX));
 
-        }    
-        
-        //smashBoard.set("reversed", inverted);
+        } 
 
     }
 
@@ -424,11 +400,6 @@ public class Robot extends TimedRobot {
         }
 
         shooterControl.eval();
-
-        //smashBoard.set("firing", Robot.emergencyManual);
-        //smashBoard.set("readyToFire", ShooterController.aligned);
-        //smashBoard.set("aligned", !(limelight.getHorizontalAngle() == 0.0));
-        //smashBoard.set("enabled", true);
 
     }
 
