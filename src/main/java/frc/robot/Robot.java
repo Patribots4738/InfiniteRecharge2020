@@ -15,14 +15,13 @@ public class Robot extends TimedRobot {
 
     boolean firstTime;
 
+    public static boolean emergencyManual = true;
+
     double shootTime;
 
     Countdown shootTimer;
 
-    NTTable smashBoard;
-
-    DriverCamera forwardCam;
-    DriverCamera reverseCam;
+    //NTTable smashBoard;
 
     Compressor compressor;
 
@@ -46,6 +45,8 @@ public class Robot extends TimedRobot {
 
     ShooterController shooterControl;
 
+    Limitswitch topSwitch;
+
     Elevator elevator;
     
     AutoPath path;
@@ -55,37 +56,17 @@ public class Robot extends TimedRobot {
     public void robotInit() {
         // here begin all the constructors
 
+        Timer.init();
+
         shifted = true;
 
         firstTime = true;
 
-        Timer.init();
-
-        shootTime = 8.5;
+        shootTime = 13;
 
         shootTimer = new Countdown(shootTime);
 
-        smashBoard = new NTTable("/SmartDashboard");
-
-        try {
-            
-            forwardCam = new DriverCamera(1);
-
-        } catch (Exception e) {
-
-            System.err.println("forward camera failed to start!");
-
-        }
-
-        try {
-
-            reverseCam = new DriverCamera(0);
-
-        } catch (Exception e) {
-
-            System.err.println("reverse camera failed to start!");
-
-        }
+        //smashBoard = new NTTable("/SmartDashboard");
 
         compressor = new Compressor();
 
@@ -123,12 +104,11 @@ public class Robot extends TimedRobot {
         PIDMotor leftElevator = new Falcon(12);
         PIDMotor rightElevator = new Falcon(11);
 
-        Limitswitch topSwitch = new Limitswitch(0);
-        Limitswitch bottomSwitch = new Limitswitch(1);
-
         DoubleSolenoid elevatorLock = new DoubleSolenoid(1,0);
 
-        elevator = new Elevator(leftElevator, rightElevator, elevatorLock, topSwitch, bottomSwitch);
+        topSwitch = new Limitswitch(0);
+
+        elevator = new Elevator(leftElevator, rightElevator, elevatorLock);
 
         auto = new AutoDrive(leftMotors, rightMotors);
 
@@ -139,10 +119,10 @@ public class Robot extends TimedRobot {
         gearShifter.activateChannel(shifted);
 
         // drive motors have their PID configured in teleop and autonomous
-        // init, as th   ey need to be different between the two modes
+        // init, as they need to be different between the two modes
 
         topShooterWheel.setPID(1.7, 0.15, 0.15);
-        bottomShooterWheel.setPID(1.7, 0.15, 0.15);
+        bottomShooterWheel.setPID(0.7, 0.15, 0.15);
 
         auto.reset();
 
@@ -151,12 +131,11 @@ public class Robot extends TimedRobot {
     @Override
     public void robotPeriodic() {
 
-        //forwardCam.retryConnection();
-        //reverseCam.retryConnection();
-
         gearShifter.activateChannel(shifted);
 
         compressor.setState(true);
+        
+        //smashBoard.set("EMERGENCY", emergencyManual);
 
     }
 
@@ -178,23 +157,23 @@ public class Robot extends TimedRobot {
         auto.reset();
 
         // add universal default path
-        auto.addPath(new AutoPath("home/lvuser/deploy/autopaths/Default.json"));
+        //auto.addPath(new AutoPath("home/lvuser/deploy/autopaths/Default.json"));
+/*
+        String smashBoardPath;
 
-        String smashBoardPath = smashBoard.get("autoPath").toString();
+        try {
 
-        // 9 is the smallest possible size of a valid string for the path,
-        // all valid paths are 9 or more, and all nonvalid ones are less
-        if(smashBoardPath.length() > 8) {
-            System.out.println("ADDED PATH");
-            path = new AutoPath("home/lvuser/deploy/autopaths/" + smashBoardPath  + ".json");
+            smashBoardPath = smashBoard.get("autoPath").toString();
 
-        } else {
-            System.out.println("DEFAULT ADDED");
-            // if the smashBoard path is invalid, just do the default path again
-            path = new AutoPath("home/lvuser/deploy/autopaths/Default.json");
+        } catch (Exception e) {
+
+            // if the smashBoard doesn't return anything, just do nothing
+            smashBoardPath = "Blank";
 
         }
 
+        path = new AutoPath("home/lvuser/deploy/autopaths/" + smashBoardPath + ".json");
+*/
         shooterControl.stop();
 
     } 
@@ -202,36 +181,37 @@ public class Robot extends TimedRobot {
     @Override
     public void autonomousPeriodic() {
 
-        smashBoard.set("enabled", true);
-
+        //smashBoard.set("enabled", true);
         if (auto.queueIsEmpty()) {
 
             if(shootTimer.isRunning()) {
-
+/*
                 leftMotors.setPID(0.5, 0, 0);
                 rightMotors.setPID(0.5, 0, 0);
 
                 shooterControl.aim();
 
                 if(ShooterController.aligned) {
-
-                    shooterControl.fire();
+*/
+                    shooterControl.manualFire();
+/*
                 }
-
+*/
             } else {
 
-                leftMotors.setPID(2, 0, 0);
-                rightMotors.setPID(2, 0, 0);
+                //leftMotors.setPID(2, 0, 0);
+                //rightMotors.setPID(2, 0, 0);
 
                 if(firstTime) {
-
-                    auto.addPath(new AutoPath("/home/lvuser/deploy/autopaths/Blank.json"));
-
-                    auto.addPath(path);
+                    
+                    auto.addPath(new AutoPath("/home/lvuser/deploy/autopaths/Default.json"));
+                    
+                    //auto.addPath(path);
 
                     firstTime = false;
 
-                    auto.jumpstart();
+                    //auto.jumpstart();
+                    
 
                     shooterControl.stop();
 
@@ -264,7 +244,7 @@ public class Robot extends TimedRobot {
     @Override
     public void disabledPeriodic() {
 
-        smashBoard.set("enabled", false);
+        //smashBoard.set("enabled", false);
 
     }
     
@@ -278,47 +258,58 @@ public class Robot extends TimedRobot {
         leftMotors.resetEncoder();
         rightMotors.resetEncoder();
 
+        shooterControl.stop();
+
     }
 
     public void drive() {
 
-        boolean trainingWheels = false;
+        boolean trainingWheels = driver.getToggle(XboxController.Buttons.Y);
 
         boolean inverted = driver.getToggle(XboxController.Buttons.L);
         double multiplier = ((inverted) ? -1.0 : 1.0);
 
         double maxSpeed = 1.0;
-
+/*
         if(trainingWheels) {
 
             maxSpeed = 0.6;
 
         }
-
+*/
         multiplier *= maxSpeed;
 
-        smashBoard.set("reversed", inverted);
+        //smashBoard.set("reversed", inverted);
 
         shifted = !driver.getToggle(XboxController.Buttons.R);
 
         if(trainingWheels) {
 
             drive.bananaArcade(-driver.getAxis(XboxController.Axes.LeftY) * multiplier, driver.getAxis(XboxController.Axes.RightX));
-            return;
             
-        }
+        } else {
 
-        drive.curvature(-driver.getAxis(XboxController.Axes.LeftY) * multiplier, driver.getAxis(XboxController.Axes.RightX));
+            drive.curvature(-driver.getAxis(XboxController.Axes.LeftY) * multiplier, driver.getAxis(XboxController.Axes.RightX));
+
+        }        
 
     }
 
     public void operate() {
 
-        double intakeMultiplier = 0.35;
-        double conveyorMultiplier = 0.8;
+        double intakeMultiplier = 0.37;
+        double conveyorMultiplier = 0.275;
         double elevatorMultiplier = 0.5;
 
-        elevator.setElevator(-operator.getAxis(XboxController.Axes.LeftY) * elevatorMultiplier);
+        double elevatorInput = -operator.getAxis(XboxController.Axes.LeftY);
+
+        if(!topSwitch.getState() && elevatorInput > 0) {
+
+            elevatorInput = 0;
+
+        }
+
+        elevator.setElevator(elevatorInput * elevatorMultiplier);
 
         elevator.setLock(operator.getToggle(XboxController.Buttons.Start));
 
@@ -336,6 +327,34 @@ public class Robot extends TimedRobot {
 
     }
 
+    public void emergencyManual() {
+
+        boolean aiming = driver.getButton(XboxController.Buttons.A);
+
+        if(aiming) {
+
+            shooterControl.aim();
+
+        } else {
+
+            drive();
+
+        }
+
+        operate();
+
+        if(operator.getButton(XboxController.Buttons.A)) {
+
+            shooterControl.fire();
+
+        } else {
+
+            shooter.stop();
+
+        }
+
+    }
+
     @Override
     public void teleopPeriodic() {
 
@@ -348,9 +367,24 @@ public class Robot extends TimedRobot {
         driver.setRumble(true, 0.0);
         driver.setRumble(false, 0.0);
 
-        smashBoard.set("enabled", true);
+        //smashBoard.set("enabled", true);
 
-        boolean aiming = driver.getButton(XboxController.Buttons.A);
+        //boolean aiming = driver.getButton(XboxController.Buttons.A);
+
+        emergencyManual();
+/*
+        if(operator.getButtonDown(XboxController.Buttons.Y) && driver.getButton(XboxController.Buttons.X) && driver.getButton(XboxController.Buttons.Y)) {
+
+            emergencyManual = !emergencyManual;
+
+        }
+
+        if(emergencyManual) {
+
+            emergencyManual();
+            return;
+
+        }
 
         if(!aiming) {
 
@@ -358,7 +392,6 @@ public class Robot extends TimedRobot {
 
             operate();
 
-            shooter.stop();
 
         } else {
 
@@ -387,21 +420,21 @@ public class Robot extends TimedRobot {
 
                     shooterControl.fire();
 
-                } else {
-
-                    shooterControl.stop();
-
                 }
+
+            } else {
+
+                shooterControl.stop();
 
             }
 
         }
+*/
+        //shooterControl.eval();
 
-        shooterControl.eval();
-
-        smashBoard.set("firing", Shooter.readyToFire);
-        smashBoard.set("readyToFire", ShooterController.aligned);
-        smashBoard.set("aligned", !(limelight.getHorizontalAngle() == 0.0));
+        //smashBoard.set("firing", Robot.emergencyManual);
+        //smashBoard.set("readyToFire", ShooterController.aligned);
+        //smashBoard.set("aligned", !(limelight.getHorizontalAngle() == 0.0));
 
     }
 
@@ -409,6 +442,31 @@ public class Robot extends TimedRobot {
     public void testInit() {}
 
     @Override
-    public void testPeriodic() {}
+    public void testPeriodic() {
+
+        boolean feeding = operator.getToggle(XboxController.Buttons.Y);
+
+        if(feeding) {
+
+            shooter.setRawSpeeds(0.58, 0.36);
+            shooter.eval(0);
+            shooter.setFeeders(Shooter.readyToFire);
+
+        } else {
+
+            shooter.stop();
+
+        }
+
+        drive();
+        operate();
+
+        if(feeding && operator.getAxis(XboxController.Axes.RightTrigger) > 0.2) {
+
+            conveyor.setConveyor(true);
+
+        }
+
+    }
 
 }

@@ -81,7 +81,7 @@ public class SparkMax implements PIDMotor {
 
         double currentCommand = PIDLoop.getCommand(speed, getSpeed());
 
-        pidController.setReference(currentCommand, ControlType.kDutyCycle);
+        this.setPercent(currentCommand);
 
     }
 

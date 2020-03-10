@@ -81,7 +81,7 @@ public class Talon implements PIDMotor{
     
         double currentCommand = PIDLoop.getCommand(speed, getSpeed());
 
-        motor.set(ControlMode.PercentOutput, currentCommand);
+        this.setPercent(currentCommand);
         
     }
 

@@ -41,7 +41,7 @@ public class AutoPath {
 
         } catch (Exception e) {
 
-            System.err.print("File not found: " + filePath);
+            System.out.print("File not found: " + filePath);
 
         }
         

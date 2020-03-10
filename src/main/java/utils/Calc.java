@@ -38,4 +38,23 @@ public class Calc {
         
     }
 
+    // caps a value between the two specified inputs and outputs
+    public static double cap(double value, double min, double max) {
+
+        if(value > max) {
+
+            return max;
+
+        }
+
+        if(value < min) {
+
+            return min;
+
+        }
+
+        return value;
+
+    }
+
 }

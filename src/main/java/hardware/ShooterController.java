@@ -1,5 +1,6 @@
 package hardware;
 
+import frc.robot.Robot;
 import wrappers.Limelight;
 
 public class ShooterController {
@@ -12,16 +13,22 @@ public class ShooterController {
 
     Drive drive;
 
-    // all of these doubles are placeholders pending testing
-    private double maxSpeed = 0.3;
+    // these may need some tuning as things change
 
-    private double minSpeed = 0.17 * maxSpeed;
-
-    private double converter = 1.0 / 15;
+    // except these next two, leave these alone
+    private double maxSpeed = 0.315;
 
     private double acceptableAngleError = 0.65;
 
+    private double minSpeed = 0.15 * maxSpeed;
+
+    private double converter = 1.0 / 15;
+
     public static boolean aligned = false;
+
+    private double shortOffset = 3.55;
+
+    private double longOffset = 1.68;
 
     public ShooterController(Conveyor conveyor, Shooter shooter, Limelight limelight, Drive drive) {
 
@@ -42,16 +49,25 @@ public class ShooterController {
 
         conveyor.setSpeed(0);
 
+        shooter.eval(0);
+
     }
 
+    // checks if the robot is aligned and if the shooter is spun up, then updates internal variables accordingly
     public void eval() {
 
-        double offset = (limelight.getDistance() > 200) ? (1.68) : (3.55);
+        double offset = (limelight.getDistance() > 200) ? (longOffset) : (shortOffset);
 
         double angle = limelight.getHorizontalAngle() - offset;
 
         aligned = Math.abs(angle) <= acceptableAngleError; 
         
+        if(Robot.emergencyManual) {
+
+            shooter.eval(0);
+
+        }
+
         shooter.eval(limelight.getDistance());
 
     }
@@ -59,7 +75,31 @@ public class ShooterController {
     // this spins up the shooter and sets the conveyor and feeders based on wether the shooter is up to speed
     public void fire() {
 
-        shooter.setShooterSpeeds(limelight.getDistance());
+        if(Robot.emergencyManual) {
+
+            shooter.setRawSpeeds(0.58, 0.36);
+
+        } else {
+
+            shooter.setShooterSpeeds(limelight.getDistance());
+
+        }
+
+        eval();
+
+        System.out.println("shooter: " + Shooter.readyToFire);
+
+        conveyor.setConveyor(Shooter.readyToFire);
+
+        shooter.setFeeders(Shooter.readyToFire);
+
+    }
+
+    public void manualFire() {
+
+        shooter.setRawSpeeds(0.58, 0.36);
+
+        shooter.eval(0);
 
         conveyor.setConveyor(Shooter.readyToFire);
 
@@ -70,7 +110,7 @@ public class ShooterController {
     // this aligns the robot with the vision target found by the limelight
     public void aim() {
 
-        double offset = (limelight.getDistance() > 200) ? (1.68) : (3.55);
+        double offset = (limelight.getDistance() > 200) ? (longOffset) : (shortOffset);
 
         double angle = limelight.getHorizontalAngle() - offset;
 
@@ -85,7 +125,11 @@ public class ShooterController {
             speed = maxSpeed;
 
         }
-
+/*
+        System.out.println(aligned);
+        System.out.println(speed);
+        System.out.println(limelight.getHorizontalAngle());
+*/
         drive.bananaTank(speed, -speed);
 
     }

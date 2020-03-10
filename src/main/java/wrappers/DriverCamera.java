@@ -26,7 +26,26 @@ public class DriverCamera {
 
         } catch (Exception e) {
 
-            System.err.println("Camera Not Found");
+            System.out.println("Camera Not Found");
+
+        }
+
+    }
+
+    public DriverCamera() {
+
+        try {
+
+            cam = CameraServer.getInstance().startAutomaticCapture();
+            cam.setResolution(240, 160);
+            cam.setFPS(30);
+            cam.setExposureManual(50);
+
+            constructed = true;
+
+        } catch (Exception e) {
+
+            System.out.println("Camera Not Found");
 
         }
 
@@ -61,7 +80,7 @@ public class DriverCamera {
 
         } catch (Exception exception) {
 
-            System.err.println("Camera Not Found");
+            System.out.println("Camera Not Found");
 
         }
 

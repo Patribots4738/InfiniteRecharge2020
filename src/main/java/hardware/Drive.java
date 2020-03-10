@@ -8,7 +8,7 @@ public class Drive {
     MotorGroup leftMotors;
     MotorGroup rightMotors;
 
-    private final double deadBand = 0.05;
+    private final double deadBand = 0.07;
 
     public Drive(MotorGroup leftMotors, MotorGroup rightMotors) {
 

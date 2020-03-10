@@ -14,6 +14,8 @@ public class TimeLoop {
 
         this.loopTime = loopTime;
 
+        loopsCompleted = 0;
+
         startTime = Timer.getTime();
 
     }
@@ -23,13 +25,17 @@ public class TimeLoop {
 
         if(((Timer.getTime() - startTime) % loopTime) == 0) {
 
-            loopsCompleted++;
-
             return true;
 
         }
 
         return false;
+
+    }
+
+    public int getLoops() {
+
+        return (int)((Timer.getTime() - startTime) / loopTime);
 
     }
 

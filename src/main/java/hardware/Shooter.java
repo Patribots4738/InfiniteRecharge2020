@@ -1,6 +1,7 @@
 package hardware;
 
 import wrappers.*;
+import frc.robot.Robot;
 import interfaces.*;
 import utils.*;
 
@@ -95,13 +96,22 @@ public class Shooter {
 
     public void eval(double distance) {
 
-        double[] speeds = distanceToSpeeds(distance);
+        double[] speeds = {0.58, 0.36};
+
+        if(!Robot.emergencyManual) {
+
+            speeds = distanceToSpeeds(distance);
+        
+        }
 
         boolean topReady = Calc.isBetween(topWheel.getSpeed(), speeds[0] - acceptableSpeedError, speeds[0] + acceptableSpeedError);
         boolean bottomReady = Calc.isBetween(Math.abs(bottomWheel.getSpeed()), speeds[1] - acceptableSpeedError, speeds[1] + acceptableSpeedError);
 
         readyToFire = topReady && bottomReady;
-
+/*
+        System.out.println("top: " + topReady);
+        System.out.println("bottom: " + bottomReady);
+*/
     }
 
     public void setRawSpeeds(double topSpeed, double bottomSpeed) {

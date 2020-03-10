@@ -51,8 +51,8 @@ public class AutoDrive {
 		rightMotors.resetEncoder();
 
 		completePositions = new double[2];
-		completePositions[0] = leftMotors.getPosition();
-		completePositions[1] = rightMotors.getPosition();
+		completePositions[0] = 0.0;
+		completePositions[1] = 0.0;
 
 		commandQueue = new ArrayList<Command>();
 
