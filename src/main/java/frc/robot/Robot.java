@@ -181,37 +181,33 @@ public class Robot extends TimedRobot {
     @Override
     public void autonomousPeriodic() {
 
-        //smashBoard.set("enabled", true);
         if (auto.queueIsEmpty()) {
 
             if(shootTimer.isRunning()) {
-/*
+
                 leftMotors.setPID(0.5, 0, 0);
                 rightMotors.setPID(0.5, 0, 0);
 
                 shooterControl.aim();
 
                 if(ShooterController.aligned) {
-*/
-                    shooterControl.manualFire();
-/*
+
+                    shooterControl.fire();
+
                 }
-*/
+
             } else {
 
-                //leftMotors.setPID(2, 0, 0);
-                //rightMotors.setPID(2, 0, 0);
+                leftMotors.setPID(2, 0, 0);
+                rightMotors.setPID(2, 0, 0);
 
                 if(firstTime) {
-                    
-                    auto.addPath(new AutoPath("/home/lvuser/deploy/autopaths/Default.json"));
-                    
-                    //auto.addPath(path);
+                                        
+                    auto.addPath(path);
 
                     firstTime = false;
 
-                    //auto.jumpstart();
-                    
+                    auto.jumpstart();
 
                     shooterControl.stop();
 
@@ -224,6 +220,8 @@ public class Robot extends TimedRobot {
             auto.executeQueue();
 
         }
+
+        //smashBoard.set("enabled", true);
 
     }
 
@@ -243,6 +241,11 @@ public class Robot extends TimedRobot {
     // VERY EXTRA NO TOUCH
     @Override
     public void disabledPeriodic() {
+
+        operator.setRumble(true, 0.0);
+        operator.setRumble(false, 0.0);
+        driver.setRumble(true, 0.0);
+        driver.setRumble(false, 0.0);
 
         //smashBoard.set("enabled", false);
 
@@ -264,22 +267,20 @@ public class Robot extends TimedRobot {
 
     public void drive() {
 
-        boolean trainingWheels = driver.getToggle(XboxController.Buttons.Y);
+        boolean trainingWheels = false;
 
         boolean inverted = driver.getToggle(XboxController.Buttons.L);
         double multiplier = ((inverted) ? -1.0 : 1.0);
 
         double maxSpeed = 1.0;
-/*
+
         if(trainingWheels) {
 
             maxSpeed = 0.6;
 
         }
-*/
-        multiplier *= maxSpeed;
 
-        //smashBoard.set("reversed", inverted);
+        multiplier *= maxSpeed;
 
         shifted = !driver.getToggle(XboxController.Buttons.R);
 
@@ -291,7 +292,9 @@ public class Robot extends TimedRobot {
 
             drive.curvature(-driver.getAxis(XboxController.Axes.LeftY) * multiplier, driver.getAxis(XboxController.Axes.RightX));
 
-        }        
+        }    
+        
+        //smashBoard.set("reversed", inverted);
 
     }
 
@@ -367,17 +370,7 @@ public class Robot extends TimedRobot {
         driver.setRumble(true, 0.0);
         driver.setRumble(false, 0.0);
 
-        //smashBoard.set("enabled", true);
-
-        //boolean aiming = driver.getButton(XboxController.Buttons.A);
-
-        emergencyManual();
-/*
-        if(operator.getButtonDown(XboxController.Buttons.Y) && driver.getButton(XboxController.Buttons.X) && driver.getButton(XboxController.Buttons.Y)) {
-
-            emergencyManual = !emergencyManual;
-
-        }
+        boolean aiming = driver.getButton(XboxController.Buttons.A);
 
         if(emergencyManual) {
 
@@ -429,12 +422,13 @@ public class Robot extends TimedRobot {
             }
 
         }
-*/
-        //shooterControl.eval();
+
+        shooterControl.eval();
 
         //smashBoard.set("firing", Robot.emergencyManual);
         //smashBoard.set("readyToFire", ShooterController.aligned);
         //smashBoard.set("aligned", !(limelight.getHorizontalAngle() == 0.0));
+        //smashBoard.set("enabled", true);
 
     }
 

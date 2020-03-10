@@ -1,6 +1,5 @@
 package hardware;
 
-import frc.robot.Robot;
 import wrappers.Limelight;
 
 public class ShooterController {
@@ -14,8 +13,6 @@ public class ShooterController {
     Drive drive;
 
     // these may need some tuning as things change
-
-    // except these next two, leave these alone
     private double maxSpeed = 0.315;
 
     private double acceptableAngleError = 0.65;
@@ -61,13 +58,7 @@ public class ShooterController {
         double angle = limelight.getHorizontalAngle() - offset;
 
         aligned = Math.abs(angle) <= acceptableAngleError; 
-        
-        if(Robot.emergencyManual) {
-
-            shooter.eval(0);
-
-        }
-
+     
         shooter.eval(limelight.getDistance());
 
     }
@@ -75,35 +66,15 @@ public class ShooterController {
     // this spins up the shooter and sets the conveyor and feeders based on wether the shooter is up to speed
     public void fire() {
 
-        if(Robot.emergencyManual) {
-
-            shooter.setRawSpeeds(0.58, 0.36);
-
-        } else {
-
-            shooter.setShooterSpeeds(limelight.getDistance());
-
-        }
+        shooter.setShooterSpeeds(limelight.getDistance());
 
         eval();
 
-        System.out.println("shooter: " + Shooter.readyToFire);
-
         conveyor.setConveyor(Shooter.readyToFire);
 
         shooter.setFeeders(Shooter.readyToFire);
 
-    }
-
-    public void manualFire() {
-
-        shooter.setRawSpeeds(0.58, 0.36);
-
-        shooter.eval(0);
-
-        conveyor.setConveyor(Shooter.readyToFire);
-
-        shooter.setFeeders(Shooter.readyToFire);
+        //System.out.println("shooter: " + Shooter.readyToFire);
 
     }
 
@@ -125,12 +96,14 @@ public class ShooterController {
             speed = maxSpeed;
 
         }
+
+        drive.bananaTank(speed, -speed);
+
 /*
         System.out.println(aligned);
         System.out.println(speed);
         System.out.println(limelight.getHorizontalAngle());
 */
-        drive.bananaTank(speed, -speed);
 
     }
 

@@ -43,6 +43,13 @@ public class Shooter {
             bottomWheelSpeed = 0.695 + (distance / 50000.0);
 
         }
+
+        if(Robot.emergencyManual) {
+
+            topWheelSpeed = 0.58;
+            bottomWheelSpeed = 0.36;
+
+        }
         
         return new double[]{topWheelSpeed, bottomWheelSpeed};
 
@@ -96,13 +103,7 @@ public class Shooter {
 
     public void eval(double distance) {
 
-        double[] speeds = {0.58, 0.36};
-
-        if(!Robot.emergencyManual) {
-
-            speeds = distanceToSpeeds(distance);
-        
-        }
+        double[] speeds = distanceToSpeeds(distance);
 
         boolean topReady = Calc.isBetween(topWheel.getSpeed(), speeds[0] - acceptableSpeedError, speeds[0] + acceptableSpeedError);
         boolean bottomReady = Calc.isBetween(Math.abs(bottomWheel.getSpeed()), speeds[1] - acceptableSpeedError, speeds[1] + acceptableSpeedError);
