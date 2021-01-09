@@ -361,7 +361,6 @@ public class Robot extends TimedRobot {
 
             operate();
 
-
         } else {
 
             shifted = true;
