@@ -21,7 +21,7 @@ public class Robot extends TimedRobot {
 
     Countdown shootTimer;
 
-    NTTable smashBoard;
+    //NTTable smashBoard;
 
     Compressor compressor;
 
@@ -66,7 +66,7 @@ public class Robot extends TimedRobot {
 
         shootTimer = new Countdown(shootTime);
 
-        smashBoard = new NTTable("/SmartDashboard");
+        //smashBoard = new NTTable("/SmartDashboard");
 
         compressor = new Compressor();
 
