@@ -142,10 +142,6 @@ public class Robot extends TimedRobot {
 
         compressor.setState(true);
 
-        cam.retryConnection();
-
-        System.out.println(cam.getConstructed());
-
     }
 
     @Override
