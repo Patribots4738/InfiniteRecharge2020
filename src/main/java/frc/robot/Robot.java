@@ -1,3 +1,6 @@
+// this was sent by zach
+
+
 package frc.robot;
 
 import edu.wpi.first.wpilibj.TimedRobot;
@@ -15,7 +18,7 @@ public class Robot extends TimedRobot {
 
     boolean firstTime;
 
-    public static boolean emergencyManual = true;
+    public static boolean emergencyManual = false;
 
     double shootTime;
 
@@ -245,7 +248,7 @@ public class Robot extends TimedRobot {
 
     public void drive() {
 
-        boolean trainingWheels = false;
+        boolean trainingWheels = true;
 
         boolean inverted = driver.getToggle(XboxController.Buttons.L);
         double multiplier = ((inverted) ? -1.0 : 1.0);
