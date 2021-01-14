@@ -144,6 +144,8 @@ public class Robot extends TimedRobot {
 
         cam.retryConnection();
 
+        System.out.println(cam.getConstructed());
+
     }
 
     @Override

@@ -86,4 +86,10 @@ public class DriverCamera {
 
     }
 
+    public boolean getConstructed() {
+
+        return constructed;
+
+    }
+
 }
