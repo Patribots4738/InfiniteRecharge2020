@@ -14,6 +14,8 @@ import wrappers.*;
 
 public class Robot extends TimedRobot {
 
+    DriverCamera cam;
+
     public static boolean shifted;
 
     boolean firstTime;
@@ -58,6 +60,8 @@ public class Robot extends TimedRobot {
     @Override
     public void robotInit() {
         // here begin all the constructors
+
+        cam = new DriverCamera();
 
         Timer.init();
 
@@ -137,6 +141,8 @@ public class Robot extends TimedRobot {
         gearShifter.activateChannel(shifted);
 
         compressor.setState(true);
+
+        cam.retryConnection();
 
     }
 
