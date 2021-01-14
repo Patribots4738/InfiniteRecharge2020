@@ -20,7 +20,7 @@ public class Robot extends TimedRobot {
 
     boolean firstTime;
 
-    public static boolean emergencyManual = false;
+    public static boolean emergencyManual = true;
 
     double shootTime;
 
