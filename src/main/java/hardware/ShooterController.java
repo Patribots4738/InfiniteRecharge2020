@@ -1,5 +1,6 @@
 package hardware;
 
+import utils.PIDLoop;
 import wrappers.Limelight;
 
 public class ShooterController {
@@ -11,6 +12,8 @@ public class ShooterController {
     Limelight limelight;
 
     Drive drive;
+
+    // swap out current alignment math with PIDLoop class
 
     // these may need some tuning as things change
     private double maxSpeed = 0.315;
