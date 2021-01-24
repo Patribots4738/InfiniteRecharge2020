@@ -268,7 +268,7 @@ public class Robot extends TimedRobot {
 
         if(trainingWheels) {
 
-            drive.bananaArcade(-driver.getAxis(XboxController.Axes.LeftY) * multiplier, driver.getAxis(XboxController.Axes.RightX));
+            drive.trainingWheels(-driver.getAxis(XboxController.Axes.LeftY) * multiplier, driver.getAxis(XboxController.Axes.RightX));
             
         } else {
 

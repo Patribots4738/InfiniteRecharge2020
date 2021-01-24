@@ -5,7 +5,7 @@ import networking.*;
 public final class Constants {
 
     // in inches
-    public static final double TARGET_HEIGHT = 92;
+    public static final double TARGET_HEIGHT =  85; //85 is a temporary value from joeseph's house, 92 is the one for actual competition //92;
 
     // in inches
     public static final double LIMELIGHT_HEIGHT = 40.125;
