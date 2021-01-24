@@ -91,13 +91,13 @@ public class ShooterController {
 
         if(speed < minSpeed) {
 
-            speed = minSpeed * Math.signum(angle);
+            speed = minSpeed;
 
         }
 
         if(speed > maxSpeed) {
 
-            speed = maxSpeed * Math.signum(angle);
+            speed = maxSpeed;
 
         }
 
