@@ -23,7 +23,7 @@ public class ShooterController {
 
     public static boolean aligned = false;
 
-    private double shortOffset = 3.55;
+    private double shortOffset = 0;//3.55;
 
     private double longOffset = 1.68;
 
