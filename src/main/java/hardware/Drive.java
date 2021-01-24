@@ -167,7 +167,7 @@ public class Drive {
         turning = deadBand(turning);
 
         double adjustedThrottle = Calc.bananaCurve(throttle);
-        double adjustedTurning = Calc.trainingWheelsBananaCurve(turning);
+        double adjustedTurning = Calc.bananaCurve(turning);
 
         double leftMotorInput = adjustedThrottle + adjustedTurning;
         double rightMotorInput = -(adjustedThrottle - adjustedTurning);
