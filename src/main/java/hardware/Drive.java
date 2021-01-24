@@ -161,4 +161,20 @@ public class Drive {
 
     }
 
+    public void trainingWheels(double throttle, double turning) {
+
+        throttle = deadBand(throttle);
+        turning = deadBand(turning);
+
+        double adjustedThrottle = Calc.trainingWheelsBananaCurve(throttle);
+        double adjustedTurning = Calc.trainingWheelsBananaCurve(turning);
+
+        double leftMotorInput = adjustedThrottle + adjustedTurning;
+        double rightMotorInput = -(adjustedThrottle - adjustedTurning);
+
+        leftMotors.setSpeed(leftMotorInput);
+        rightMotors.setSpeed(rightMotorInput);
+
+    }
+
 }

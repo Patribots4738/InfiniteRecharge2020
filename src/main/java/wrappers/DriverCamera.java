@@ -11,6 +11,7 @@ public class DriverCamera {
 
     boolean constructed = false;
 
+    // usb port the camera is plugged into, should be 0 or 1
     public DriverCamera(int camNum) {
 
         this.camNum = camNum;
@@ -18,25 +19,6 @@ public class DriverCamera {
         try {
 
             cam = CameraServer.getInstance().startAutomaticCapture(camNum);
-            cam.setResolution(240, 160);
-            cam.setFPS(30);
-            cam.setExposureManual(50);
-
-            constructed = true;
-
-        } catch (Exception e) {
-
-            System.out.println("Camera Not Found");
-
-        }
-
-    }
-
-    public DriverCamera() {
-
-        try {
-
-            cam = CameraServer.getInstance().startAutomaticCapture();
             cam.setResolution(240, 160);
             cam.setFPS(30);
             cam.setExposureManual(50);

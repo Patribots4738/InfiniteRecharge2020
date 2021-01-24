@@ -12,6 +12,13 @@ public class Calc {
 
     }
 
+    // modified version of the banana curve for the training wheels drive method
+    public static double trainingWheelsBananaCurve(double x) {
+
+        return Math.signum(x) * Math.pow(Math.abs(x), 0.8 + (Math.abs(x)));
+
+    }
+
     public static boolean isBetween(double value, double min, double max) {
 
         return (value < max) && (value > min);
