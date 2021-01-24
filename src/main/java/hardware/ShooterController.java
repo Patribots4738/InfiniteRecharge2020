@@ -83,11 +83,11 @@ public class ShooterController {
 
         double offset = (limelight.getDistance() > 200) ? (longOffset) : (shortOffset);
 
-        double angle = limelight.getHorizontalAngle();// - offset;
+        double angle = (Math.abs(limelight.getHorizontalAngle()) - offset) * Math.signum(limelight.getHorizontalAngle());
 
         aligned = Math.abs(angle) <= acceptableAngleError;
 
-        double speed = ((angle * converter) * maxSpeed);
+        double speed = (angle * converter * maxSpeed);
 
         if(speed < minSpeed) {
 
@@ -103,11 +103,10 @@ public class ShooterController {
 
         drive.bananaTank(speed, -speed);
 
-/*
+        System.out.println(angle);
         System.out.println(aligned);
-        System.out.println(speed);
         System.out.println(limelight.getHorizontalAngle());
-*/
+
 
     }
 
