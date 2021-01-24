@@ -89,7 +89,7 @@ public class ShooterController {
 
         double speed = (angle * converter * maxSpeed);
 
-        if(speed < minSpeed) {
+        if(Math.abs(speed) < minSpeed) {
 
             speed = minSpeed;
 
