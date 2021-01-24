@@ -89,11 +89,15 @@ public class ShooterController {
 
         double speed = ((angle * converter) * maxSpeed);
 
-        speed += (minSpeed * Math.signum(angle));
+        if(speed < minSpeed) {
+
+            speed = minSpeed * Math.signum(angle);
+
+        }
 
         if(speed > maxSpeed) {
 
-            speed = maxSpeed;
+            speed = maxSpeed * Math.signum(angle);
 
         }
 
