@@ -94,7 +94,7 @@ public class ShooterController {
 
         aligned = Math.abs(angle) <= acceptableAngleError;
 
-        double speed = aimLoop.getCommand(0, angle) *converter;
+        double speed = aimLoop.getCommand(0, angle) * converter;
 
         if(Math.abs(speed) < minSpeed) {
 
@@ -112,6 +112,7 @@ public class ShooterController {
 
         System.out.println(angle);
         System.out.println(aligned);
+        System.out.println(speed);
         System.out.println(limelight.getHorizontalAngle());
 
 
