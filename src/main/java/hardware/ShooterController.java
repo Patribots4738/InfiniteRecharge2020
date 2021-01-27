@@ -94,7 +94,7 @@ public class ShooterController {
 
         aligned = Math.abs(angle) <= acceptableAngleError;
 
-        double speed = aimLoop.getCommand(0, angle) * converter; 
+        double speed = -(aimLoop.getCommand(0, angle) * converter); 
 
         if(Math.abs(speed) < minSpeed) {
 
