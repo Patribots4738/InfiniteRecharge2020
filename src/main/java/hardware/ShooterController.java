@@ -16,11 +16,11 @@ public class ShooterController {
     // swap out current alignment math with PIDLoop class
 
     // these may need some tuning as things change
-    private double maxSpeed = 0.315;
+    private double maxSpeed = 0.15;
 
-    private double acceptableAngleError = 0.65;
+    private double acceptableAngleError = 0.5;
 
-    private double minSpeed = 0.11;
+    private double minSpeed = 0.05;
 
     private double converter = 1.0 / 15;
 
@@ -42,7 +42,7 @@ public class ShooterController {
 
         this.drive = drive;
 
-        aimLoop = new PIDLoop(0.5, 0, 0);
+        aimLoop = new PIDLoop(0.75, 2, 0.2);
 
     }
 
