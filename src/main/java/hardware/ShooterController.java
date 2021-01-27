@@ -42,7 +42,7 @@ public class ShooterController {
 
         this.drive = drive;
 
-        aimLoop = new PIDLoop(0, 0, 0);
+        aimLoop = new PIDLoop(0.5, 0, 0);
 
     }
 
@@ -94,7 +94,7 @@ public class ShooterController {
 
         aligned = Math.abs(angle) <= acceptableAngleError;
 
-        double speed = aimLoop.getCommand(0, angle) * converter;
+        double speed = aimLoop.getCommand(0, angle) * converter; 
 
         if(Math.abs(speed) < minSpeed) {
 
