@@ -215,23 +215,11 @@ public class Robot extends TimedRobot {
 
         firstTime = true;
 
-        driver.setRumble(true, 0.0);
-        driver.setRumble(false, 0.0);
-        operator.setRumble(true, 0.0);
-        operator.setRumble(false, 0.0);
-
     }
     
     // VERY EXTRA NO TOUCH
     @Override
-    public void disabledPeriodic() {
-
-        operator.setRumble(true, 0.0);
-        operator.setRumble(false, 0.0);
-        driver.setRumble(true, 0.0);
-        driver.setRumble(false, 0.0);
-
-    }
+    public void disabledPeriodic() {}
     
     @Override
     public void teleopInit() {
@@ -343,13 +331,6 @@ public class Robot extends TimedRobot {
 
         // here begins the code for controlling the full robot
 
-        // set the rumbles to 0 to disable them, unless they're later reset
-        // also resets them to 0 if they aren't being told to do stuff later
-        operator.setRumble(true, 0.0);
-        operator.setRumble(false, 0.0);
-        driver.setRumble(true, 0.0);
-        driver.setRumble(false, 0.0);
-
         boolean aiming = driver.getButton(XboxController.Buttons.A);
 
         if(emergencyManual) {
@@ -372,9 +353,8 @@ public class Robot extends TimedRobot {
             // the angle between the limelight and the target is never exactly 0 unless it can't see the target
             if(limelight.getHorizontalAngle() == 0.0) {
 
-                // buzz driver controller if they try to line up without the limelight finding a target,
-                driver.setRumble(true, 0.5);
-                driver.setRumble(false, 0.5);
+                // and if the limelight cant see the target then it shouldn't do anything
+                shooterControl.stop();
 
             } else {
 
@@ -384,18 +364,20 @@ public class Robot extends TimedRobot {
 
             if(ShooterController.aligned) {
 
-                // start buzzing the operator controller if they're ready to fire
-                operator.setRumble(true, 0.5);
-                operator.setRumble(false, 0.5);
-
                 if(operator.getButton(XboxController.Buttons.A)) {
 
                     shooterControl.fire();
 
-                }
+                } else {
+
+                    // if the operator isn't trying to fire the shooter should be off
+                    shooterControl.stop();
+
+                } 
 
             } else {
 
+                // if the robot isn't aligned the shooter should be off
                 shooterControl.stop();
 
             }
