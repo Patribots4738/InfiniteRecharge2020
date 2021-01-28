@@ -362,7 +362,7 @@ public class Robot extends TimedRobot {
 
             }
 
-            if(XboxController.Buttons.A){//(ShooterController.aligned) {
+            if(operator.getButton(XboxController.Buttons.A)){//(ShooterController.aligned) {
 
                 if(operator.getButton(XboxController.Buttons.A)) {
 
