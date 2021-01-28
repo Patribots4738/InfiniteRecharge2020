@@ -384,7 +384,7 @@ public class Robot extends TimedRobot {
 
         }
 
-        shooterControl.eval();
+        //shooterControl.eval();
 
     }
 
@@ -399,8 +399,8 @@ public class Robot extends TimedRobot {
         if(feeding) {
 
             shooter.setRawSpeeds(0.58, 0.36);
-            shooter.eval(0);
-            shooter.setFeeders(Shooter.readyToFire);
+            //shooter.eval(0);
+            shooter.setFeeders(false);//shooter.setFeeders(Shooter.readyToFire);
 
         } else {
 

@@ -53,7 +53,7 @@ public class ShooterController {
 
         conveyor.setSpeed(0);
 
-        shooter.eval(0);
+        //shooter.eval(0);
 
     }
 
@@ -75,11 +75,11 @@ public class ShooterController {
 
         shooter.setShooterSpeeds(limelight.getDistance());
 
-        eval();
+        //eval();
 
         conveyor.setConveyor(Shooter.readyToFire);
 
-        shooter.setFeeders(Shooter.readyToFire);
+        Shooter.readyToFire(false);//shooter.setFeeders(Shooter.readyToFire);
 
         //System.out.println("shooter: " + Shooter.readyToFire);
 
