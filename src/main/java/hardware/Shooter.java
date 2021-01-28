@@ -97,7 +97,7 @@ public class Shooter {
         topWheel.setSpeed(speeds[0]);
         bottomWheel.setSpeed(-speeds[1]);
 
-        eval(distance);
+        //eval(distance);
         
     }
 
@@ -143,7 +143,7 @@ public class Shooter {
 
     public void setFeeders(boolean on) {
         
-        blocker.activateChannel(on);
+        blocker.activateChannel(!on);
 
         feeders.setSpeed((on) ? feedRate : 0);
 

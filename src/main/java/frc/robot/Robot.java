@@ -366,6 +366,7 @@ public class Robot extends TimedRobot {
 
                 if(operator.getButton(XboxController.Buttons.A)) {
 
+                    shooter.readyToFire = true;
                     shooterControl.fire();
 
                 } else {

@@ -77,9 +77,11 @@ public class ShooterController {
 
         //eval();
 
+        
+
         conveyor.setConveyor(Shooter.readyToFire);
 
-        Shooter.setFeeders(false);//shooter.setFeeders(Shooter.readyToFire);
+        shooter.setFeeders(false);//shooter.setFeeders(Shooter.readyToFire);
 
         //System.out.println("shooter: " + Shooter.readyToFire);
 
