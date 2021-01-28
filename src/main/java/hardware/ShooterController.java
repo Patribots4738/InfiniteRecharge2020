@@ -41,8 +41,8 @@ public class ShooterController {
         this.limelight = limelight;
 
         this.drive = drive;
-
-        aimLoop = new PIDLoop(0.75, 2, 0.2);
+          //1,0,0 PID worked ok
+        aimLoop = new PIDLoop(0.5, 0.5, 0.0015);
 
     }
 
@@ -94,7 +94,7 @@ public class ShooterController {
 
         aligned = Math.abs(angle) <= acceptableAngleError;
 
-        double speed = -(aimLoop.getCommand(0, angle) * converter); 
+        double speed = -((aimLoop.getCommand(0, angle) - angle) * converter); 
 
         if(Math.abs(speed) < minSpeed) {
 
