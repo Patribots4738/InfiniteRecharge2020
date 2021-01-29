@@ -41,8 +41,8 @@ public class ShooterController {
         this.limelight = limelight;
 
         this.drive = drive;
-          //0.5,0.5,0 PID worked ok
-        aimLoop = new PIDLoop(1.07, 0.15, 0);
+          //1.07,.15,0 PID worked ok
+        aimLoop = new PIDLoop(1.95, 0.15, 0.2);
         //aimLoop = new PIDLoop(0, 0, 0);
     }
 
