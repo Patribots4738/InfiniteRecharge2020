@@ -19,7 +19,7 @@ public class ShooterController {
 	// these may need some tuning as things change
 	private double maxSpeed = 0.15;
 
-	private double acceptableAngleError = 0.5;
+	private double acceptableAngleError = .5;
 
 	private double minSpeed = 0.025;
 
@@ -46,7 +46,7 @@ public class ShooterController {
 		this.drive = drive;
 		  //0.5,0.5,0 PID worked ok
         //aimLoop = new PIDLoop(.95, .15, .075);
-        //aimLoop = new PIDLoop(-0.06335049865011404, -0.0018142513139456247, -0.5530222919461508, 1, 40, 9);
+        aimLoop = new PIDLoop(-6.8, 0, -1, 1, 3);
         
         loop = 0;
 	}
@@ -99,7 +99,7 @@ public class ShooterController {
 
 		aligned = Math.abs(angle) <= acceptableAngleError;
 
-		double speed = angle * converter;//-(aimLoop.getCommand(0, angle) * converter); 
+		double speed = (aimLoop.getCommand(0, angle) * converter); 
 
 		if(Math.abs(speed) < minSpeed) {
 
