@@ -1,5 +1,6 @@
 package hardware;
 
+import utils.Constants;
 import utils.PIDLoop;
 import wrappers.Limelight;
 
@@ -24,7 +25,9 @@ public class ShooterController {
 
 	private double converter = 1.0 / 15;
 
-	public static boolean aligned = false;
+    public static boolean aligned = false;
+    
+    private int loop;
 
 	//private double shortOffset = 0;//3.55;
 
@@ -42,8 +45,10 @@ public class ShooterController {
 
 		this.drive = drive;
 		  //0.5,0.5,0 PID worked ok
-		aimLoop = new PIDLoop(.95, .15, .075);
-		//aimLoop = new PIDLoop(0, 0, 0);
+		//aimLoop = new PIDLoop(.95, .15, .075);
+        //aimLoop = new PIDLoop(0, 0, 0);
+        
+        loop = 0;
 	}
 
 	// stops the shooter
@@ -94,7 +99,7 @@ public class ShooterController {
 
 		aligned = Math.abs(angle) <= acceptableAngleError;
 
-		double speed = -(aimLoop.getCommand(0, angle) * converter); 
+		double speed = -angle * converter;//-(aimLoop.getCommand(0, angle) * converter); 
 
 		if(Math.abs(speed) < minSpeed) {
 
@@ -108,13 +113,19 @@ public class ShooterController {
 
 		}
 
-		drive.bananaTank(speed, -speed);
+        drive.bananaTank(speed, -speed);
 
+        loop++;
+        
+        String str = loop * Constants.LOOP_TIME + "," + 0 + "," + angle;
+
+        System.out.println(str);
+/*
 		System.out.println(angle);
 		System.out.println(aligned);
 		System.out.println(speed);
 		System.out.println(limelight.getHorizontalAngle());
-
+*/
 
 	}
 
