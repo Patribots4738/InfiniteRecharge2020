@@ -34,9 +34,11 @@ public class PIDLoop {
 	it's used for finding the integral and devivative
 	*/
 	private double[] errorLog;
+	private int dLog;
 
 	// this is the size of the errorlog, it determines how long the memory of the controller is for the I constant
 	private int Izone;
+	public int Dzone;
 
 	public PIDLoop(double P, double I, double D, double FF, int Izone) {
 
@@ -54,6 +56,28 @@ public class PIDLoop {
 		this.Izone = Izone;
 
 		errorLog = new double[Izone];
+		dLog = 1;
+
+	}
+
+	public PIDLoop(double P, double I, double D, double FF, int Izone, int Dzone) {
+
+		this.P = P;
+		this.I = I;
+		this.D = D;
+		this.FF = FF;
+
+		PError = 0;
+		IError = 0;
+		DError = 0;
+
+		error = 0;
+
+		this.Izone = Izone;
+		this.Dzone = Dzone;
+
+		errorLog = new double[Izone];
+		dLog = Dzone;
 
 	}
 
@@ -163,7 +187,7 @@ public class PIDLoop {
 
 		IError = errorSum * Constants.LOOP_TIME;
 
-		DError = (errorLog[0] - errorLog[1]) / Constants.LOOP_TIME;
+		DError = (errorLog[0] - errorLog[dLog]) / Constants.LOOP_TIME;
 
 		double correctedCommand = (FF * desiredCommand) + (P * PError) + (I * IError) + (D * DError);
 
