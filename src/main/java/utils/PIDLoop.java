@@ -40,26 +40,6 @@ public class PIDLoop {
 	private int Izone;
 	public int Dzone;
 
-	public PIDLoop(double P, double I, double D, double FF, int Izone) {
-
-		this.P = P;
-		this.I = I;
-		this.D = D;
-		this.FF = FF;
-
-		PError = 0;
-		IError = 0;
-		DError = 0;
-
-		error = 0;
-
-		this.Izone = Izone;
-
-		errorLog = new double[Izone];
-		dLog = 1;
-
-	}
-
 	public PIDLoop(double P, double I, double D, double FF, int Izone, int Dzone) {
 
 		this.P = P;
@@ -78,6 +58,26 @@ public class PIDLoop {
 
 		errorLog = new double[Izone];
 		dLog = Dzone;
+
+	}
+
+	public PIDLoop(double P, double I, double D, double FF, int Izone) {
+
+		this.P = P;
+		this.I = I;
+		this.D = D;
+		this.FF = FF;
+
+		PError = 0;
+		IError = 0;
+		DError = 0;
+
+		error = 0;
+
+		this.Izone = Izone;
+
+		errorLog = new double[Izone];
+		dLog = 1;
 
 	}
 
