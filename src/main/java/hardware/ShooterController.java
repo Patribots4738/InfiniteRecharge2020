@@ -41,8 +41,8 @@ public class ShooterController {
         this.limelight = limelight;
 
         this.drive = drive;
-          //1.07,.15,0 PID worked ok
-        aimLoop = new PIDLoop(1.95, 0.15, 0.2);
+          //0.5,0.5,0 PID worked ok
+        aimLoop = new PIDLoop(1.07, 0.15, 0);
         //aimLoop = new PIDLoop(0, 0, 0);
     }
 
@@ -53,7 +53,7 @@ public class ShooterController {
 
         conveyor.setSpeed(0);
 
-        //shooter.eval(0);
+        shooter.eval(0);
 
     }
 
@@ -75,13 +75,11 @@ public class ShooterController {
 
         shooter.setShooterSpeeds(limelight.getDistance());
 
-        //eval();
-
-        
+        eval();
 
         conveyor.setConveyor(Shooter.readyToFire);
 
-        shooter.setFeeders(false);//shooter.setFeeders(Shooter.readyToFire);
+        shooter.setFeeders(Shooter.readyToFire);
 
         //System.out.println("shooter: " + Shooter.readyToFire);
 

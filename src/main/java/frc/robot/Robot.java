@@ -362,11 +362,10 @@ public class Robot extends TimedRobot {
 
             }
 
-            if(operator.getButton(XboxController.Buttons.A)){//(ShooterController.aligned) {
+            if(ShooterController.aligned) {
 
                 if(operator.getButton(XboxController.Buttons.A)) {
 
-                    shooter.readyToFire = true;
                     shooterControl.fire();
 
                 } else {
@@ -385,7 +384,7 @@ public class Robot extends TimedRobot {
 
         }
 
-        //shooterControl.eval();
+        shooterControl.eval();
 
     }
 
@@ -400,8 +399,8 @@ public class Robot extends TimedRobot {
         if(feeding) {
 
             shooter.setRawSpeeds(0.58, 0.36);
-            //shooter.eval(0);
-            shooter.setFeeders(false);//shooter.setFeeders(Shooter.readyToFire);
+            shooter.eval(0);
+            shooter.setFeeders(Shooter.readyToFire);
 
         } else {
 
