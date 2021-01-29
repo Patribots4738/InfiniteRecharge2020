@@ -304,20 +304,6 @@ public class Robot extends TimedRobot {
 		
 		double intakeMultiplier = 0.37;
 		double conveyorMultiplier = 0.275;
-		double elevatorMultiplier = 0.5;
-
-		// this needs to be mapped to an unused axis (only the joysticks are left so that's a bit of an issue)
-		double elevatorInput = -driver.getAxis(/* XboxController.Axes.LeftX */);
-
-		if(!topSwitch.getState() && elevatorInput > 0) {
-
-			elevatorInput = 0;
-
-		}
-
-		elevator.setElevator(elevatorInput * elevatorMultiplier);
-
-		elevator.setLock(driver.getToggle(XboxController.Buttons.Start));
 
 		if(driver.getAxis(XboxController.Axes.RightTrigger) < 0.2) {
 
