@@ -5,34 +5,34 @@ import wrappers.*;
 
 public class Elevator {
 
-    PIDMotor rightLifter;
-    PIDMotor leftLifter;
+	PIDMotor rightLifter;
+	PIDMotor leftLifter;
 
-    DoubleSolenoid lock;
+	DoubleSolenoid lock;
 
-    public Elevator(PIDMotor leftLifter, PIDMotor rightLifter, DoubleSolenoid lock) {
-        
-        this.rightLifter = rightLifter;
-        this.leftLifter = leftLifter;
+	public Elevator(PIDMotor leftLifter, PIDMotor rightLifter, DoubleSolenoid lock) {
+		
+		this.rightLifter = rightLifter;
+		this.leftLifter = leftLifter;
 
-        this.lock = lock;
+		this.lock = lock;
 
-        rightLifter.setSpeed(0.0);
-        leftLifter.setSpeed(0.0);
-        
-    }
+		rightLifter.setSpeed(0.0);
+		leftLifter.setSpeed(0.0);
+		
+	}
 
-    public void setElevator(double speed) {
+	public void setElevator(double speed) {
 
-        rightLifter.setPercent(speed);
-        leftLifter.setPercent(-speed);
+		rightLifter.setPercent(speed);
+		leftLifter.setPercent(-speed);
 
-    }
+	}
 
-    public void setLock(boolean isLocked) {
+	public void setLock(boolean isLocked) {
 
-        lock.activateChannel(isLocked);
+		lock.activateChannel(isLocked);
 
-    }
+	}
 
 }

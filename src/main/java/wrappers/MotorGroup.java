@@ -4,22 +4,22 @@ import interfaces.*;
 
 public class MotorGroup implements Motor {
 
-    Motor[] motors;
+	Motor[] motors;
 
-    public MotorGroup(Motor... motors) {
+	public MotorGroup(Motor... motors) {
 
-        this.motors = motors;
+		this.motors = motors;
 
-    }
+	}
 
-    public void setSpeed(double speed) {
+	public void setSpeed(double speed) {
 
-        for(Motor motor : motors){
+		for(Motor motor : motors){
 
-            motor.setSpeed(speed);
-            
-        }
+			motor.setSpeed(speed);
+			
+		}
 
-    }
+	}
 
 }

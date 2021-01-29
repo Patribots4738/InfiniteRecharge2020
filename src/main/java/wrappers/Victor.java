@@ -6,18 +6,18 @@ import com.ctre.phoenix.motorcontrol.can.VictorSPX;
 
 public class Victor implements Motor {
 
-    VictorSPX motor;
+	VictorSPX motor;
 
-    public Victor(int canID){
+	public Victor(int canID){
 
-        motor = new VictorSPX(canID);
-        
-    }
+		motor = new VictorSPX(canID);
+		
+	}
 
-    public void setSpeed(double speed){
+	public void setSpeed(double speed){
 
-        motor.set(ControlMode.PercentOutput, speed);
+		motor.set(ControlMode.PercentOutput, speed);
 
-    }
+	}
 
 }

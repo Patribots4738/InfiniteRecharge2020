@@ -6,42 +6,42 @@ import utils.MovingAverage;
 
 public class AnalogPort{
 
-    // NOT TESTED, NEEDS WORK
+	// NOT TESTED, NEEDS WORK
 
-    // Raw analog port class for reading a writing voltage to an analog port on the rio
+	// Raw analog port class for reading a writing voltage to an analog port on the rio
 
-    AnalogInput input;
-    AnalogOutput output;
-    MovingAverage inputAvg;
+	AnalogInput input;
+	AnalogOutput output;
+	MovingAverage inputAvg;
 
-    public AnalogPort(int port) {
+	public AnalogPort(int port) {
 
-        input = new AnalogInput(port);
-        output = new AnalogOutput(port);
+		input = new AnalogInput(port);
+		output = new AnalogOutput(port);
 
-        inputAvg = new MovingAverage(10);
+		inputAvg = new MovingAverage(10);
 
-    }
+	}
 
-    // 0 to 5, in volts
-    public void setVoltage(double volts) {
+	// 0 to 5, in volts
+	public void setVoltage(double volts) {
 
-        output.setVoltage(volts);
+		output.setVoltage(volts);
 
-    }
+	}
 
-    public double getVoltage() {
+	public double getVoltage() {
 
-        inputAvg.addValue(input.getVoltage());
+		inputAvg.addValue(input.getVoltage());
 
-        return inputAvg.getAverage();
+		return inputAvg.getAverage();
 
-    }
+	}
 
-    public double getRawVoltage() {
+	public double getRawVoltage() {
 
-        return input.getVoltage();
+		return input.getVoltage();
 
-    }
+	}
 
 }

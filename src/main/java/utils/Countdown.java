@@ -4,29 +4,29 @@ import wrappers.*;
 
 public class Countdown {
 
-    double startTime;
-    double endTime;
-    double runTime;
-    
-    public Countdown(double runTime) {
+	double startTime;
+	double endTime;
+	double runTime;
+	
+	public Countdown(double runTime) {
 
-        startTime = Timer.getTime();
-        this.runTime = runTime;
-        endTime = startTime + runTime;
+		startTime = Timer.getTime();
+		this.runTime = runTime;
+		endTime = startTime + runTime;
 
-    }
+	}
 
-    public boolean isRunning() {
+	public boolean isRunning() {
 
-        return Timer.getTime() < endTime;
+		return Timer.getTime() < endTime;
 
-    }
+	}
 
-    public void reset() {
+	public void reset() {
 
-        startTime = Timer.getTime();
-        endTime = startTime + runTime;
+		startTime = Timer.getTime();
+		endTime = startTime + runTime;
 
-    }
+	}
 
 }

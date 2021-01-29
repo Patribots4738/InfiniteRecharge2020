@@ -4,39 +4,39 @@ import wrappers.*;
 
 public class TimeLoop {
 
-    double loopTime;
+	double loopTime;
 
-    double startTime;
+	double startTime;
 
-    int loopsCompleted;
+	int loopsCompleted;
 
-    public TimeLoop(double loopTime) {
+	public TimeLoop(double loopTime) {
 
-        this.loopTime = loopTime;
+		this.loopTime = loopTime;
 
-        loopsCompleted = 0;
+		loopsCompleted = 0;
 
-        startTime = Timer.getTime();
+		startTime = Timer.getTime();
 
-    }
+	}
 
-    // returns true whenever a loop of is completed, false otherwise
-    public boolean loopCompleted() {
+	// returns true whenever a loop of is completed, false otherwise
+	public boolean loopCompleted() {
 
-        if(((Timer.getTime() - startTime) % loopTime) == 0) {
+		if(((Timer.getTime() - startTime) % loopTime) == 0) {
 
-            return true;
+			return true;
 
-        }
+		}
 
-        return false;
+		return false;
 
-    }
+	}
 
-    public int getLoops() {
+	public int getLoops() {
 
-        return (int)((Timer.getTime() - startTime) / loopTime);
+		return (int)((Timer.getTime() - startTime) / loopTime);
 
-    }
+	}
 
 }

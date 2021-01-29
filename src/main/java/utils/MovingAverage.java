@@ -3,60 +3,60 @@ package utils;
 // this class is used to take the average of a constantly changing set of values
 public class MovingAverage {
 
-    double[] values;
+	double[] values;
 
-    private int maxSize;
-    private int currentIndex;
-    private int numberOfValues;
+	private int maxSize;
+	private int currentIndex;
+	private int numberOfValues;
 
-    public MovingAverage(int size) {
+	public MovingAverage(int size) {
 
-        this.values = new double[size];
-        this.maxSize = size;
-        this.numberOfValues = 0;
+		this.values = new double[size];
+		this.maxSize = size;
+		this.numberOfValues = 0;
 
-    }
+	}
 
-    public void addValue(double newVal) {
+	public void addValue(double newVal) {
 
-        values[currentIndex] = newVal;
+		values[currentIndex] = newVal;
 
-        this.increaseIndex();
+		this.increaseIndex();
 
-    }
+	}
 
-    public double getAverage() {
+	public double getAverage() {
 
-        double sum = 0;
+		double sum = 0;
 
-        for (int i = 0; i < values.length; i++) {
+		for (int i = 0; i < values.length; i++) {
 
-            sum += values[i];
+			sum += values[i];
 
-        }
-    
-        return sum / numberOfValues;
-        
-    }
+		}
+	
+		return sum / numberOfValues;
+		
+	}
 
-    private void increaseIndex() {
+	private void increaseIndex() {
 
-        if (currentIndex + 1 >= maxSize) {
+		if (currentIndex + 1 >= maxSize) {
 
-            currentIndex = 0;
+			currentIndex = 0;
 
-        } else {
+		} else {
 
-            currentIndex++;
+			currentIndex++;
 
-        }
+		}
 
-        if (numberOfValues < maxSize) {
+		if (numberOfValues < maxSize) {
 
-            numberOfValues++;
+			numberOfValues++;
 
-        }
+		}
 
-    }
-    
+	}
+	
 }

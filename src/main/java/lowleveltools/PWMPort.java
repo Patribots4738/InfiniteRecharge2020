@@ -4,64 +4,64 @@ import edu.wpi.first.wpilibj.PWM;
 
 public class PWMPort {
 
-    // NOT TESTED, NEEDS WORK
+	// NOT TESTED, NEEDS WORK
 
-    PWM PWMPort;
+	PWM PWMPort;
 
-    public PWMPort(int port) {
+	public PWMPort(int port) {
 
-        PWMPort = new PWM(port);
+		PWMPort = new PWM(port);
 
-    }
+	}
 
-    public int getPort() {
+	public int getPort() {
 
-        return PWMPort.getChannel();
+		return PWMPort.getChannel();
 
-    }
+	}
 
-    // input is decimal percent power, from -1 to 1
-    public void setPower(double percentPower) {
+	// input is decimal percent power, from -1 to 1
+	public void setPower(double percentPower) {
 
-        int signal = (int)((percentPower * 127.5) + 127.5);
+		int signal = (int)((percentPower * 127.5) + 127.5);
 
-        this.setRaw(signal);
+		this.setRaw(signal);
 
-    }
+	}
 
-    // returns decimal percent power, from 0 to 1
-    public double getPower() {
+	// returns decimal percent power, from 0 to 1
+	public double getPower() {
 
-        int pwmInput = this.getRaw();
+		int pwmInput = this.getRaw();
 
-        return ((double)pwmInput / 255.0);
+		return ((double)pwmInput / 255.0);
 
-    }
+	}
 
-    // get raw output from the PWM port, 0 to 255
-    public int getRaw() {
+	// get raw output from the PWM port, 0 to 255
+	public int getRaw() {
 
-        return PWMPort.getRaw();
+		return PWMPort.getRaw();
 
-    }
+	}
 
-    // set raw output to the PWM port, 0 to 255
-    public void setRaw(int rawInput) {
+	// set raw output to the PWM port, 0 to 255
+	public void setRaw(int rawInput) {
 
-        if(rawInput > 255) {
+		if(rawInput > 255) {
 
-            rawInput = 255;
+			rawInput = 255;
 
-        }
+		}
 
-        if(rawInput < 0) {
+		if(rawInput < 0) {
 
-            rawInput = 0;
+			rawInput = 0;
 
-        }
+		}
 
-        PWMPort.setRaw(rawInput);
+		PWMPort.setRaw(rawInput);
 
-    }
+	}
 
 }

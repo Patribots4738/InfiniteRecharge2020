@@ -2,46 +2,46 @@ package wrappers;
 
 public class LEDController {
 /*
-    public enum Mode {
-        CHAMELEON,TRAIN;
-    }
+	public enum Mode {
+		CHAMELEON,TRAIN;
+	}
 
-    LEDStrip[] strips;
+	LEDStrip[] strips;
 
-    public LEDController(Mode mode, LEDStrip... strips) {
+	public LEDController(Mode mode, LEDStrip... strips) {
 
-        this.strips =  strips;
+		this.strips =  strips;
 
-        switch (mode) {
+		switch (mode) {
 
-            case CHAMELEON:
-                chameleon();
-            break;
-            case TRAIN:
-                train();
-            break;
-
-
-        }
-
-    }
-
-    public void setMode(Mode mode) {
-
-        
-
-    }
-
-    private void chameleon() {
+			case CHAMELEON:
+				chameleon();
+			break;
+			case TRAIN:
+				train();
+			break;
 
 
+		}
 
-    }
+	}
 
-    private void train() {
+	public void setMode(Mode mode) {
+
+		
+
+	}
+
+	private void chameleon() {
 
 
 
-    }*/
+	}
+
+	private void train() {
+
+
+
+	}*/
 
 }

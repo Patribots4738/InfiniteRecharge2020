@@ -5,73 +5,73 @@ import edu.wpi.first.cameraserver.CameraServer;
 
 public class DriverCamera {
 
-    UsbCamera cam;
+	UsbCamera cam;
 
-    int camNum;
+	int camNum;
 
-    boolean constructed = false;
+	boolean constructed = false;
 
-    // usb port the camera is plugged into, should be 0 or 1
-    public DriverCamera(int camNum) {
+	// usb port the camera is plugged into, should be 0 or 1
+	public DriverCamera(int camNum) {
 
-        this.camNum = camNum;
+		this.camNum = camNum;
 
-        try {
+		try {
 
-            cam = CameraServer.getInstance().startAutomaticCapture(camNum);
-            cam.setResolution(240, 160);
-            cam.setFPS(30);
-            cam.setExposureManual(50);
+			cam = CameraServer.getInstance().startAutomaticCapture(camNum);
+			cam.setResolution(240, 160);
+			cam.setFPS(30);
+			cam.setExposureManual(50);
 
-            constructed = true;
+			constructed = true;
 
-        } catch (Exception e) {
+		} catch (Exception e) {
 
-            System.out.println("Camera Not Found");
+			System.out.println("Camera Not Found");
 
-        }
+		}
 
-    }
+	}
 
-    public void retryConnection() {
+	public void retryConnection() {
 
-        try {
+		try {
 
-            cam.setExposureManual(51);
+			cam.setExposureManual(51);
 
-        } catch(Exception e) {
+		} catch(Exception e) {
 
-            constructed = false;
+			constructed = false;
 
-        }
+		}
 
-        if(constructed) {
+		if(constructed) {
 
-            return;
+			return;
 
-        }
+		}
 
-        try {
+		try {
 
-            cam = CameraServer.getInstance().startAutomaticCapture(camNum);
-            cam.setResolution(240, 160);
-            cam.setFPS(30);
-            cam.setExposureManual(50);
+			cam = CameraServer.getInstance().startAutomaticCapture(camNum);
+			cam.setResolution(240, 160);
+			cam.setFPS(30);
+			cam.setExposureManual(50);
 
-            constructed = true;
+			constructed = true;
 
-        } catch (Exception exception) {
+		} catch (Exception exception) {
 
-            System.out.println("Camera Not Found");
+			System.out.println("Camera Not Found");
 
-        }
+		}
 
-    }
+	}
 
-    public boolean getConstructed() {
+	public boolean getConstructed() {
 
-        return constructed;
+		return constructed;
 
-    }
+	}
 
 }

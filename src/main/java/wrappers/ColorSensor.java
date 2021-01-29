@@ -9,111 +9,111 @@ import com.revrobotics.ColorSensorV3.RawColor;
 
 public class ColorSensor{
 
-    I2C.Port port;
+	I2C.Port port;
 
-    ColorSensorV3 colorSensor;
+	ColorSensorV3 colorSensor;
 
-    public ColorSensor () {
+	public ColorSensor () {
 
-        port = I2C.Port.kOnboard;
+		port = I2C.Port.kOnboard;
 
-        colorSensor = new ColorSensorV3(port);
+		colorSensor = new ColorSensorV3(port);
 
-    }
+	}
 
-    public Color getColor() {
-        
-        return colorSensor.getColor();
-        
-    }
+	public Color getColor() {
+		
+		return colorSensor.getColor();
+		
+	}
 
-    public ColorSensorV3.RawColor getRawColor(){
+	public ColorSensorV3.RawColor getRawColor(){
 
-        return colorSensor.getRawColor();
+		return colorSensor.getRawColor();
 
-    }
+	}
 
-    public double[] getRGBIR(){
+	public double[] getRGBIR(){
 
-        RawColor color = colorSensor.getRawColor();
+		RawColor color = colorSensor.getRawColor();
 
-        double max = Math.max(color.ir, Math.max(Math.max(color.red, color.blue), color.green));
+		double max = Math.max(color.ir, Math.max(Math.max(color.red, color.blue), color.green));
 
-        double r = ((color.red/max) * 255.0);
-        double g = ((color.green/max) * 255.0);
-        double b = ((color.blue/max) * 255.0);
-        double ir =((color.ir/max) * 255.0);
+		double r = ((color.red/max) * 255.0);
+		double g = ((color.green/max) * 255.0);
+		double b = ((color.blue/max) * 255.0);
+		double ir =((color.ir/max) * 255.0);
 
-        double[] rgbIR = {r, g, b, ir};
+		double[] rgbIR = {r, g, b, ir};
 
-        return rgbIR;
+		return rgbIR;
 
-    }
+	}
 
-    public String determineColor() {
+	public String determineColor() {
 
-        double[] rgbIR = getRGBIR();
+		double[] rgbIR = getRGBIR();
 
-        for (int i = 0; i < Constants.COLORS.length; i++) {
+		for (int i = 0; i < Constants.COLORS.length; i++) {
 
-            String checkColor = Constants.COLORS[i];
+			String checkColor = Constants.COLORS[i];
 
-            if (isColor(rgbIR, checkColor)) {
+			if (isColor(rgbIR, checkColor)) {
 
-                return checkColor;
+				return checkColor;
 
-            }
+			}
 
-        }
+		}
 
-        return "N/A";
+		return "N/A";
 
-    }
+	}
 
-    public boolean isColor (double[] rgb, String colorName) {
+	public boolean isColor (double[] rgb, String colorName) {
 
-        Constants.Color testColor;
+		Constants.Color testColor;
 
-        switch (colorName) {
+		switch (colorName) {
 
-            case "Yellow":
-                testColor = Constants.Color.Yellow;
-            break;
+			case "Yellow":
+				testColor = Constants.Color.Yellow;
+			break;
 
-            case "Red":
-                testColor = Constants.Color.Red;
-            break;
-            
-            case "Green":
-                testColor = Constants.Color.Green;
-            break;
+			case "Red":
+				testColor = Constants.Color.Red;
+			break;
+			
+			case "Green":
+				testColor = Constants.Color.Green;
+			break;
 
-            case "Blue":
-                testColor = Constants.Color.Blue;
-            break;
+			case "Blue":
+				testColor = Constants.Color.Blue;
+			break;
 
-            default:
-                testColor = null;
-            break;
+			default:
+				testColor = null;
+			break;
 
-        }
+		}
 
-        if(rgb[0] > testColor.RMIN && rgb[0] < testColor.RMAX) {
-            
-            if(rgb[1] > testColor.GMIN && rgb[1] < testColor.GMAX) {
-                
-                if(rgb[2] > testColor.BMIN && rgb[2] < testColor.BMAX) {
-                    
-                    return true;
+		if(rgb[0] > testColor.RMIN && rgb[0] < testColor.RMAX) {
+			
+			if(rgb[1] > testColor.GMIN && rgb[1] < testColor.GMAX) {
+				
+				if(rgb[2] > testColor.BMIN && rgb[2] < testColor.BMAX) {
+					
+					return true;
 
-                }
+				}
 
-            }
+			}
 
-        }
+		}
 
-        return false;
+		return false;
 
-    } 
+	} 
 
 }

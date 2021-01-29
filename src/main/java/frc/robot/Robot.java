@@ -11,412 +11,428 @@ import wrappers.*;
 
 public class Robot extends TimedRobot {
 
-    DriverCamera cam;
+	public static boolean soloControls = true;
 
-    public static boolean shifted;
+	DriverCamera cam;
 
-    boolean firstTime;
+	public static boolean shifted;
 
-    public static boolean emergencyManual = false;
+	boolean firstTime;
 
-    double shootTime;
+	public static boolean emergencyManual = false;
 
-    Countdown shootTimer;
+	double shootTime;
 
-    //NTTable smashBoard;
+	Countdown shootTimer;
 
-    Compressor compressor;
+	//NTTable smashBoard;
 
-    DoubleSolenoid gearShifter;
+	Compressor compressor;
 
-    PIDMotorGroup leftMotors;
-    PIDMotorGroup rightMotors;
+	DoubleSolenoid gearShifter;
 
-    Drive drive;
+	PIDMotorGroup leftMotors;
+	PIDMotorGroup rightMotors;
 
-    XboxController driver;
-    XboxController operator;
+	Drive drive;
 
-    Shooter shooter;
+	XboxController driver;
+	XboxController operator;
 
-    Intake intake;
+	Shooter shooter;
 
-    Conveyor conveyor;
+	Intake intake;
 
-    Limelight limelight;
+	Conveyor conveyor;
 
-    ShooterController shooterControl;
+	Limelight limelight;
 
-    Limitswitch topSwitch;
+	ShooterController shooterControl;
 
-    Elevator elevator;
-    
-    AutoPath path;
-    AutoDrive auto;
+	Limitswitch topSwitch;
 
-    @Override
-    public void robotInit() {
-        // here begin all the constructors
+	Elevator elevator;
+	
+	AutoPath path;
+	AutoDrive auto;
 
-        cam = new DriverCamera(0);
+	@Override
+	public void robotInit() {
+		// here begin all the constructors
 
-        Timer.init();
+		cam = new DriverCamera(0);
 
-        shifted = true;
+		Timer.init();
 
-        firstTime = true;
+		shifted = true;
 
-        shootTime = 13;
+		firstTime = true;
 
-        shootTimer = new Countdown(shootTime);
+		shootTime = 13;
 
-        //smashBoard = new NTTable("/SmartDashboard");
+		shootTimer = new Countdown(shootTime);
 
-        compressor = new Compressor();
+		//smashBoard = new NTTable("/SmartDashboard");
 
-        gearShifter = new DoubleSolenoid(7,6);
+		compressor = new Compressor();
 
-        leftMotors = new PIDMotorGroup(new Falcon(1), new Falcon(2));
-        rightMotors = new PIDMotorGroup(new Falcon(3), new Falcon(4));
+		gearShifter = new DoubleSolenoid(7,6);
 
-        drive = new Drive(leftMotors, rightMotors);
+		leftMotors = new PIDMotorGroup(new Falcon(1), new Falcon(2));
+		rightMotors = new PIDMotorGroup(new Falcon(3), new Falcon(4));
 
-        driver = new XboxController(0);
-        operator = new XboxController(1);               
+		drive = new Drive(leftMotors, rightMotors);
 
-        PIDMotor topShooterWheel = new Falcon(6);
-        PIDMotor bottomShooterWheel = new Falcon(5);
+		driver = new XboxController(0);
+		operator = new XboxController(1);               
 
-        DoubleSolenoid shooterBlocker = new DoubleSolenoid(2,3);
+		PIDMotor topShooterWheel = new Falcon(6);
+		PIDMotor bottomShooterWheel = new Falcon(5);
 
-        MotorGroup shooterFeeders = new MotorGroup(new Talon(10), new Talon(9));
+		DoubleSolenoid shooterBlocker = new DoubleSolenoid(2,3);
 
-        shooter = new Shooter(topShooterWheel, bottomShooterWheel, shooterFeeders, shooterBlocker);
+		MotorGroup shooterFeeders = new MotorGroup(new Talon(10), new Talon(9));
 
-        Motor intakeSucker = new Talon(8);
+		shooter = new Shooter(topShooterWheel, bottomShooterWheel, shooterFeeders, shooterBlocker);
 
-        intake = new Intake(intakeSucker);
+		Motor intakeSucker = new Talon(8);
 
-        Motor conveyorDriver = new Talon(7);
+		intake = new Intake(intakeSucker);
 
-        conveyor = new Conveyor(conveyorDriver);
+		Motor conveyorDriver = new Talon(7);
 
-        limelight = new Limelight();
+		conveyor = new Conveyor(conveyorDriver);
 
-        shooterControl = new ShooterController(conveyor, shooter, limelight, drive);
+		limelight = new Limelight();
 
-        PIDMotor leftElevator = new Falcon(12);
-        PIDMotor rightElevator = new Falcon(11);
+		shooterControl = new ShooterController(conveyor, shooter, limelight, drive);
 
-        DoubleSolenoid elevatorLock = new DoubleSolenoid(1,0);
+		PIDMotor leftElevator = new Falcon(12);
+		PIDMotor rightElevator = new Falcon(11);
 
-        topSwitch = new Limitswitch(0);
+		DoubleSolenoid elevatorLock = new DoubleSolenoid(1,0);
 
-        elevator = new Elevator(leftElevator, rightElevator, elevatorLock);
+		topSwitch = new Limitswitch(0);
 
-        auto = new AutoDrive(leftMotors, rightMotors);
+		elevator = new Elevator(leftElevator, rightElevator, elevatorLock);
 
-        // the constructors end here, now everything gets configured
+		auto = new AutoDrive(leftMotors, rightMotors);
 
-        compressor.setState(true);
+		// the constructors end here, now everything gets configured
 
-        gearShifter.activateChannel(shifted);
+		compressor.setState(true);
 
-        // drive motors have their PID configured in teleop and autonomous
-        // init, as they need to be different between the two modes
+		gearShifter.activateChannel(shifted);
 
-        topShooterWheel.setPID(1.7, 0.15, 0.15);
-        bottomShooterWheel.setPID(0.7, 0.15, 0.15);
+		// drive motors have their PID configured in teleop and autonomous
+		// init, as they need to be different between the two modes
 
-        auto.reset();
+		topShooterWheel.setPID(1.7, 0.15, 0.15);
+		bottomShooterWheel.setPID(0.7, 0.15, 0.15);
 
-    }
+		auto.reset();
 
-    @Override
-    public void robotPeriodic() {
+	}
 
-        gearShifter.activateChannel(shifted);
+	@Override
+	public void robotPeriodic() {
 
-        compressor.setState(true);
+		gearShifter.activateChannel(shifted);
 
-    }
+		compressor.setState(true);
 
-    @Override
-    public void autonomousInit() {
+	}
 
-        firstTime = true;
-        
-        shifted = true;
+	@Override
+	public void autonomousInit() {
 
-        gearShifter.activateChannel(shifted);
+		firstTime = true;
+		
+		shifted = true;
 
-        shootTimer.reset();
+		gearShifter.activateChannel(shifted);
 
-        // config motors for positional control
-        leftMotors.setPID(2, 0, 0);
-        rightMotors.setPID(2, 0, 0);
+		shootTimer.reset();
 
-        auto.reset();
+		// config motors for positional control
+		leftMotors.setPID(2, 0, 0);
+		rightMotors.setPID(2, 0, 0);
 
-        auto.addPath(new AutoPath("home/lvuser/deploy/autopaths/Default.json"));
+		auto.reset();
 
-        shooterControl.stop();
+		auto.addPath(new AutoPath("home/lvuser/deploy/autopaths/Default.json"));
 
-    } 
+		shooterControl.stop();
 
-    @Override
-    public void autonomousPeriodic() {
+	} 
 
-        if (auto.queueIsEmpty()) {
+	@Override
+	public void autonomousPeriodic() {
 
-            if(shootTimer.isRunning()) {
+		if (auto.queueIsEmpty()) {
 
-                leftMotors.setPID(0.5, 0, 0);
-                rightMotors.setPID(0.5, 0, 0);
+			if(shootTimer.isRunning()) {
 
-                shooterControl.aim();
+				leftMotors.setPID(0.5, 0, 0);
+				rightMotors.setPID(0.5, 0, 0);
 
-                if(ShooterController.aligned) {
+				shooterControl.aim();
 
-                    shooterControl.fire();
+				if(ShooterController.aligned) {
 
-                }
+					shooterControl.fire();
 
-            } else {
+				}
 
-                leftMotors.setPID(2, 0, 0);
-                rightMotors.setPID(2, 0, 0);
+			} else {
 
-                if(firstTime) {
-                                        
-                    auto.addPath(path);
+				leftMotors.setPID(2, 0, 0);
+				rightMotors.setPID(2, 0, 0);
 
-                    firstTime = false;
+				if(firstTime) {
+										
+					auto.addPath(path);
 
-                    auto.jumpstart();
+					firstTime = false;
 
-                    shooterControl.stop();
+					auto.jumpstart();
 
-                }
+					shooterControl.stop();
 
-            }
+				}
 
-        } else {
+			}
 
-            auto.executeQueue();
+		} else {
 
-        }
+			auto.executeQueue();
 
-    }
+		}
 
-    // NO TOUCH
-    @Override 
-    public void disabledInit() {
+	}
 
-        firstTime = true;
+	// NO TOUCH
+	@Override 
+	public void disabledInit() {
 
-    }
-    
-    // VERY EXTRA NO TOUCH
-    @Override
-    public void disabledPeriodic() {}
-    
-    @Override
-    public void teleopInit() {
+		firstTime = true;
 
-        // config motors for velocity control
-        leftMotors.setPID(0.5, 0, 0);
-        rightMotors.setPID(0.5, 0, 0);
+	}
+	
+	// VERY EXTRA NO TOUCH
+	@Override
+	public void disabledPeriodic() {}
+	
+	@Override
+	public void teleopInit() {
 
-        leftMotors.resetEncoder();
-        rightMotors.resetEncoder();
+		// config motors for velocity control
+		leftMotors.setPID(0.5, 0, 0);
+		rightMotors.setPID(0.5, 0, 0);
 
-        shooterControl.stop();
+		leftMotors.resetEncoder();
+		rightMotors.resetEncoder();
 
-    }
+		shooterControl.stop();
 
-    public void drive() {
+	}
 
-        boolean trainingWheels = true;
+	public void drive() {
 
-        boolean inverted = driver.getToggle(XboxController.Buttons.L);
-        double multiplier = ((inverted) ? -1.0 : 1.0);
+		boolean trainingWheels = true;
 
-        double maxSpeed = 1.0;
+		boolean inverted = driver.getToggle(XboxController.Buttons.L);
+		double multiplier = ((inverted) ? -1.0 : 1.0);
 
-        if(trainingWheels) {
+		double maxSpeed = 1.0;
 
-            maxSpeed = 0.6;
+		if(trainingWheels) {
 
-        }
+			maxSpeed = 0.6;
 
-        multiplier *= maxSpeed;
+		}
 
-        shifted = !driver.getToggle(XboxController.Buttons.R);
+		multiplier *= maxSpeed;
 
-        if(trainingWheels) {
+		shifted = !driver.getToggle(XboxController.Buttons.R);
 
-            drive.trainingWheels(-driver.getAxis(XboxController.Axes.LeftY) * multiplier, driver.getAxis(XboxController.Axes.RightX));
-            
-        } else {
+		if(trainingWheels) {
 
-            drive.curvature(-driver.getAxis(XboxController.Axes.LeftY) * multiplier, driver.getAxis(XboxController.Axes.RightX));
+			drive.trainingWheels(-driver.getAxis(XboxController.Axes.LeftY) * multiplier, driver.getAxis(XboxController.Axes.RightX));
+			
+		} else {
 
-        } 
+			drive.curvature(-driver.getAxis(XboxController.Axes.LeftY) * multiplier, driver.getAxis(XboxController.Axes.RightX));
 
-    }
+		} 
 
-    public void operate() {
+	}
 
-        double intakeMultiplier = 0.37;
-        double conveyorMultiplier = 0.275;
-        double elevatorMultiplier = 0.5;
+	public void operate() {
 
-        double elevatorInput = -operator.getAxis(XboxController.Axes.LeftY);
+		double intakeMultiplier = 0.37;
+		double conveyorMultiplier = 0.275;
+		double elevatorMultiplier = 0.5;
 
-        if(!topSwitch.getState() && elevatorInput > 0) {
+		double elevatorInput = -operator.getAxis(XboxController.Axes.LeftY);
 
-            elevatorInput = 0;
+		if(!topSwitch.getState() && elevatorInput > 0) {
 
-        }
+			elevatorInput = 0;
 
-        elevator.setElevator(elevatorInput * elevatorMultiplier);
+		}
 
-        elevator.setLock(operator.getToggle(XboxController.Buttons.Start));
+		elevator.setElevator(elevatorInput * elevatorMultiplier);
 
-        if(operator.getAxis(XboxController.Axes.RightTrigger) < 0.2) {
+		elevator.setLock(operator.getToggle(XboxController.Buttons.Start));
 
-            intake.setSuck(operator.getAxis(XboxController.Axes.LeftTrigger) * intakeMultiplier);
-            conveyor.setSpeed(-operator.getAxis(XboxController.Axes.LeftTrigger) * conveyorMultiplier);
-            
-        } else {
+		if(operator.getAxis(XboxController.Axes.RightTrigger) < 0.2) {
 
-            intake.setSuck(-operator.getAxis(XboxController.Axes.RightTrigger) * intakeMultiplier);
-            conveyor.setSpeed(operator.getAxis(XboxController.Axes.RightTrigger) * conveyorMultiplier);
+			intake.setSuck(operator.getAxis(XboxController.Axes.LeftTrigger) * intakeMultiplier);
+			conveyor.setSpeed(-operator.getAxis(XboxController.Axes.LeftTrigger) * conveyorMultiplier);
+			
+		} else {
 
-        }
+			intake.setSuck(-operator.getAxis(XboxController.Axes.RightTrigger) * intakeMultiplier);
+			conveyor.setSpeed(operator.getAxis(XboxController.Axes.RightTrigger) * conveyorMultiplier);
 
-    }
+		}
 
-    public void emergencyManual() {
+	}
 
-        boolean aiming = driver.getButton(XboxController.Buttons.A);
+	public void soloOperate() {
 
-        if(aiming) {
+		
+		
+	}
 
-            shooterControl.aim();
+	public void emergencyManual() {
 
-        } else {
+		boolean aiming = driver.getButton(XboxController.Buttons.A);
 
-            drive();
+		if(aiming) {
 
-        }
+			shooterControl.aim();
 
-        operate();
+		} else {
 
-        if(operator.getButton(XboxController.Buttons.A)) {
+			drive();
 
-            shooterControl.fire();
+		}
 
-        } else {
+		operate();
 
-            shooter.stop();
+		if(operator.getButton(XboxController.Buttons.A)) {
 
-        }
+			shooterControl.fire();
 
-    }
+		} else {
 
-    @Override
-    public void teleopPeriodic() {
+			shooter.stop();
 
-        // here begins the code for controlling the full robot
+		}
 
-        boolean aiming = driver.getButton(XboxController.Buttons.A);
+	}
 
-        if(emergencyManual) {
+	@Override
+	public void teleopPeriodic() {
 
-            emergencyManual();
-            return;
+		// here begins the code for controlling the full robot
 
-        }
+		boolean aiming = driver.getButton(XboxController.Buttons.A);
 
-        if(!aiming) {
+		if(emergencyManual) {
 
-            drive();
+			emergencyManual();
+			return;
 
-            operate();
+		}
 
-        } else {
+		if(!aiming) {
 
-            shifted = true;
+			drive();
 
-            // the angle between the limelight and the target is never exactly 0 unless it can't see the target
-            if(limelight.getHorizontalAngle() == 0.0) {
+			if (soloControls) {
 
-                // and if the limelight cant see the target then it shouldn't do anything
-                shooterControl.stop();
+				soloOperate();
 
-            } else {
+			} else {
 
-                shooterControl.aim();
+				operate();
 
-            }
+			}            
 
-            if(ShooterController.aligned) {
+		} else {
 
-                if(operator.getButton(XboxController.Buttons.A)) {
+			shifted = true;
 
-                    shooterControl.fire();
+			// the angle between the limelight and the target is never exactly 0 unless it can't see the target
+			if(limelight.getHorizontalAngle() == 0.0) {
 
-                } else {
+				// and if the limelight cant see the target then it shouldn't do anything
+				shooterControl.stop();
 
-                    // if the operator isn't trying to fire the shooter should be off
-                    shooterControl.stop();
+			} else {
 
-                } 
+				shooterControl.aim();
 
-            } else {
+			}
 
-                // if the robot isn't aligned the shooter should be off
-                shooterControl.stop();
+			if(ShooterController.aligned) {
 
-            }
+				if(operator.getButton(XboxController.Buttons.A)) {
 
-        }
+					shooterControl.fire();
 
-        shooterControl.eval();
+				} else {
 
-    }
+					// if the operator isn't trying to fire the shooter should be off
+					shooterControl.stop();
 
-    @Override
-    public void testInit() {}
+				} 
 
-    @Override
-    public void testPeriodic() {
+			} else {
 
-        boolean feeding = operator.getToggle(XboxController.Buttons.Y);
+				// if the robot isn't aligned the shooter should be off
+				shooterControl.stop();
 
-        if(feeding) {
+			}
 
-            shooter.setRawSpeeds(0.58, 0.36);
-            shooter.eval(0);
-            shooter.setFeeders(Shooter.readyToFire);
+		}
 
-        } else {
+		shooterControl.eval();
 
-            shooter.stop();
+	}
 
-        }
+	@Override
+	public void testInit() {}
 
-        drive();
-        operate();
+	@Override
+	public void testPeriodic() {
 
-        if(feeding && operator.getAxis(XboxController.Axes.RightTrigger) > 0.2) {
+		boolean feeding = operator.getToggle(XboxController.Buttons.Y);
 
-            conveyor.setConveyor(true);
+		if(feeding) {
 
-        }
+			shooter.setRawSpeeds(0.58, 0.36);
+			shooter.eval(0);
+			shooter.setFeeders(Shooter.readyToFire);
 
-    }
+		} else {
+
+			shooter.stop();
+
+		}
+
+		drive();
+		operate();
+
+		if(feeding && operator.getAxis(XboxController.Axes.RightTrigger) > 0.2) {
+
+			conveyor.setConveyor(true);
+
+		}
+
+	}
 
 }

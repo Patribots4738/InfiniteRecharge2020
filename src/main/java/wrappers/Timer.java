@@ -2,21 +2,21 @@ package wrappers;
 
 public class Timer {
 
-    static edu.wpi.first.wpilibj.Timer timer;
+	static edu.wpi.first.wpilibj.Timer timer;
 
-    public static void init() {
+	public static void init() {
 
-        timer = new edu.wpi.first.wpilibj.Timer();
+		timer = new edu.wpi.first.wpilibj.Timer();
 
-        timer.start();
+		timer.start();
 
-    }
+	}
 
-    // returns current time since robot code began, in seconds;
-    public static double getTime() {
+	// returns current time since robot code began, in seconds;
+	public static double getTime() {
 
-        return timer.get();
+		return timer.get();
 
-    }
+	}
 
 }

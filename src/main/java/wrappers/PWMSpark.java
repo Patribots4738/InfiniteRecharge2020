@@ -5,18 +5,18 @@ import edu.wpi.first.wpilibj.Spark;
 
 public class PWMSpark implements Motor{
 
-    edu.wpi.first.wpilibj.Spark spark;
+	edu.wpi.first.wpilibj.Spark spark;
 
-    public PWMSpark(int port){
+	public PWMSpark(int port){
 
-        spark = new Spark(port);
+		spark = new Spark(port);
 
-    }
+	}
 
-    public void setSpeed(double speed){
+	public void setSpeed(double speed){
 
-        spark.set(speed);
+		spark.set(speed);
 
-    }
+	}
 
 }
