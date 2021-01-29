@@ -46,7 +46,7 @@ public class ShooterController {
 		this.drive = drive;
 		  //0.5,0.5,0 PID worked ok
         //aimLoop = new PIDLoop(.95, .15, .075);
-        aimLoop = new PIDLoop(-6.8, 0, -1, 1, 3);
+        aimLoop = new PIDLoop(-6.8, 0, -1);
         
         loop = 0;
 	}
