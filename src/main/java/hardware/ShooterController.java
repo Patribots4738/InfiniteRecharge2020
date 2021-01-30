@@ -17,7 +17,7 @@ public class ShooterController {
 	// swap out current alignment math with PIDLoop class
 
 	// these may need some tuning as things change
-	private double maxSpeed = 0.12;
+	private double maxSpeed = 0.12;  //0.15 worked
 
 	private double acceptableAngleError = .5;
 
@@ -47,7 +47,7 @@ public class ShooterController {
 		  //0.5,0.5,0 PID worked ok
 		//aimLoop = new PIDLoop(.95, .15, .075, 1, 25); GOOD PID
 		
-        aimLoop = new PIDLoop(.95, .5, .075, 1, 25);
+        aimLoop = new PIDLoop(.95, .15, .075, 1, 25);
         
         loop = 0;
 	}
