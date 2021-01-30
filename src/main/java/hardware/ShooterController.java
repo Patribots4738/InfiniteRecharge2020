@@ -118,7 +118,7 @@ public class ShooterController {
 
         loop++;
         
-        String str = loop * Constants.LOOP_TIME + "," + 0 + "," + angle;
+        String str = loop * Constants.LOOP_TIME + "," + angle;
 
         System.out.println(str);
 /*
