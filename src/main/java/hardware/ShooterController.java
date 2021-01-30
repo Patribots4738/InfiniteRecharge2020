@@ -29,9 +29,9 @@ public class ShooterController {
     
     private int loop;
 
-	//private double shortOffset = 0;//3.55;
+	private double shortOffset = 0;//3.55;
 
-	//private double longOffset = 1.68;
+	private double longOffset = 1.68;
 
 	PIDLoop aimLoop;
 
@@ -66,9 +66,9 @@ public class ShooterController {
 	// checks if the robot is aligned and if the shooter is spun up, then updates internal variables accordingly
 	public void eval() {
 
-		//double offset = (limelight.getDistance() > 200) ? (longOffset) : (shortOffset);
+		double offset = (limelight.getDistance() > 200) ? (longOffset) : (shortOffset);
 
-		double angle = limelight.getHorizontalAngle();// - offset;
+		double angle = limelight.getHorizontalAngle() - offset;
 
 		aligned = Math.abs(angle) <= acceptableAngleError; 
 	 
@@ -94,9 +94,9 @@ public class ShooterController {
 	// this aligns the robot with the vision target found by the limelight
 	public void aim() {
 
-		//double offset = (limelight.getDistance() > 200) ? (longOffset) : (shortOffset);
+		double offset = (limelight.getDistance() > 200) ? (longOffset) : (shortOffset);
 
-		double angle = (Math.abs(limelight.getHorizontalAngle()) /*- offset*/) * Math.signum(limelight.getHorizontalAngle());
+		double angle = (Math.abs(limelight.getHorizontalAngle()) - offset) * Math.signum(limelight.getHorizontalAngle());
 
 		aligned = Math.abs(angle) <= acceptableAngleError;
 
