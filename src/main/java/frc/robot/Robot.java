@@ -363,6 +363,8 @@ public class Robot extends TimedRobot {
 
 		if(!aiming) {
 
+			shooterControl.stop();
+			
 			drive();
 
 			if (soloControls) {
