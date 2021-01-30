@@ -29,7 +29,7 @@ public class ShooterController {
     
     private int loop;
 
-	private double shortOffset = 0;//3.55;
+	private double shortOffset = 3.55;//3.55;
 
 	private double longOffset = 1.68;
 
