@@ -120,7 +120,7 @@ public class ShooterController {
         
         String str = loop * Constants.LOOP_TIME + "," + angle;
 
-        System.out.println(str);
+        //System.out.println(str);
 /*
 		System.out.println(angle);
 		System.out.println(aligned);

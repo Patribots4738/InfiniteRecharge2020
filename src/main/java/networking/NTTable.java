@@ -59,7 +59,7 @@ public class NTTable {
 	public Object get(String key) {
 
 		return table.getEntry(key).getValue().getValue();
-
+		
 	}
 	
 	// sets the value at the key in this NetworkTable

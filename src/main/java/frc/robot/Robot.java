@@ -25,7 +25,7 @@ public class Robot extends TimedRobot {
 
 	Countdown shootTimer;
 
-	//NTTable smashBoard;
+	NTTable smashBoard;
 
 	Compressor compressor;
 
@@ -72,7 +72,7 @@ public class Robot extends TimedRobot {
 
 		shootTimer = new Countdown(shootTime);
 
-		//smashBoard = new NTTable("/SmartDashboard");
+		smashBoard = new NTTable("/SmartDashboard");
 
 		compressor = new Compressor();
 
@@ -351,8 +351,13 @@ public class Robot extends TimedRobot {
 	public void teleopPeriodic() {
 
 		// here begins the code for controlling the full robot
-
 		boolean aiming = driver.getButton(XboxController.Buttons.A);
+
+		System.out.println("Distance: " + limelight.getDistance());
+
+		smashBoard.set("angleOffset", limelight.getHorizontalAngle());
+		smashBoard.set("isAimed", ShooterController.aligned);
+		smashBoard.set("isTargetVisible", (limelight.getHorizontalAngle() == 0) ? false : true);
 
 		if(emergencyManual) {
 
@@ -375,7 +380,7 @@ public class Robot extends TimedRobot {
 
 				operate();
 
-			}            
+			}      
 
 		} else {
 
