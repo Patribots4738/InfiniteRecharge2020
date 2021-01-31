@@ -96,7 +96,7 @@ public class ShooterController {
 
 		double offset = (limelight.getDistance() > 200) ? (longOffset) : (shortOffset);
 
-		double angle = ((Math.abs(limelight.getHorizontalAngle()) - offset) * Math.signum(limelight.getHorizontalAngle()));
+		double angle = ((limelight.getHorizontalAngle()) - offset);
 
 		aligned = Math.abs(angle) <= acceptableAngleError;
 

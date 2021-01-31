@@ -302,7 +302,7 @@ public class Robot extends TimedRobot {
 
 	public void soloOperate() {
 		
-		double intakeMultiplier = 0.37;
+		double intakeMultiplier = 0.75;
 		double conveyorMultiplier = 0.275;
 
 		if(driver.getAxis(XboxController.Axes.RightTrigger) < 0.2) {
