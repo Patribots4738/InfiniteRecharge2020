@@ -96,11 +96,11 @@ public class ShooterController {
 
 		double offset = (limelight.getDistance() > 200) ? (longOffset) : (shortOffset);
 
-		double angle = (Math.abs(limelight.getHorizontalAngle()) - offset) * Math.signum(limelight.getHorizontalAngle());
+		double angle = (Math.abs(limelight.getHorizontalAngle())) * Math.signum(limelight.getHorizontalAngle());
 
 		aligned = Math.abs(angle) <= acceptableAngleError;
 
-		double speed = -(aimLoop.getCommand(0, angle) * converter); 
+		double speed = -(aimLoop.getCommand(offset, angle) * converter); 
 
 		if(Math.abs(speed) < minSpeed) {
 
