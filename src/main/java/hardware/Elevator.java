@@ -10,6 +10,8 @@ public class Elevator {
 
 	DoubleSolenoid lock;
 
+	double defaultSpeed = 0.3;
+
 	public Elevator(PIDMotor leftLifter, PIDMotor rightLifter, DoubleSolenoid lock) {
 		
 		this.rightLifter = rightLifter;
@@ -26,6 +28,27 @@ public class Elevator {
 
 		rightLifter.setPercent(speed);
 		leftLifter.setPercent(-speed);
+
+	}
+
+	public void setElevatorUp() {
+
+		rightLifter.setPercent(defaultSpeed);
+		leftLifter.setPercent(-defaultSpeed);
+
+	}
+
+	public void setElevatorDown() {
+
+		rightLifter.setPercent(-defaultSpeed);
+		leftLifter.setPercent(defaultSpeed);
+
+	}
+
+	public void stop() {
+
+		rightLifter.setPercent(0);
+		leftLifter.setPercent(0);
 
 	}
 

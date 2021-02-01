@@ -254,7 +254,7 @@ public class Robot extends TimedRobot {
 
 		multiplier *= maxSpeed;
 
-		shifted = !driver.getToggle(XboxController.Buttons.R);
+		//shifted = !driver.getToggle(XboxController.Buttons.R);
 
 		if(trainingWheels) {
 
@@ -272,19 +272,33 @@ public class Robot extends TimedRobot {
 
 		double intakeMultiplier = 0.37;
 		double conveyorMultiplier = 0.275;
-		double elevatorMultiplier = 0.5;
 
-		double elevatorInput = -operator.getAxis(XboxController.Axes.LeftY);
+		boolean elevatorLock = operator.getToggle(XboxController.Buttons.Select);
 
-		if(!topSwitch.getState() && elevatorInput > 0) {
+		boolean eleUp = operator.getDPad(Gamepad.Directions.N);
+		boolean eleDown = operator.getDPad(Gamepad.Directions.S);
 
-			elevatorInput = 0;
+		if(eleUp) {
+
+			elevator.setElevatorUp();
+
+		} else if(eleDown) {
+
+			elevator.setElevatorUp();
+
+		} else {
+
+			elevator.stop();
 
 		}
 
-		elevator.setElevator(elevatorInput * elevatorMultiplier);
+		if(!topSwitch.getState() && eleUp) {
 
-		elevator.setLock(operator.getToggle(XboxController.Buttons.Start));
+			elevator.stop();
+
+		}
+
+		elevator.setLock(elevatorLock);
 
 		if(operator.getAxis(XboxController.Axes.RightTrigger) < 0.2) {
 
@@ -300,7 +314,8 @@ public class Robot extends TimedRobot {
 
 	}
 
-	public void autoShoot(boolean fire) {
+	// method for aligning and firing the shooter
+	public void autoShoot(boolean fireInput) {
 
 		shifted = true;
 
@@ -318,7 +333,7 @@ public class Robot extends TimedRobot {
 
 		if(ShooterController.aligned) {
 
-			if(fire) {
+			if(fireInput) {
 
 				shooterControl.fire();
 
@@ -345,6 +360,33 @@ public class Robot extends TimedRobot {
 		
 		double intakeMultiplier = 0.75;
 		double conveyorMultiplier = 0.275;
+
+		boolean elevatorLock = driver.getToggle(XboxController.Buttons.Select);
+
+		boolean eleUp = driver.getDPad(Gamepad.Directions.N);
+		boolean eleDown = driver.getDPad(Gamepad.Directions.S);
+
+		if(eleUp) {
+
+			elevator.setElevatorUp();
+
+		} else if(eleDown) {
+
+			elevator.setElevatorUp();
+
+		} else {
+
+			elevator.stop();
+
+		}
+
+		if(!topSwitch.getState() && eleUp) {
+
+			elevator.stop();
+
+		}
+
+		elevator.setLock(elevatorLock);
 
 		if(driver.getAxis(XboxController.Axes.RightTrigger) < 0.2) {
 
