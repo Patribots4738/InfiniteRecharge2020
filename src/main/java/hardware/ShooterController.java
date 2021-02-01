@@ -27,8 +27,6 @@ public class ShooterController {
 
     public static boolean aligned = false;
     
-    private int loop;
-
 	private double shortOffset = 3.55;//3.55;
 
 	private double longOffset = 1.68;
@@ -49,7 +47,6 @@ public class ShooterController {
 		
         aimLoop = new PIDLoop(.95, .15, .075, 1, 25);
         
-        loop = 0;
 	}
 
 	// stops the shooter
@@ -115,18 +112,6 @@ public class ShooterController {
 		}
 
         drive.bananaTank(speed, -speed);
-
-        loop++;
-        
-        String str = loop * Constants.LOOP_TIME + "," + angle;
-
-        //System.out.println(str);
-/*
-		System.out.println(angle);
-		System.out.println(aligned);
-		System.out.println(speed);
-		System.out.println(limelight.getHorizontalAngle());
-*/
 
 	}
 

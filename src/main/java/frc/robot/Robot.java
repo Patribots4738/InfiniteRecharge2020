@@ -11,7 +11,7 @@ import wrappers.*;
 
 public class Robot extends TimedRobot {
 
-	public static boolean soloControls = true;
+	public static boolean singleDriver = true;
 
 	DriverCamera cam;
 
@@ -300,6 +300,47 @@ public class Robot extends TimedRobot {
 
 	}
 
+	public void autoShoot(boolean fire) {
+
+		shifted = true;
+
+		// the angle between the limelight and the target is never exactly 0 unless it can't see the target
+		if(limelight.getHorizontalAngle() == 0.0) {
+
+			// and if the limelight cant see the target then it shouldn't do anything
+			shooterControl.stop();
+
+		} else {
+
+			shooterControl.aim();
+
+		}
+
+		if(ShooterController.aligned) {
+
+			if(fire) {
+
+				shooterControl.fire();
+
+			} else {
+
+				// if the operator isn't trying to fire the shooter should be off
+				shooterControl.stop();
+
+			} 
+
+		} else {
+
+			// if the robot isn't aligned the shooter should be off
+			shooterControl.stop();
+
+		}
+
+		shooterControl.eval();
+
+	}
+
+	// for use when only one driver is around
 	public void soloOperate() {
 		
 		double intakeMultiplier = 0.75;
@@ -353,15 +394,35 @@ public class Robot extends TimedRobot {
 		// here begins the code for controlling the full robot
 		boolean aiming = driver.getButton(XboxController.Buttons.A);
 
+		/*
 		System.out.println("Distance: " + limelight.getDistance());
 
 		smashBoard.set("angleOffset", limelight.getHorizontalAngle());
 		smashBoard.set("isAimed", ShooterController.aligned);
 		smashBoard.set("isTargetVisible", (limelight.getHorizontalAngle() == 0) ? false : true);
+		*/
 
+		// if emergency manual mode, run only the emergency manual code, then return
 		if(emergencyManual) {
 
 			emergencyManual();
+			return;
+
+		}
+
+		if(singleDriver) {
+
+			if(!aiming) {
+
+				drive();
+				soloOperate();
+
+			} else {
+
+				autoShoot(driver.getButton(XboxController.Buttons.X));
+
+			}
+
 			return;
 
 		}
@@ -372,55 +433,13 @@ public class Robot extends TimedRobot {
 			
 			drive();
 
-			if (soloControls) {
-
-				soloOperate();
-
-			} else {
-
-				operate();
-
-			}      
+			operate();
 
 		} else {
 
-			shifted = true;
-
-			// the angle between the limelight and the target is never exactly 0 unless it can't see the target
-			if(limelight.getHorizontalAngle() == 0.0) {
-
-				// and if the limelight cant see the target then it shouldn't do anything
-				shooterControl.stop();
-
-			} else {
-
-				shooterControl.aim();
-
-			}
-
-			if(ShooterController.aligned) {
-
-				if(operator.getButton(XboxController.Buttons.A)) {
-
-					shooterControl.fire();
-
-				} else {
-
-					// if the operator isn't trying to fire the shooter should be off
-					shooterControl.stop();
-
-				} 
-
-			} else {
-
-				// if the robot isn't aligned the shooter should be off
-				shooterControl.stop();
-
-			}
+			autoShoot(operator.getButton(XboxController.Buttons.A));
 
 		}
-
-		shooterControl.eval();
 
 	}
 
