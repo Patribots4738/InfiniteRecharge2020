@@ -11,15 +11,15 @@ import wrappers.*;
 
 public class Robot extends TimedRobot {
 
-	public static boolean singleDriver = true;
+	boolean singleDriver = true;
+
+	public static boolean emergencyManual = false;
 
 	DriverCamera cam;
 
 	public static boolean shifted;
 
 	boolean firstTime;
-
-	public static boolean emergencyManual = false;
 
 	double shootTime;
 
