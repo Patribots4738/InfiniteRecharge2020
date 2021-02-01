@@ -284,7 +284,7 @@ public class Robot extends TimedRobot {
 
 		} else if(eleDown) {
 
-			elevator.setElevatorUp();
+			elevator.setElevatorDown();
 
 		} else {
 
@@ -372,7 +372,7 @@ public class Robot extends TimedRobot {
 
 		} else if(eleDown) {
 
-			elevator.setElevatorUp();
+			elevator.setElevatorDown();
 
 		} else {
 
