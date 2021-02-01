@@ -10,7 +10,7 @@ public class Elevator {
 
 	DoubleSolenoid lock;
 
-	double defaultSpeed = 0.3;
+	double defaultSpeed = 0.4;
 
 	public Elevator(PIDMotor leftLifter, PIDMotor rightLifter, DoubleSolenoid lock) {
 		
