@@ -270,7 +270,7 @@ public class Robot extends TimedRobot {
 
 	public void operate() {
 
-		double intakeMultiplier = 0.37;
+		double intakeMultiplier = 0.75;
 		double conveyorMultiplier = 0.275;
 
 		boolean elevatorLock = operator.getToggle(XboxController.Buttons.Select);
@@ -435,14 +435,12 @@ public class Robot extends TimedRobot {
 
 		// here begins the code for controlling the full robot
 		boolean aiming = driver.getButton(XboxController.Buttons.A);
-
-		/*
-		System.out.println("Distance: " + limelight.getDistance());
+		
+		//System.out.println("Distance: " + limelight.getDistance());
 
 		smashBoard.set("angleOffset", limelight.getHorizontalAngle());
 		smashBoard.set("isAimed", ShooterController.aligned);
 		smashBoard.set("isTargetVisible", (limelight.getHorizontalAngle() == 0) ? false : true);
-		*/
 
 		// if emergency manual mode, run only the emergency manual code, then return
 		if(emergencyManual) {
@@ -469,6 +467,7 @@ public class Robot extends TimedRobot {
 
 		}
 
+		// standard operation from here on out
 		if(!aiming) {
 
 			shooterControl.stop();

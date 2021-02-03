@@ -126,14 +126,14 @@ public class AutoDrive {
 	// this command will be called once to start executing a command
 	public void executeCommand(Command command) {
 
-		System.out.println("executing a command");
+		//System.out.println("executing a command");
 
 		Command.CommandType commandType = command.getType();
 
 		double value = command.getValue();
 		double speed = command.getSpeed();
 
-		// the left motor will always move in the same direction regardless of moving or rotating the robot
+		// the left motor will always move in the same relative direction regardless of moving or rotating the robot
 		completePositions[0] += value;
 		
 		if(commandType == Command.CommandType.MOVE) {

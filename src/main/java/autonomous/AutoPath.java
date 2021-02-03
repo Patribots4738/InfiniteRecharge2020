@@ -49,6 +49,7 @@ public class AutoPath {
 
     }
 
+    // this is magic regex stuff for reading the json files, it works, don't worry about it
     private double[][] getDoubleArray() {
 
         // this next line is black magic, don't touch
@@ -89,6 +90,7 @@ public class AutoPath {
 
     }
 
+    // this filters out the commands from the double array granted by parsing the files
     private ArrayList<Command> getCommands() {
 
         double[][] commandVals = this.getDoubleArray();
@@ -113,6 +115,7 @@ public class AutoPath {
 
     }
 
+    // this finds and returns the filepaths of all the paths currently stored in the robot code
     public static String[] getAutoPaths() {
 
         ArrayList<String> temp = new ArrayList<String>();
