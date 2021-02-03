@@ -46,6 +46,7 @@ public class Robot extends TimedRobot {
 	Conveyor conveyor;
 
 	Limelight limelight;
+	Limelight ballFinder;
 
 	ShooterController shooterControl;
 
@@ -104,6 +105,7 @@ public class Robot extends TimedRobot {
 		conveyor = new Conveyor(conveyorDriver);
 
 		limelight = new Limelight();
+		ballFinder = new Limelight();
 
 		shooterControl = new ShooterController(conveyor, shooter, limelight, drive);
 
@@ -441,6 +443,9 @@ public class Robot extends TimedRobot {
 		smashBoard.set("angleOffset", limelight.getHorizontalAngle());
 		smashBoard.set("isAimed", ShooterController.aligned);
 		smashBoard.set("isTargetVisible", (limelight.getHorizontalAngle() == 0) ? false : true);
+
+		System.out.println("Horizontal Angle: " + ballFinder.getHorizontalAngle());
+		System.out.println("Vertical Angle: " + ballFinder.getVerticalAngle());
 
 		// if emergency manual mode, run only the emergency manual code, then return
 		if(emergencyManual) {
