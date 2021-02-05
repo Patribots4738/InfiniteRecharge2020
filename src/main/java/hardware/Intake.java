@@ -12,6 +12,8 @@ public class Intake {
 
 	Drive drive;
 
+	Conveyor conveyor;
+
 	private double maxTurning = 0.2;
 
 	private double acceptableAngleError = .5;
@@ -24,13 +26,15 @@ public class Intake {
 
 	PIDLoop aimLoop;
 
-	public Intake(Motor sucker, Limelight ballFinder, Drive drive) {
+	public Intake(Motor sucker, Limelight ballFinder, Drive drive, Conveyor conveyor) {
 
 		this.sucker = sucker;
 
 		this.ballFinder = ballFinder;
 
 		this.drive = drive;
+
+		this.conveyor = conveyor;
 
 		aimLoop = new PIDLoop(.95, .15, .075, 1, 25);
 
@@ -72,6 +76,11 @@ public class Intake {
 		if(ballFinder.getTargetAreaPercent() > 1.0) {
 
 			setSuck(-0.75);
+			conveyor.setConveyor(true);
+
+		} else {
+
+			conveyor.setConveyor(false);
 
 		}
 

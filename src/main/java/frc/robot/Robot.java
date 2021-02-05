@@ -49,6 +49,7 @@ public class Robot extends TimedRobot {
 	Limelight ballFinder;
 
 	ShooterController shooterControl;
+	IntakeController intakeControl;
 
 	Limitswitch topSwitch;
 
@@ -101,13 +102,14 @@ public class Robot extends TimedRobot {
 
 		Motor intakeSucker = new Talon(8);
 
-		intake = new Intake(intakeSucker, ballFinder, drive);
-
 		Motor conveyorDriver = new Talon(7);
 
 		conveyor = new Conveyor(conveyorDriver);
 
+		intake = new Intake(intakeSucker, ballFinder, drive, conveyor);
+
 		shooterControl = new ShooterController(conveyor, shooter, limelight, drive);
+		intakeControl = new IntakeController(conveyor, intake);
 
 		PIDMotor leftElevator = new Falcon(12);
 		PIDMotor rightElevator = new Falcon(11);
