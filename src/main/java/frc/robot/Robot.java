@@ -440,7 +440,7 @@ public class Robot extends TimedRobot {
 		// here begins the code for controlling the full robot
 		boolean aiming = driver.getButton(XboxController.Buttons.A);
 		
-		//System.out.println("Distance: " + limelight.getDistance());
+		System.out.println("Distance: " + limelight.getDistance());
 
 		smashBoard.set("angleOffset", limelight.getHorizontalAngle());
 		smashBoard.set("isAimed", ShooterController.aligned);
