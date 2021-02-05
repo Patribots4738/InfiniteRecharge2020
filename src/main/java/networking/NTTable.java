@@ -26,6 +26,7 @@ public class NTTable {
 
 	}
 
+	// not functional
 	public NTTable[] getSubtables() {
 
 		// gets all of the sub table names inside of this table.

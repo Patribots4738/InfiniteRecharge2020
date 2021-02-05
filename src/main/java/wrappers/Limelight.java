@@ -25,9 +25,9 @@ public class Limelight {
 	MovingAverage vertAngleAvg;
 	MovingAverage distanceAvg;
 
-	public Limelight() {
+	public Limelight(String name) {
 
-		this.limelightTable = new NTTable("limelight");
+		this.limelightTable = new NTTable(name);
 
 		setLED(LEDMode.DEFAULT);
 
@@ -72,7 +72,7 @@ public class Limelight {
 	}
 
 	// returns how much of the image the camera can actually see
-	public double targetAreaPercent() {
+	public double getTargetAreaPercent() {
 
 		return Double.valueOf((Double)limelightTable.get("ta"));
 

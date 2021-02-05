@@ -71,6 +71,9 @@ public class Robot extends TimedRobot {
 
 		shootTime = 13;
 
+		limelight = new Limelight("limelight-shooter");
+		ballFinder = new Limelight("limelight-balls");
+
 		shootTimer = new Countdown(shootTime);
 
 		smashBoard = new NTTable("/SmartDashboard");
@@ -98,14 +101,11 @@ public class Robot extends TimedRobot {
 
 		Motor intakeSucker = new Talon(8);
 
-		intake = new Intake(intakeSucker);
+		intake = new Intake(intakeSucker, ballFinder, drive);
 
 		Motor conveyorDriver = new Talon(7);
 
 		conveyor = new Conveyor(conveyorDriver);
-
-		limelight = new Limelight();
-		ballFinder = new Limelight();
 
 		shooterControl = new ShooterController(conveyor, shooter, limelight, drive);
 
@@ -444,9 +444,6 @@ public class Robot extends TimedRobot {
 		smashBoard.set("isAimed", ShooterController.aligned);
 		smashBoard.set("isTargetVisible", (limelight.getHorizontalAngle() == 0) ? false : true);
 
-		System.out.println("Horizontal Angle: " + ballFinder.getHorizontalAngle());
-		System.out.println("Vertical Angle: " + ballFinder.getVerticalAngle());
-
 		// if emergency manual mode, run only the emergency manual code, then return
 		if(emergencyManual) {
 
@@ -495,29 +492,19 @@ public class Robot extends TimedRobot {
 	@Override
 	public void testPeriodic() {
 
-		boolean feeding = operator.getToggle(XboxController.Buttons.Y);
+		boolean seeking = driver.getButton(XboxController.Buttons.Y); //because "Y" not?!!
 
-		if(feeding) {
+		if(!seeking) {
 
-			shooter.setRawSpeeds(0.58, 0.36);
-			shooter.eval(0);
-			shooter.setFeeders(Shooter.readyToFire);
+			drive();
+			soloOperate();
 
 		} else {
 
-			shooter.stop();
+			intake.seekBall();
 
 		}
-
-		drive();
-		operate();
-
-		if(feeding && operator.getAxis(XboxController.Axes.RightTrigger) > 0.2) {
-
-			conveyor.setConveyor(true);
-
-		}
-
+	
 	}
 
 }

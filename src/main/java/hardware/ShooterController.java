@@ -1,6 +1,5 @@
 package hardware;
 
-import utils.Constants;
 import utils.PIDLoop;
 import wrappers.Limelight;
 
