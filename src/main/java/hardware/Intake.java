@@ -71,16 +71,24 @@ public class Intake {
 
 		}
 
+		if(ballFinder.getTargetAreaPercent() == 0) {
+
+			throttle = 0;
+			turning = 0.2;	
+
+		}
+
 		drive.bananaArcade(throttle, turning);
 		
 		if(ballFinder.getTargetAreaPercent() > 1.0) {
 
 			setSuck(-0.75);
+
+		}
+
+		if(ballFinder.getTargetAreaPercent() > 1.0) {
+
 			conveyor.setConveyor(true);
-
-		} else {
-
-			conveyor.setConveyor(false);
 
 		}
 
