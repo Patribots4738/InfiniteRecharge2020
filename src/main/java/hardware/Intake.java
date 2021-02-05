@@ -48,8 +48,8 @@ public class Intake {
 
 	public void seekBall() {
 
-		System.out.println("Horizontal Angle: " + ballFinder.getHorizontalAngle());
-		System.out.println("Vertical Angle: " + ballFinder.getVerticalAngle());
+		//System.out.println("Horizontal Angle: " + ballFinder.getHorizontalAngle());
+		//System.out.println("Vertical Angle: " + ballFinder.getVerticalAngle());
 
 		double angle = ballFinder.getHorizontalAngle();
 
@@ -71,6 +71,7 @@ public class Intake {
 
 		}
 
+		// if the limelight cant see anything, just turn around until it does
 		if(ballFinder.getTargetAreaPercent() == 0) {
 
 			throttle = 0;
@@ -80,17 +81,21 @@ public class Intake {
 
 		drive.bananaArcade(throttle, turning);
 		
+		// if the ball is close to the robot, start running the intake and conveyor
 		if(ballFinder.getTargetAreaPercent() > 1.0) {
 
 			setSuck(-0.75);
-
-		}
-
-		if(ballFinder.getTargetAreaPercent() > 1.0) {
-
 			conveyor.setConveyor(true);
 
+		} else {
+
+			// otherwise, turn them off
+			setSuck(0);
+			conveyor.setConveyor(false);
+
 		}
+
+		
 
 	}
 
