@@ -14,17 +14,13 @@ public class Intake {
 
 	Conveyor conveyor;
 
-	MovingAverage movingAverage;
+	MovingAverage ballPercentLog;
 
 	public int ballsCollected;
 
 	private boolean aboveBallPercent;
 
-	private double log;
-
 	private double maxTurning = 0.2;
-
-	private double acceptableAngleError = 0.5;
 
 	private double minTurning = 0.05;
 
@@ -32,15 +28,13 @@ public class Intake {
 
 	private double closeBallPercent = 2.4;
 
-    public static boolean aligned = false;
-
 	PIDLoop aimLoop;
 
 	public Intake(Motor sucker, Limelight ballFinder, Drive drive, Conveyor conveyor) {
 
 		aboveBallPercent = false;
 
-		movingAverage = new MovingAverage(20);
+		ballPercentLog = new MovingAverage(20);
 
 		this.sucker = sucker;
 
@@ -49,8 +43,6 @@ public class Intake {
 		this.drive = drive;
 
 		this.conveyor = conveyor;
-
-		log = 0;
 
 		ballsCollected = 0;
 
@@ -64,19 +56,30 @@ public class Intake {
 
 	}
 
+	public void resetBallCount() {
+
+		ballsCollected = 0;
+
+	}
+
+	public int getBallsCollected() {
+
+		return ballsCollected;
+
+	}
+
 	public void seekBall() {
 
 		//System.out.println("Horizontal Angle: " + ballFinder.getHorizontalAngle());
 		//System.out.println("Vertical Angle: " + ballFinder.getVerticalAngle());
 
-		log = ballFinder.getTargetAreaPercent();
-		System.out.println(log);
+		// set the intake and conveyor on to collect balls
+		setSuck(-0.75);
+		conveyor.setConveyor(true);
 
-		movingAverage.addValue(log);
+		ballPercentLog.addValue(ballFinder.getTargetAreaPercent());
 
 		double angle = ballFinder.getHorizontalAngle();
-
-		aligned = Math.abs(angle) <= acceptableAngleError;
 
 		double turning = -(aimLoop.getCommand(0, angle) * converter); 
 
@@ -103,20 +106,22 @@ public class Intake {
 
 		drive.bananaArcade(throttle, turning);
 
-		setSuck(-0.75);
-		conveyor.setConveyor(true);
-
-		System.out.println("Log Average Bigger: " + (movingAverage.getAverage() > closeBallPercent));
+		/*
+		System.out.println("Log Average Bigger: " + (ballPercentLog.getAverage() > closeBallPercent));
 		System.out.println("AboveBallPercent: " + aboveBallPercent);
-		System.out.println("Log: " + log + "     CloseBallPercent: " + closeBallPercent);
+		System.out.println("Log: " + ballFinder.getTargetAreaPercent() + "     CloseBallPercent: " + closeBallPercent);
+		*/
 		
-		if (movingAverage.getAverage() > closeBallPercent) {
+		// check and record that the area taken up by the ball has reached the amount it should be when the ball is close (like inside the intake close)
+		if (ballPercentLog.getAverage() > closeBallPercent) {
 
 			aboveBallPercent = true;
 
 		}
 
-		if (aboveBallPercent && movingAverage.getAverage() < closeBallPercent) {
+		// check that the ball has disapperead from veiw after getting inside the intake (meaning it's been collected)
+		// so increase the number of balls collected, and reset the checker for if the ball gets close
+		if (aboveBallPercent && ballPercentLog.getAverage() < closeBallPercent) {
 
 			ballsCollected += 1;
 			aboveBallPercent = false;
