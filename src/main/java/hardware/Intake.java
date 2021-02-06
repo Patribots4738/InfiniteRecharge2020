@@ -24,7 +24,7 @@ public class Intake {
 
 	private double maxTurning = 0.2;
 
-	private double acceptableAngleError = .5;
+	private double acceptableAngleError = 0.5;
 
 	private double minTurning = 0.05;
 
