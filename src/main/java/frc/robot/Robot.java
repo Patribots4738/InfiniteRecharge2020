@@ -498,6 +498,7 @@ public class Robot extends TimedRobot {
 
 			drive();
 			soloOperate();
+			System.out.println("Balls Collected: " + intake.ballsCollected);
 
 		} else {
 

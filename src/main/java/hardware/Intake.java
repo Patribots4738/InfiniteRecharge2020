@@ -26,7 +26,7 @@ public class Intake {
 
 	private double converter = 1.0 / 15;
 
-	private double closeBallPercent = 0.024;
+	private double closeBallPercent = 0.021;
 
     public static boolean aligned = false;
 
@@ -60,8 +60,8 @@ public class Intake {
 
 		boolean aboveBallPercent = false;
 
-		System.out.println("Horizontal Angle: " + ballFinder.getHorizontalAngle());
-		System.out.println("Vertical Angle: " + ballFinder.getVerticalAngle());
+		//System.out.println("Horizontal Angle: " + ballFinder.getHorizontalAngle());
+		//System.out.println("Vertical Angle: " + ballFinder.getVerticalAngle());
 
 		log = ballFinder.getTargetAreaPercent();
 		System.out.println(log);
@@ -110,8 +110,6 @@ public class Intake {
 			aboveBallPercent = false;
 
 		}
-
-		System.out.println("Balls Collected: " + ballsCollected);
 
 	}
 
