@@ -14,7 +14,11 @@ public class Intake {
 
 	Conveyor conveyor;
 
+	MovingAverage movingAverage;
+
 	public int ballsCollected;
+
+	private boolean aboveBallPercent;
 
 	private double log;
 
@@ -33,6 +37,10 @@ public class Intake {
 	PIDLoop aimLoop;
 
 	public Intake(Motor sucker, Limelight ballFinder, Drive drive, Conveyor conveyor) {
+
+		aboveBallPercent = false;
+
+		movingAverage = new MovingAverage(20);
 
 		this.sucker = sucker;
 
@@ -58,13 +66,13 @@ public class Intake {
 
 	public void seekBall() {
 
-		boolean aboveBallPercent = false;
-
 		//System.out.println("Horizontal Angle: " + ballFinder.getHorizontalAngle());
 		//System.out.println("Vertical Angle: " + ballFinder.getVerticalAngle());
 
 		log = ballFinder.getTargetAreaPercent();
 		System.out.println(log);
+
+		movingAverage.addValue(log);
 
 		double angle = ballFinder.getHorizontalAngle();
 
@@ -98,17 +106,17 @@ public class Intake {
 		setSuck(-0.75);
 		conveyor.setConveyor(true);
 
-		System.out.println("Log Bigger: " + (log > closeBallPercent));
+		System.out.println("Log Average Bigger: " + (movingAverage.getAverage() > closeBallPercent));
 		System.out.println("AboveBallPercent: " + aboveBallPercent);
-		System.out.println("Log: " + log + "CloseBallPercent: " + closeBallPercent);
+		System.out.println("Log: " + log + "     CloseBallPercent: " + closeBallPercent);
 		
-		if (log > closeBallPercent) {
+		if (movingAverage.getAverage() > closeBallPercent) {
 
 			aboveBallPercent = true;
 
 		}
 
-		if (aboveBallPercent && log < closeBallPercent) {
+		if (aboveBallPercent && movingAverage.getAverage() < closeBallPercent) {
 
 			ballsCollected += 1;
 			aboveBallPercent = false;
