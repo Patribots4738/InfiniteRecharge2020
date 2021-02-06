@@ -14,6 +14,10 @@ public class Intake {
 
 	Conveyor conveyor;
 
+	public int ballsCollected;
+
+	private double log;
+
 	private double maxTurning = 0.2;
 
 	private double acceptableAngleError = .5;
@@ -21,6 +25,8 @@ public class Intake {
 	private double minTurning = 0.05;
 
 	private double converter = 1.0 / 15;
+
+	private double closeBallPercent = 0.15;
 
     public static boolean aligned = false;
 
@@ -36,6 +42,10 @@ public class Intake {
 
 		this.conveyor = conveyor;
 
+		log = 0;
+
+		ballsCollected = 0;
+
 		aimLoop = new PIDLoop(.95, .15, .075, 1, 25);
 
 	}
@@ -48,8 +58,13 @@ public class Intake {
 
 	public void seekBall() {
 
+		boolean aboveBallPercent = false;
+
 		System.out.println("Horizontal Angle: " + ballFinder.getHorizontalAngle());
 		System.out.println("Vertical Angle: " + ballFinder.getVerticalAngle());
+
+		log = ballFinder.getTargetAreaPercent();
+		System.out.println(log);
 
 		double angle = ballFinder.getHorizontalAngle();
 
@@ -82,19 +97,19 @@ public class Intake {
 
 		setSuck(-0.75);
 		conveyor.setConveyor(true);
-		/*
-		if(ballFinder.getTargetAreaPercent() > 1.0) {
+		
+		if (log > closeBallPercent) {
 
-			setSuck(-0.75);
-
-		}
-
-		if(ballFinder.getTargetAreaPercent() > 1.0) {
-
-			conveyor.setConveyor(true);
+			aboveBallPercent = true;
 
 		}
-		*/
+
+		if (aboveBallPercent && log < closeBallPercent) {
+
+			ballsCollected += 1;
+			aboveBallPercent = false;
+
+		}
 
 	}
 
