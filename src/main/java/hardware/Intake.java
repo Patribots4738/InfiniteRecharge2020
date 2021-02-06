@@ -26,7 +26,7 @@ public class Intake {
 
 	private double converter = 1.0 / 15;
 
-	private double closeBallPercent = 0.15;
+	private double closeBallPercent = 0.024;
 
     public static boolean aligned = false;
 
@@ -110,6 +110,8 @@ public class Intake {
 			aboveBallPercent = false;
 
 		}
+
+		System.out.println("Balls Collected: " + ballsCollected);
 
 	}
 
