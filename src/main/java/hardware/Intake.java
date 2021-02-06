@@ -79,11 +79,7 @@ public class Intake {
 		}
 
 		drive.bananaArcade(throttle, turning);
-
-		setSuck(0.75);
-		conveyor.setConveyor(true);
-
-		/*
+		
 		if(ballFinder.getTargetAreaPercent() > 1.0) {
 
 			setSuck(-0.75);
@@ -94,7 +90,7 @@ public class Intake {
 
 			conveyor.setConveyor(true);
 
-		}*/
+		}
 
 	}
 
