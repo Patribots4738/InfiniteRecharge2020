@@ -100,6 +100,7 @@ public class Intake {
 
 		System.out.println("Log Bigger: " + (log > closeBallPercent));
 		System.out.println("AboveBallPercent: " + aboveBallPercent);
+		System.out.println("Log: " + log + "CloseBallPercent: " + closeBallPercent);
 		
 		if (log > closeBallPercent) {
 
