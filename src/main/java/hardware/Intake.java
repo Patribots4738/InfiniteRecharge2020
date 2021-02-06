@@ -97,6 +97,9 @@ public class Intake {
 
 		setSuck(-0.75);
 		conveyor.setConveyor(true);
+
+		System.out.println("Log Bigger: " + (log > closeBallPercent));
+		System.out.println("AboveBallPercent: " + aboveBallPercent);
 		
 		if (log > closeBallPercent) {
 
