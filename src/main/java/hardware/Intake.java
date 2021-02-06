@@ -26,7 +26,7 @@ public class Intake {
 
 	private double converter = 1.0 / 15;
 
-	private double closeBallPercent = 0.021;
+	private double closeBallPercent = 2.4;
 
     public static boolean aligned = false;
 
