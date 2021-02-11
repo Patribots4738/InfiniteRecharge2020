@@ -31,7 +31,7 @@ public class AutoDrive {
 
 		running = false;
 
-		completePositions = new double[]{
+		completePositions = new double[] {
 
 			leftMotors.getPosition(),
 			rightMotors.getPosition()

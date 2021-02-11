@@ -107,7 +107,7 @@ public class Robot extends TimedRobot {
 
 		conveyor = new Conveyor(conveyorDriver);
 
-		intake = new Intake(intakeSucker, ballFinder, drive, conveyor);
+		intake = new Intake(intakeSucker, ballFinder, drive, conveyor, leftMotors, rightMotors);
 
 		shooterControl = new ShooterController(conveyor, shooter, limelight, drive);
 
