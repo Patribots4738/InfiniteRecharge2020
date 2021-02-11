@@ -57,6 +57,8 @@ public class Robot extends TimedRobot {
 	AutoPath path;
 	AutoDrive auto;
 
+	boolean isPathRed;
+
 	@Override
 	public void robotInit() {
 		// here begin all the constructors
@@ -131,6 +133,8 @@ public class Robot extends TimedRobot {
 
 		topShooterWheel.setPID(1.7, 0.15, 0.15);
 		bottomShooterWheel.setPID(0.7, 0.15, 0.15);
+
+		isPathRed = intake.isPathRed();
 
 		auto.reset();
 
@@ -488,12 +492,19 @@ public class Robot extends TimedRobot {
 	}
 
 	@Override
-	public void testInit() {}
+	public void testInit() {
+
+		isPathRed = intake.isPathRed();
+
+	}
 
 	@Override
 	public void testPeriodic() {
 
 		boolean seeking = driver.getButton(XboxController.Buttons.Y); //because "Y" not?!!
+
+		System.out.println(isPathRed);
+		System.out.println(ballFinder.getTargetAreaPercent());
 
 		if(!seeking) {
 

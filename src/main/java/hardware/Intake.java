@@ -18,6 +18,9 @@ public class Intake {
 
 	public int ballsCollected;
 
+	//-1 is left, +1 is right
+	private int[] pathATurningVals = {1, -1, -1, 1};
+
 	private boolean aboveBallPercent;
 
 	private double maxTurning = 0.2;
@@ -68,6 +71,13 @@ public class Intake {
 
 	}
 
+	public boolean isPathRed() {
+
+
+		return !(ballFinder.getTargetAreaPercent() == 0);
+
+	}
+
 	public void seekBall() {
 
 		//System.out.println("Horizontal Angle: " + ballFinder.getHorizontalAngle());
@@ -97,21 +107,6 @@ public class Intake {
 
 		}
 
-		if(ballFinder.getTargetAreaPercent() == 0) {
-
-			throttle = 0;
-			turning = 0.2;	
-
-		}
-
-		drive.bananaArcade(throttle, turning);
-
-		/*
-		System.out.println("Log Average Bigger: " + (ballPercentLog.getAverage() > closeBallPercent));
-		System.out.println("AboveBallPercent: " + aboveBallPercent);
-		System.out.println("Log: " + ballFinder.getTargetAreaPercent() + "     CloseBallPercent: " + closeBallPercent);
-		*/
-		
 		// check and record that the area taken up by the ball has reached the amount it should be when the ball is close (like inside the intake close)
 		if (ballPercentLog.getAverage() > closeBallPercent) {
 
@@ -127,6 +122,30 @@ public class Intake {
 			aboveBallPercent = false;
 
 		}
+
+		if(ballFinder.getTargetAreaPercent() == 0 && ballsCollected < 3) {
+
+			throttle = 0;
+			turning = 0.2 * pathATurningVals[ballsCollected];
+			System.out.println("BLIDNLY TURNING");	
+
+		}
+
+		if(ballsCollected == 3) {
+
+			throttle = 0.186;
+			turning = 0.253 * pathATurningVals[ballsCollected];
+
+		}
+
+		System.out.println("Turning Speed: " + turning);
+		drive.bananaArcade(throttle, turning);
+
+		/*
+		System.out.println("Log Average Bigger: " + (ballPercentLog.getAverage() > closeBallPercent));
+		System.out.println("AboveBallPercent: " + aboveBallPercent);
+		System.out.println("Log: " + ballFinder.getTargetAreaPercent() + "     CloseBallPercent: " + closeBallPercent);
+		*/
 
 	}
 
