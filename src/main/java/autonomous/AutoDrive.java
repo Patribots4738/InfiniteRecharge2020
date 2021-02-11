@@ -31,12 +31,10 @@ public class AutoDrive {
 
 		running = false;
 
-		completePositions = new double[] {
-
-			leftMotors.getPosition(),
-			rightMotors.getPosition()
-
-		};
+		completePositions = new double[2];
+		completePositions[0] = leftMotors.getPosition();
+		completePositions[1] = rightMotors.getPosition();
+		
 
 		commandQueue = new ArrayList<Command>();
 

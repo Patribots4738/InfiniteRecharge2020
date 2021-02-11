@@ -45,7 +45,7 @@ public class Robot extends TimedRobot {
 
 	Conveyor conveyor;
 
-	Limelight limelight;
+	Limelight shooterCam;
 	Limelight ballFinder;
 
 	ShooterController shooterControl;
@@ -57,7 +57,7 @@ public class Robot extends TimedRobot {
 	AutoPath path;
 	AutoDrive auto;
 
-	boolean isPathRed;
+	AutoSeeker seeker;
 
 	@Override
 	public void robotInit() {
@@ -73,7 +73,7 @@ public class Robot extends TimedRobot {
 
 		shootTime = 13;
 
-		limelight = new Limelight("limelight-shooter");
+		shooterCam = new Limelight("limelight-shooter");
 		ballFinder = new Limelight("limelight-balls");
 
 		shootTimer = new Countdown(shootTime);
@@ -107,9 +107,9 @@ public class Robot extends TimedRobot {
 
 		conveyor = new Conveyor(conveyorDriver);
 
-		intake = new Intake(intakeSucker, ballFinder, drive, conveyor, leftMotors, rightMotors);
+		intake = new Intake(intakeSucker);
 
-		shooterControl = new ShooterController(conveyor, shooter, limelight, drive);
+		shooterControl = new ShooterController(conveyor, shooter, shooterCam, drive);
 
 		PIDMotor leftElevator = new Falcon(12);
 		PIDMotor rightElevator = new Falcon(11);
@@ -134,7 +134,7 @@ public class Robot extends TimedRobot {
 		topShooterWheel.setPID(1.7, 0.15, 0.15);
 		bottomShooterWheel.setPID(0.7, 0.15, 0.15);
 
-		isPathRed = intake.isPathRed();
+		seeker = new AutoSeeker(intake, conveyor, ballFinder, drive, leftMotors, rightMotors);
 
 		auto.reset();
 
@@ -222,7 +222,7 @@ public class Robot extends TimedRobot {
 	public void disabledInit() {
 
 		firstTime = true;
-		intake.resetBallCount();
+		seeker.resetBallCount();
 
 	}
 	
@@ -326,10 +326,10 @@ public class Robot extends TimedRobot {
 
 		shifted = true;
 
-		// the angle between the limelight and the target is never exactly 0 unless it can't see the target
-		if(limelight.getHorizontalAngle() == 0.0) {
+		// the angle between the shooterCam and the target is never exactly 0 unless it can't see the target
+		if(shooterCam.getHorizontalAngle() == 0.0) {
 
-			// and if the limelight cant see the target then it shouldn't do anything
+			// and if the shooterCam cant see the target then it shouldn't do anything
 			shooterControl.stop();
 
 		} else {
@@ -443,11 +443,7 @@ public class Robot extends TimedRobot {
 		// here begins the code for controlling the full robot
 		boolean aiming = driver.getButton(XboxController.Buttons.A);
 		
-		System.out.println("Distance: " + limelight.getDistance());
-
-		smashBoard.set("angleOffset", limelight.getHorizontalAngle());
-		smashBoard.set("isAimed", ShooterController.aligned);
-		smashBoard.set("isTargetVisible", (limelight.getHorizontalAngle() == 0) ? false : true);
+		System.out.println("Distance: " + shooterCam.getDistance());
 
 		// if emergency manual mode, run only the emergency manual code, then return
 		if(emergencyManual) {
@@ -494,27 +490,32 @@ public class Robot extends TimedRobot {
 	@Override
 	public void testInit() {
 
-		isPathRed = intake.isPathRed();
+		// config motors for velocity control
+		leftMotors.setPID(0.5, 0, 0);
+		rightMotors.setPID(0.5, 0, 0);
 
 	}
 
 	@Override
 	public void testPeriodic() {
 
+		smashBoard.set("angleFromTarget", "" + shooterCam.getHorizontalAngle());
+		smashBoard.set("distFromTarget", "" + shooterCam.getDistance());
+		smashBoard.set("aligned", "" + (Math.abs(shooterCam.getHorizontalAngle()) <= 0.5));
+
 		boolean seeking = driver.getButton(XboxController.Buttons.Y); //because "Y" not?!!
 
-		System.out.println(isPathRed);
 		System.out.println(ballFinder.getTargetAreaPercent());
 
 		if(!seeking) {
 
 			drive();
 			soloOperate();
-			System.out.println("Balls Collected: " + intake.ballsCollected);
+			System.out.println("Balls Collected: " + seeker.ballsCollected);
 
 		} else {
 
-			intake.seekBall();
+			seeker.runSeeker();
 
 		}
 	
