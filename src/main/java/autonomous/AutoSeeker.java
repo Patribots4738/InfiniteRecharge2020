@@ -26,16 +26,21 @@ public class AutoSeeker {
     PIDLoop aimLoop;
 
 	private double[] completePositions;
-	
-	private int pathNum = 0;
 
 	// 1st 3 values are for finding balls, final one is for the final rotation before going to the end zone
 	private int[][] blindTurningDirections = { 
-					/* path A red */         {1, 1, -1, 1},
-					/* path A blue */		 {1, -1, 1, -1},
-					/* path B red */		 {1, 1, -1, 1},
-					/* path B blue */        {1, -1, 1, -1}
+					/* path A red */          {1, 1, -1, 1},
+					/* path A blue */		  {1, -1, 1, -1},
+					/* path B red */		  {1, 1, -1, 1},
+					/* path B blue */         {1, -1, 1, -1}
 											 };
+
+	private double[] finalRotationAngles = { 
+				/* path A red */            0.25,
+				/* path A blue */		    0.05,
+				/* path B red */		    0.35,
+				/* path B blue */           0.45
+										   };
 
 	private double maxTurning = 0.2;
 
@@ -49,7 +54,11 @@ public class AutoSeeker {
     
     private boolean allBallsCollected = false;
 
-    private boolean startFinalRotation = false;
+	private boolean startFinalRotation = false;
+	
+	private boolean isPathRed;
+
+	private boolean isPathA;
 
     public AutoSeeker(Intake intake, Conveyor conveyor, Limelight ballFinder, Drive drive, PIDMotorGroup leftMotors, PIDMotorGroup rightMotors) {
        
@@ -62,7 +71,10 @@ public class AutoSeeker {
 		this.drive = drive;
 
 		this.leftMotors = leftMotors;
-        this.rightMotors = rightMotors;
+		this.rightMotors = rightMotors;
+		
+		isPathRed = isPathRed();
+		isPathA = isPathA();
 
         ballPercentLog = new MovingAverage(20);
 
@@ -82,9 +94,10 @@ public class AutoSeeker {
 
 	}
 
-	public void detectPath() {
+	public boolean isPathA() {
 
 		// not finsihed
+		return true;
 
 	}
 
@@ -97,6 +110,20 @@ public class AutoSeeker {
 	public boolean isPathRed() {
 
 		return !((ballFinder.getTargetAreaPercent() == 0) || (ballFinder.getTargetAreaPercent() < 1.0));
+
+	}
+
+	public int getPathNum(boolean isPathA, boolean isPathRed) {
+
+		if (isPathA) {
+
+			return isPathRed ? 0 : 1;
+
+		} else {
+
+			return isPathRed ? 2 : 3;
+
+		}
 
 	}
 
@@ -200,7 +227,7 @@ public class AutoSeeker {
 		if(ballFinder.getTargetAreaPercent() < 0.08 && ballsCollected < 3) {
 
 			throttle = 0;
-			turning = 0.2 * blindTurningDirections[pathNum][ballsCollected];
+			turning = 0.2 * blindTurningDirections[getPathNum(isPathA, isPathRed)][ballsCollected];
 
 		}
 
@@ -230,8 +257,7 @@ public class AutoSeeker {
 		        leftMotors.setPID(2, 0, 0);
 		        rightMotors.setPID(2, 0, 0);
 
-				// make array of correct final rotation values, first one is 0.25, 2nd is 0.1, find others
-                rotate(0.1 * blindTurningDirections[pathNum][3], 0.2);
+                rotate(finalRotationAngles[getPathNum(isPathA, isPathRed)] * blindTurningDirections[getPathNum(isPathA, isPathRed)][3], 0.2);
 
                 startFinalRotation = true;
 
