@@ -505,13 +505,12 @@ public class Robot extends TimedRobot {
 
 		boolean seeking = driver.getButton(XboxController.Buttons.Y); //because "Y" not?!!
 
-		System.out.println(ballFinder.getTargetAreaPercent());
+		System.out.println(seeker.isPathRed());
 
 		if(!seeking) {
 
 			drive();
 			soloOperate();
-			System.out.println("Balls Collected: " + seeker.ballsCollected);
 
 		} else {
 

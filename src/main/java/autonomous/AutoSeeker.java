@@ -77,6 +77,8 @@ public class AutoSeeker {
     public void resetBallCount() {
 
 		ballsCollected = 0;
+		startFinalRotation = false;
+		allBallsCollected = false;
 
 	}
 
@@ -94,7 +96,7 @@ public class AutoSeeker {
 
 	public boolean isPathRed() {
 
-		return !(ballFinder.getTargetAreaPercent() == 0);
+		return !((ballFinder.getTargetAreaPercent() == 0) || (ballFinder.getTargetAreaPercent() < 1.0));
 
 	}
 
@@ -163,8 +165,10 @@ public class AutoSeeker {
 
 	public void seekBalls() {
 
-		//System.out.println("Horizontal Angle: " + ballFinder.getHorizontalAngle());
-		//System.out.println("Vertical Angle: " + ballFinder.getVerticalAngle());
+		System.out.println("Horizontal Angle: " + ballFinder.getHorizontalAngle());
+		System.out.println("Vertical Angle: " + ballFinder.getVerticalAngle());
+		System.out.println("Target Area: " + ballFinder.getTargetAreaPercent());
+		System.out.println("Balls: " + ballsCollected);
 
 		// set the intake and conveyor on to collect balls
 		intake.setSuck(-0.75);
@@ -193,12 +197,12 @@ public class AutoSeeker {
         countBalls();
 
         // if we can't find any balls, turn in the right direction until we find one
-		if(ballFinder.getTargetAreaPercent() == 0 && ballsCollected < 3) {
+		if(ballFinder.getTargetAreaPercent() < 0.08 && ballsCollected < 3) {
 
 			throttle = 0;
 			turning = 0.2 * blindTurningDirections[pathNum][ballsCollected];
 
-        }
+		}
 
         drive.bananaArcade(throttle, turning);
 
@@ -226,7 +230,8 @@ public class AutoSeeker {
 		        leftMotors.setPID(2, 0, 0);
 		        rightMotors.setPID(2, 0, 0);
 
-                rotate(0.25 * blindTurningDirections[pathNum][3], 0.2);
+				// make array of correct final rotation values, first one is 0.25, 2nd is 0.1, find others
+                rotate(0.1 * blindTurningDirections[pathNum][3], 0.2);
 
                 startFinalRotation = true;
 
