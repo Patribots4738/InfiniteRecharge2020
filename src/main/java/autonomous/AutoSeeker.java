@@ -56,9 +56,13 @@ public class AutoSeeker {
 
 	private boolean startFinalRotation = false;
 	
-	private boolean isPathRed;
+	private boolean pathFound = false;
+	
+	private int pathNum;
 
-	private boolean isPathA;
+	private double forwardSpeed = 0.2;
+
+	private double rotateSpeed = 0.2;
 
     public AutoSeeker(Intake intake, Conveyor conveyor, Limelight ballFinder, Drive drive, PIDMotorGroup leftMotors, PIDMotorGroup rightMotors) {
        
@@ -72,9 +76,6 @@ public class AutoSeeker {
 
 		this.leftMotors = leftMotors;
 		this.rightMotors = rightMotors;
-		
-		isPathRed = isPathRed();
-		isPathA = isPathA();
 
         ballPercentLog = new MovingAverage(10);
 
@@ -94,33 +95,26 @@ public class AutoSeeker {
 
 	}
 
-	public boolean isPathA() {
-
-		if (isPathRed) {
-
-			return Math.abs(ballFinder.getVerticalAngle()) > 10.0 ? true : false;
-
-		} else {
-
-			return ballFinder.getVerticalAngle() < 14.3 ? true : false;
-
-		}
-
-	}
-
 	public int getBallsCollected() {
 
 		return ballsCollected;
 
 	}
 
-	public boolean isPathRed() {
+	public int getPathNum() {
 
-		return ballFinder.getTargetAreaPercent() > 1.0;
+		boolean isPathA;		
+		boolean isPathRed = ballFinder.getTargetAreaPercent() > 1.0;
 
-	}
+		if (isPathRed) {
 
-	public int getPathNum(boolean isPathA, boolean isPathRed) {
+			isPathA = Math.abs(ballFinder.getVerticalAngle()) > 10.0 ? true : false;
+
+		} else {
+
+			isPathA = ballFinder.getVerticalAngle() < 14.3 ? true : false;
+
+		}
 
 		if (isPathA) {
 
@@ -203,7 +197,7 @@ public class AutoSeeker {
 		System.out.println("Vertical Angle: " + ballFinder.getVerticalAngle());
 		System.out.println("Target Area: " + ballFinder.getTargetAreaPercent());
 		System.out.println("Balls: " + ballsCollected);
-		System.out.println("Is Path A: " + isPathA + ", Is Path Red: " + isPathRed);
+		System.out.println("PathNum: " + pathNum);
 
 		// set the intake and conveyor on to collect balls
 		intake.setSuck(-0.75);
@@ -215,7 +209,7 @@ public class AutoSeeker {
 
 		double turning = -(aimLoop.getCommand(0, angle) * converter); 
 
-		double throttle = 0.2;
+		double throttle = forwardSpeed;
 
 		if(Math.abs(turning) < minTurning) {
 
@@ -234,14 +228,14 @@ public class AutoSeeker {
         // if we can't find any balls, turn in the right direction until we find one
 		if(ballFinder.getTargetAreaPercent() < 0.0735 && ballsCollected < 3) {
 
-			System.out.println("TURNING");
+			// System.out.println("TURNING");
 			throttle = 0;
-			turning = 0.2 * blindTurningDirections[getPathNum(isPathA, isPathRed)][ballsCollected];
+			turning = rotateSpeed * blindTurningDirections[pathNum][ballsCollected];
 
 		}
 
-		// force it to turn
-		if (getPathNum(isPathA, isPathRed) == 1 && ballFinder.getTargetAreaPercent() < 0.095 && ballsCollected < 1) {
+		// force it to turn for that one time in path 1 when two balls are super close and it's hard to tell which one it is
+		if (pathNum == 1 && ballFinder.getTargetAreaPercent() < 0.095 && ballsCollected < 1) {
 
 			throttle = 0.1;
 			turning = 0.175;
@@ -260,6 +254,15 @@ public class AutoSeeker {
     
     public void runSeeker() {
 
+		// detect which path we're on based on starting information
+		if(!pathFound) {
+
+			pathNum = getPathNum();
+
+			pathFound = true;
+
+		}
+
         // if we haven't collected all the balls, go find them
         if(!allBallsCollected) {
 
@@ -274,7 +277,7 @@ public class AutoSeeker {
 		        leftMotors.setPID(2, 0, 0);
 		        rightMotors.setPID(2, 0, 0);
 
-                rotate(finalRotationAngles[getPathNum(isPathA, isPathRed)] * blindTurningDirections[getPathNum(isPathA, isPathRed)][3], 0.2);
+                rotate(finalRotationAngles[pathNum] * blindTurningDirections[pathNum][3], rotateSpeed);
 
                 startFinalRotation = true;
 
@@ -287,7 +290,7 @@ public class AutoSeeker {
 		        leftMotors.setPID(0.5, 0, 0);
 		        rightMotors.setPID(0.5, 0, 0);
 
-                drive.bananaArcade(0.2, 0);
+                drive.bananaArcade(forwardSpeed, 0);
 
             }
 
