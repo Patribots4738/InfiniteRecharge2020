@@ -443,7 +443,7 @@ public class Robot extends TimedRobot {
 		// here begins the code for controlling the full robot
 		boolean aiming = driver.getButton(XboxController.Buttons.A);
 		
-		System.out.println("Distance: " + shooterCam.getDistance());
+		//System.out.println("Distance: " + shooterCam.getDistance());
 
 		// if emergency manual mode, run only the emergency manual code, then return
 		if(emergencyManual) {
@@ -504,8 +504,6 @@ public class Robot extends TimedRobot {
 		smashBoard.set("aligned", "" + (Math.abs(shooterCam.getHorizontalAngle()) <= 0.5));
 
 		boolean seeking = driver.getButton(XboxController.Buttons.Y); //because "Y" not?!!
-
-		System.out.println(seeker.isPathRed());
 
 		if(!seeking) {
 

@@ -103,7 +103,6 @@ public class Limelight {
 	// returns the distance from the target to the robot in inches.
 	public double getDistance() {
 
-		System.out.println(Math.tan(Constants.LIMELIGHT_MOUNTING_ANGLE + Calc.degreesToRadians(getVerticalAngle())));
 		double distance = (Constants.TARGET_HEIGHT - Constants.LIMELIGHT_HEIGHT)
 						  / Math.tan(Constants.LIMELIGHT_MOUNTING_ANGLE + Calc.degreesToRadians(getVerticalAngle()));
 
