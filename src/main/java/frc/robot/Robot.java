@@ -153,7 +153,7 @@ public class Robot extends TimedRobot {
 	public void autonomousInit() {
 
 		firstTime = true;
-		
+		/*
 		shifted = true;
 
 		gearShifter.activateChannel(shifted);
@@ -169,12 +169,18 @@ public class Robot extends TimedRobot {
 		auto.addPath(new AutoPath("home/lvuser/deploy/autopaths/Default.json"));
 
 		shooterControl.stop();
+		*/
+
+		seeker.reset();
 
 	} 
 
 	@Override
 	public void autonomousPeriodic() {
 
+		seeker.runSeeker();
+
+	/*
 		if (auto.queueIsEmpty()) {
 
 			if(shootTimer.isRunning()) {
@@ -214,7 +220,7 @@ public class Robot extends TimedRobot {
 			auto.executeQueue();
 
 		}
-
+	*/
 	}
 
 	// NO TOUCH
@@ -222,7 +228,6 @@ public class Robot extends TimedRobot {
 	public void disabledInit() {
 
 		firstTime = true;
-		seeker.resetBallCount();
 
 	}
 	

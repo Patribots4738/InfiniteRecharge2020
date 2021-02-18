@@ -60,9 +60,9 @@ public class AutoSeeker {
 	
 	private int pathNum;
 
-	private double forwardSpeed = 0.2;
+	private double forwardSpeed = 0.65;
 
-	private double rotateSpeed = 0.2;
+	private double rotateSpeed = 0.4;
 
     public AutoSeeker(Intake intake, Conveyor conveyor, Limelight ballFinder, Drive drive, PIDMotorGroup leftMotors, PIDMotorGroup rightMotors) {
        
@@ -87,11 +87,12 @@ public class AutoSeeker {
 
     }
 
-    public void resetBallCount() {
+    public void reset() {
 
 		ballsCollected = 0;
 		startFinalRotation = false;
 		allBallsCollected = false;
+		pathFound = false;
 
 	}
 
@@ -103,16 +104,23 @@ public class AutoSeeker {
 
 	public int getPathNum() {
 
+		/*
+		path 0 is red A
+		path 1 is blue A
+		path 2 red B
+		path 3 blue B
+		*/
+
 		boolean isPathA;		
 		boolean isPathRed = ballFinder.getTargetAreaPercent() > 1.0;
 
 		if (isPathRed) {
 
-			isPathA = Math.abs(ballFinder.getVerticalAngle()) > 10.0 ? true : false;
+			isPathA = Math.abs(ballFinder.getDirectVerticalAngle()) > 4.5 ? true : false;
 
 		} else {
 
-			isPathA = ballFinder.getVerticalAngle() < 14.3 ? true : false;
+			isPathA = ballFinder.getDirectVerticalAngle() < 14.65 ? true : false;
 
 		}
 
@@ -238,7 +246,13 @@ public class AutoSeeker {
 		if (pathNum == 1 && ballFinder.getTargetAreaPercent() < 0.095 && ballsCollected < 1) {
 
 			throttle = 0.1;
-			turning = 0.175;
+			turning = 0.1775;
+
+		}
+
+		if(pathNum == 0 && ballsCollected == 0) {
+
+			throttle = 0.4;
 
 		}
 
