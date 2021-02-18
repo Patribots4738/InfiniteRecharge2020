@@ -88,6 +88,13 @@ public class Limelight {
 		return horizAngleAvg.getAverage();
 
 	}
+
+	// gets the un-moving averaged value
+	public double getDirectHorizontalAngle() {
+
+		return Double.valueOf((Double)limelightTable.get("tx"));
+
+	}
 	
 	// returns the vertical offset from the crosshair.
 	public double getVerticalAngle() {
