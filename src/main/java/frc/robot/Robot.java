@@ -242,9 +242,18 @@ public class Robot extends TimedRobot {
 	public void disabledPeriodic() {
 
 		//EXPERIMENTAL DECELERATION CODE BE CAREFUL GOOD LUCK PLEASE DONT DIE
-		//rightMotors.safeStop(0.25);
-		//leftMotors.safestop(0.25);
+		if(driver.getButton(XboxController.Buttons.Y)) {
 
+			rightMotors.safeStop(0.25);
+			leftMotors.safeStop(0.25);
+
+		} else {
+
+			rightMotors.setPercent(0);
+			leftMotors.setPercent(0);
+
+		}
+		
 	}
 	
 	@Override
