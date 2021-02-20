@@ -242,7 +242,8 @@ public class Robot extends TimedRobot {
 	public void disabledPeriodic() {
 
 		//EXPERIMENTAL DECELERATION CODE BE CAREFUL GOOD LUCK PLEASE DONT DIE
-		//drive.decelerate(rightMotors, leftMotors, 0.25);
+		//rightMotors.safeStop(0.25);
+		//leftMotors.safestop(0.25);
 
 	}
 	
