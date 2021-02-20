@@ -177,4 +177,20 @@ public class Drive {
 
 	}
 
+	/**
+	 * @param rightMotors right PID motor group
+	 * @param leftMotors left PID motor group
+	 * @param decelerationInterval speed percent it goes down by each loop (loop is 0.02 seconds aka 20 miliseconds), default should be 0.25
+	 * to calculate how long it will take for it to stop do (speed / decelerationInterval * 0.02)
+	 */
+	public void decelerate(PIDMotorGroup rightMotors, PIDMotorGroup leftMotors, double decelerationInterval) {
+
+		double leftMotorSpeed = leftMotors.getSpeed();
+		double rightMotorSpeed = rightMotors.getSpeed();
+
+		leftMotors.setSpeed(leftMotorSpeed - decelerationInterval);
+		rightMotors.setSpeed(rightMotorSpeed - decelerationInterval);
+
+	}
+
 }

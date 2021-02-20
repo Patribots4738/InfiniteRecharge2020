@@ -228,12 +228,23 @@ public class Robot extends TimedRobot {
 	public void disabledInit() {
 
 		firstTime = true;
+		
+		leftMotors.setPID(0.5, 0, 0);
+		rightMotors.setPID(0.5, 0, 0);
+
+		leftMotors.resetEncoder();
+		rightMotors.resetEncoder();
 
 	}
 	
 	// VERY EXTRA NO TOUCH
 	@Override
-	public void disabledPeriodic() {}
+	public void disabledPeriodic() {
+
+		//EXPERIMENTAL DECELERATION CODE BE CAREFUL GOOD LUCK PLEASE DONT DIE
+		//drive.decelerate(rightMotors, leftMotors, 0.25);
+
+	}
 	
 	@Override
 	public void teleopInit() {
