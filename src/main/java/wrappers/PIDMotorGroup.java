@@ -127,11 +127,14 @@ public class PIDMotorGroup extends MotorGroup implements PIDMotor {
 
 	}
 
-	// function to slowly stop the robot over time, 
-	// decelerationRate controls the strength of the deceleration
-	// it should be above zero and below 1 (not including 0), with the deceleration getting stronger as you approach 1
-	// your net motor % speed change per second (this shouldn't ever be very high) = decelerationRate * arbConstant * 50
-	// this is currently set up for a max motor % speed change per second of 40%
+	/**
+	 * function to slowly stop the robot over time, 
+	 * it should be above zero and below 1 (not including 0), with the deceleration getting stronger as you approach 1
+	 * your net motor % speed change per second (this shouldn't ever be very high) = decelerationRate * arbConstant * 50
+	 * seconds to fully stop = initialSpeed / decelerationRate * arbConstant * 50
+	 * this is currently set up for a max motor % speed change per second of 40%
+	 * @param decelerationRate controls the strength of the deceleration
+	 */
 	public void safeStop(double decelerationRate) {
 
 		// safety to prevent people from trying to insta-stop the robot with crazy values
