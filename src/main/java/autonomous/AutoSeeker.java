@@ -38,7 +38,7 @@ public class AutoSeeker {
 	private double[] finalRotationAngles = { 
 				/* path A red */            0.25,
 				/* path A blue */		    0.0,
-				/* path B red */		    0.375,
+				/* path B red */		    0.4,
 				/* path B blue */           0.375
 										   };
 
@@ -62,7 +62,7 @@ public class AutoSeeker {
 
 	private double forwardSpeed = 0.65;
 
-	private double rotateSpeed = 0.4;
+	private double rotateSpeed = 0.45;
 
     public AutoSeeker(Intake intake, Conveyor conveyor, Limelight ballFinder, Drive drive, PIDMotorGroup leftMotors, PIDMotorGroup rightMotors) {
        
@@ -243,7 +243,7 @@ public class AutoSeeker {
 		}
 
 		// force it to turn for that one time in path 1 when two balls are super close and it's hard to tell which one it is
-		if (pathNum == 1 && ballFinder.getTargetAreaPercent() < 0.095 && ballsCollected < 1) {
+		if (pathNum == 1 && ballFinder.getTargetAreaPercent() < 0.1 && ballsCollected < 1) {
 
 			throttle = 0.1;
 			turning = 0.1775;
