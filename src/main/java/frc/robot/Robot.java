@@ -281,7 +281,7 @@ public class Robot extends TimedRobot {
 
 		if(trainingWheels) {
 
-			maxSpeed = 0.6;
+			maxSpeed = (double)smashBoard.get("trainingSpeed");
 
 		}
 
