@@ -3,7 +3,7 @@ package wrappers;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.DigitalOutput;
 
-public class ArduinoInterface {
+public class ExternalCPUInterface {
 
     DigitalInput[] inputPorts;
     int[] inputPortNums;
@@ -19,7 +19,7 @@ public class ArduinoInterface {
      * @param inputPorts port numbers of input ports
      * @param outputPorts port numbers of output ports
      */
-    public ArduinoInterface(int[] inputPorts, int[] outputPorts) {
+    public ExternalCPUInterface(int[] inputPorts, int[] outputPorts) {
 
         this.inputPorts = new DigitalInput[inputPorts.length];
         inputPortNums = new int[inputPorts.length];
