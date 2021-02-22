@@ -239,22 +239,7 @@ public class Robot extends TimedRobot {
 	
 	// VERY EXTRA NO TOUCH
 	@Override
-	public void disabledPeriodic() {
-
-		//EXPERIMENTAL DECELERATION CODE BE CAREFUL GOOD LUCK PLEASE DONT DIE
-		if(driver.getButton(XboxController.Buttons.Y)) {
-
-			rightMotors.safeStop(0.25);
-			leftMotors.safeStop(0.25);
-
-		} else {
-
-			rightMotors.setPercent(0);
-			leftMotors.setPercent(0);
-
-		}
-		
-	}
+	public void disabledPeriodic() {}
 	
 	@Override
 	public void teleopInit() {
@@ -424,7 +409,7 @@ public class Robot extends TimedRobot {
 
 		elevator.setLock(elevatorLock);
 		*/
-		
+
 		if(driver.getAxis(XboxController.Axes.RightTrigger) < 0.2) {
 
 			intake.setSuck(driver.getAxis(XboxController.Axes.LeftTrigger) * intakeMultiplier);
@@ -469,6 +454,18 @@ public class Robot extends TimedRobot {
 
 	@Override
 	public void teleopPeriodic() {
+
+		// B for brake, as in stop the robot
+		boolean brake = driver.getButton(XboxController.Buttons.B);
+
+		if(brake) {
+
+			rightMotors.safeStop(0.25);
+			leftMotors.safeStop(0.25);
+
+			return;
+
+		}
 
 		// here begins the code for controlling the full robot
 		boolean aiming = driver.getButton(XboxController.Buttons.A);
