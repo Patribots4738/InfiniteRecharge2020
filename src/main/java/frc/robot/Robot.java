@@ -8,6 +8,7 @@ import interfaces.*;
 import networking.*;
 import utils.*;
 import wrappers.*;
+import wrappers.XboxController.Buttons;
 
 public class Robot extends TimedRobot {
 
@@ -516,6 +517,11 @@ public class Robot extends TimedRobot {
 		}
 
 	}
+	
+	double topMotorSpeed = 0.5;
+	double bottomMotorSpeed = 0.5;
+	PIDMotor topShooterWheel;
+	PIDMotor bottomShooterWheel;
 
 	@Override
 	public void testInit() {
@@ -523,13 +529,34 @@ public class Robot extends TimedRobot {
 		// config motors for velocity control
 		leftMotors.setPID(0.5, 0, 0);
 		rightMotors.setPID(0.5, 0, 0);
+		topShooterWheel = new Falcon(6);
+		bottomShooterWheel = new Falcon(5);
 
 	}
 
+	
 	@Override
 	public void testPeriodic() {
 
-		smashBoard.set("angleFromTarget", "" + shooterCam.getHorizontalAngle());
+		if (operator.getButtonDown(XboxController.Buttons.X)) {
+			this.topMotorSpeed += 0.025;
+		} 
+		if (operator.getButtonDown(XboxController.Buttons.Y)) {
+			this.topMotorSpeed -= 0.025;
+		}
+		if (operator.getButtonDown(XboxController.Buttons.A)) {
+			this.bottomMotorSpeed += 0.025;
+		}
+		if (operator.getButtonDown(XboxController.Buttons.B)) {
+			this.bottomMotorSpeed -= 0.025;
+		}
+		
+		System.out.println("Top: " + topMotorSpeed + "\nBottom: " + bottomMotorSpeed);
+		
+		topShooterWheel.setSpeed(topMotorSpeed);
+		bottomShooterWheel.setSpeed(bottomMotorSpeed);
+
+		/*smashBoard.set("angleFromTarget", "" + shooterCam.getHorizontalAngle());
 		smashBoard.set("distFromTarget", "" + shooterCam.getDistance());
 		smashBoard.set("aligned", "" + (Math.abs(shooterCam.getHorizontalAngle()) <= 0.5));
 
@@ -544,7 +571,7 @@ public class Robot extends TimedRobot {
 
 			seeker.runSeeker();
 
-		}
+		}*/
 	
 	}
 
