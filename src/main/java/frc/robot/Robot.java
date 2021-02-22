@@ -306,6 +306,7 @@ public class Robot extends TimedRobot {
 		double intakeMultiplier = 0.75;
 		double conveyorMultiplier = 0.275;
 
+		/*
 		boolean elevatorLock = operator.getToggle(XboxController.Buttons.Select);
 
 		boolean eleUp = operator.getDPad(Gamepad.Directions.N);
@@ -332,6 +333,7 @@ public class Robot extends TimedRobot {
 		}
 
 		elevator.setLock(elevatorLock);
+		*/
 
 		if(operator.getAxis(XboxController.Axes.RightTrigger) < 0.2) {
 
@@ -394,6 +396,7 @@ public class Robot extends TimedRobot {
 		double intakeMultiplier = 0.75;
 		double conveyorMultiplier = 0.275;
 
+		/*
 		boolean elevatorLock = driver.getToggle(XboxController.Buttons.Select);
 
 		boolean eleUp = driver.getDPad(Gamepad.Directions.N);
@@ -420,7 +423,8 @@ public class Robot extends TimedRobot {
 		}
 
 		elevator.setLock(elevatorLock);
-
+		*/
+		
 		if(driver.getAxis(XboxController.Axes.RightTrigger) < 0.2) {
 
 			intake.setSuck(driver.getAxis(XboxController.Axes.LeftTrigger) * intakeMultiplier);
