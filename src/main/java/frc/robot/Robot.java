@@ -12,7 +12,7 @@ import wrappers.XboxController.Buttons;
 
 public class Robot extends TimedRobot {
 
-	boolean singleDriver = true;
+	boolean singleDriver = false;
 
 	public static boolean emergencyManual = false;
 

@@ -32,6 +32,12 @@ public class ShooterController {
 
 	PIDLoop aimLoop;
 
+	double P = 0.95;
+	double I = 0.15;
+	double D = 0.075;
+	double FF = 1;
+	int Izone = 25;
+
 	public ShooterController(Conveyor conveyor, Shooter shooter, Limelight limelight, Drive drive) {
 
 		this.shooter = shooter;
@@ -44,7 +50,7 @@ public class ShooterController {
 		  //0.5,0.5,0 PID worked ok
 		//aimLoop = new PIDLoop(.95, .15, .075, 1, 25); GOOD PID
 		
-        aimLoop = new PIDLoop(.95, .15, .075, 1, 25);
+        aimLoop = new PIDLoop(P, I, D, FF, Izone);
         
 	}
 
