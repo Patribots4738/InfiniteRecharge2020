@@ -3,6 +3,7 @@ package autonomous;
 import wrappers.*;
 import utils.*;
 import hardware.*;
+import frc.robot.*;
 
 public class AutoSeeker {
 
@@ -30,9 +31,9 @@ public class AutoSeeker {
 	// 1st 3 values are for finding balls, final one is for the final rotation before going to the end zone
 	private int[][] blindTurningDirections = { 
 					/* path A red */          {1, 1, -1, 1},
-					/* path A blue */		  {1, 1, 1, -1},
-					/* path B red */		  {1, 1, 1, -1},
-					/* path B blue */         {1, -1, -1, 1}
+					/* path A blue */		  {1, 1, -1, 1},
+					/* path B red */		  {1, 1, -1, 1},
+					/* path B blue */         {1, 1, -1, 1}
 											 };
 
 	private double[] finalRotationAngles = { 
@@ -60,7 +61,7 @@ public class AutoSeeker {
 	
 	private int pathNum;
 
-	private double forwardSpeed = 0.65;
+	private double forwardSpeed = 0.55;
 
 	private double rotateSpeed = 0.45;
 
@@ -291,7 +292,13 @@ public class AutoSeeker {
 		        leftMotors.setPID(2, 0, 0);
 		        rightMotors.setPID(2, 0, 0);
 
-                rotate(finalRotationAngles[pathNum] * blindTurningDirections[pathNum][3], rotateSpeed);
+				// begin sketchy modifications for showy auto
+
+				rotate(0.2, rotateSpeed);
+
+				//rotate(finalRotationAngles[pathNum] * blindTurningDirections[pathNum][3], rotateSpeed);
+				
+				// stop skethcy modifications for showy auto
 
                 startFinalRotation = true;
 
@@ -302,9 +309,15 @@ public class AutoSeeker {
 
                 // config motors for velocity control
 		        leftMotors.setPID(0.5, 0, 0);
-		        rightMotors.setPID(0.5, 0, 0);
+				rightMotors.setPID(0.5, 0, 0);
+				
+				// begin sketchy modifications for showy auto
 
-                drive.bananaArcade(forwardSpeed, 0);
+				Robot.showyAutoFinishedSeeking = true;
+
+				//drive.bananaArcade(forwardSpeed, 0);
+				
+				// stop skethcy modifications for showy auto
 
             }
 

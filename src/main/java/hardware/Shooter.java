@@ -122,6 +122,17 @@ public class Shooter {
 
 	}
 
+	public void rawEval(double topSpeed, double bottomSpeed) {
+
+		double[] speeds = {topSpeed, bottomSpeed};
+
+		boolean topReady = Calc.isBetween(topWheel.getSpeed(), speeds[0] - acceptableSpeedError, speeds[0] + acceptableSpeedError);
+		boolean bottomReady = Calc.isBetween(Math.abs(bottomWheel.getSpeed()), speeds[1] - acceptableSpeedError, speeds[1] + acceptableSpeedError);
+
+		readyToFire = topReady && bottomReady;
+
+	}
+
 	public void setBlocker(boolean on) {
 
 		blocker.activateChannel(on);

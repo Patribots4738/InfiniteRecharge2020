@@ -16,11 +16,11 @@ public class ShooterController {
 	// swap out current alignment math with PIDLoop class
 
 	// these may need some tuning as things change
-	private double maxSpeed = 0.12;  //0.15 worked
+	private double maxSpeed = 0.14;  //0.15 worked
 
 	private double acceptableAngleError = .5;
 
-	private double minSpeed = 0.03;
+	private double minSpeed = 0.035;
 
 	private double converter = 1.0 / 15;
 
@@ -90,6 +90,32 @@ public class ShooterController {
 		shooter.setFeeders(Shooter.readyToFire);
 
 		//System.out.println("shooter: " + Shooter.readyToFire);
+
+	}
+
+	public double[] showySpeeds = {0.9, 0.13};
+
+	public void showyFire() {
+
+		shooter.setRawSpeeds(showySpeeds[0], showySpeeds[1]);
+
+		showyEval();
+
+		conveyor.setConveyor(Shooter.readyToFire);
+
+		shooter.setFeeders(Shooter.readyToFire);
+
+	}
+
+	public void showyEval() {
+
+		double offset = (limelight.getDistance() > 200) ? (longOffset) : (shortOffset);
+
+		double angle = limelight.getHorizontalAngle() - offset;
+
+		aligned = Math.abs(angle) <= acceptableAngleError; 
+	 
+		shooter.rawEval(showySpeeds[0], showySpeeds[1]);
 
 	}
 

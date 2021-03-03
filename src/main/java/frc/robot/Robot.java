@@ -8,11 +8,13 @@ import interfaces.*;
 import networking.*;
 import utils.*;
 import wrappers.*;
-import wrappers.XboxController.Buttons;
 
 public class Robot extends TimedRobot {
 
 	boolean singleDriver = false;
+
+	// temporary boolean for finding when the showy auto is ready to shoot
+	public static boolean showyAutoFinishedSeeking = false;
 
 	public static boolean emergencyManual = false;
 
@@ -357,7 +359,8 @@ public class Robot extends TimedRobot {
 
 			if(fireInput) {
 
-				shooterControl.fire();
+				//shooterControl.fire();
+				shooterControl.showyFire();
 
 			} else {
 
@@ -373,7 +376,8 @@ public class Robot extends TimedRobot {
 
 		}
 
-		shooterControl.eval();
+		//shooterControl.eval();
+		shooterControl.showyEval();
 
 	}
 
@@ -518,8 +522,6 @@ public class Robot extends TimedRobot {
 	
 	double topMotorSpeed = 0.5;
 	double bottomMotorSpeed = 0.5;
-	PIDMotor topShooterWheel;
-	PIDMotor bottomShooterWheel;
 
 	@Override
 	public void testInit() {
@@ -527,8 +529,8 @@ public class Robot extends TimedRobot {
 		// config motors for velocity control
 		leftMotors.setPID(0.5, 0, 0);
 		rightMotors.setPID(0.5, 0, 0);
-		topShooterWheel = new Falcon(6);
-		bottomShooterWheel = new Falcon(5);
+
+		showyAutoFinishedSeeking = false;
 
 	}
 
@@ -536,24 +538,28 @@ public class Robot extends TimedRobot {
 	@Override
 	public void testPeriodic() {
 
-		if (operator.getButtonDown(XboxController.Buttons.X)) {
+		showyAuto();
+		/*
+		if (driver.getButtonDown(XboxController.Buttons.X)) {
 			this.topMotorSpeed += 0.025;
 		} 
-		if (operator.getButtonDown(XboxController.Buttons.Y)) {
+		if (driver.getButtonDown(XboxController.Buttons.Y)) {
 			this.topMotorSpeed -= 0.025;
 		}
-		if (operator.getButtonDown(XboxController.Buttons.A)) {
-			this.bottomMotorSpeed += 0.025;
-		}
-		if (operator.getButtonDown(XboxController.Buttons.B)) {
+		if (driver.getButtonDown(XboxController.Buttons.A)) {
 			this.bottomMotorSpeed -= 0.025;
+		}
+		if (driver.getButtonDown(XboxController.Buttons.B)) {
+			this.bottomMotorSpeed += 0.025;
 		}
 		
 		System.out.println("Top: " + topMotorSpeed + "\nBottom: " + bottomMotorSpeed);
 		
-		topShooterWheel.setSpeed(topMotorSpeed);
-		bottomShooterWheel.setSpeed(bottomMotorSpeed);
+		shooter.setRawSpeeds(topMotorSpeed, bottomMotorSpeed);
 
+		conveyor.setConveyor(driver.getAxis(XboxController.Axes.RightTrigger) > 0.7);
+		shooter.setFeeders(driver.getAxis(XboxController.Axes.RightTrigger) > 0.7);
+		*/
 		/*smashBoard.set("angleFromTarget", "" + shooterCam.getHorizontalAngle());
 		smashBoard.set("distFromTarget", "" + shooterCam.getDistance());
 		smashBoard.set("aligned", "" + (Math.abs(shooterCam.getHorizontalAngle()) <= 0.5));
@@ -571,6 +577,20 @@ public class Robot extends TimedRobot {
 
 		}*/
 	
+	}
+
+	public void showyAuto(){
+
+		if(!showyAutoFinishedSeeking) {
+			
+			seeker.runSeeker();
+		
+		} else {
+
+			autoShoot(true);
+
+		}
+
 	}
 
 }
