@@ -516,10 +516,8 @@ public class Robot extends TimedRobot {
 
 	}
 	
-	double topMotorSpeed = 0.5;
-	double bottomMotorSpeed = 0.5;
-	PIDMotor topShooterWheel;
-	PIDMotor bottomShooterWheel;
+	double topSpeed = 0.5;
+	double bottomSpeed = 0.5;
 
 	@Override
 	public void testInit() {
@@ -527,8 +525,6 @@ public class Robot extends TimedRobot {
 		// config motors for velocity control
 		leftMotors.setPID(0.5, 0, 0);
 		rightMotors.setPID(0.5, 0, 0);
-		topShooterWheel = new Falcon(6);
-		bottomShooterWheel = new Falcon(5);
 
 	}
 
@@ -536,23 +532,27 @@ public class Robot extends TimedRobot {
 	@Override
 	public void testPeriodic() {
 
-		if (operator.getButtonDown(XboxController.Buttons.X)) {
-			this.topMotorSpeed += 0.025;
+		System.out.println(shooterCam.getDistance());
+
+		if (driver.getButtonDown(XboxController.Buttons.X)) {
+			this.topSpeed += 0.025;
 		} 
-		if (operator.getButtonDown(XboxController.Buttons.Y)) {
-			this.topMotorSpeed -= 0.025;
+		if (driver.getButtonDown(XboxController.Buttons.Y)) {
+			this.topSpeed -= 0.025;
 		}
-		if (operator.getButtonDown(XboxController.Buttons.A)) {
-			this.bottomMotorSpeed += 0.025;
+		if (driver.getButtonDown(XboxController.Buttons.A)) {
+			this.bottomSpeed += 0.025;
 		}
-		if (operator.getButtonDown(XboxController.Buttons.B)) {
-			this.bottomMotorSpeed -= 0.025;
+		if (driver.getButtonDown(XboxController.Buttons.B)) {
+			this.bottomSpeed -= 0.025;
 		}
 		
-		System.out.println("Top: " + topMotorSpeed + "\nBottom: " + bottomMotorSpeed);
+		System.out.println("Top: " + topSpeed + "\nBottom: " + bottomSpeed);
+
+		shooter.setFeeders(driver.getAxis(XboxController.Axes.RightTrigger) > 0.7);
+		conveyor.setConveyor(driver.getAxis(XboxController.Axes.RightTrigger) > 0.7);
 		
-		topShooterWheel.setSpeed(topMotorSpeed);
-		bottomShooterWheel.setSpeed(bottomMotorSpeed);
+		shooter.setRawSpeeds(topSpeed, bottomSpeed);
 
 		/*smashBoard.set("angleFromTarget", "" + shooterCam.getHorizontalAngle());
 		smashBoard.set("distFromTarget", "" + shooterCam.getDistance());

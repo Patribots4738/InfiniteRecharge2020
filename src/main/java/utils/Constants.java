@@ -5,13 +5,16 @@ import networking.*;
 public final class Constants {
 
 	// in inches
-	public static final double TARGET_HEIGHT = 92.0; //85 is a temporary value from joeseph's house, 92 is the one for actual competition //92;
+	public static final double TARGET_HEIGHT = 91.25; //85 is a temporary value from joeseph's house, 92 is the one for actual competition //92;
 
 	// in inches
-	public static final double LIMELIGHT_HEIGHT = 40.125;
+	public static final double LIMELIGHT_HEIGHT = 41.125;
 
 	// in radians
-	public static final double LIMELIGHT_MOUNTING_ANGLE = Calc.degreesToRadians(18.35414);
+	public static final double LIMELIGHT_MOUNTING_ANGLE = Calc.degreesToRadians(19.1237670267);
+
+	// distance from the edge of the bumber to the limelight's camera lens
+	public static final double LIMELIGHT_CAMERA_INSET = 8.625;
 
 	// the time, in seconds, of a single loop of the robot code
 	public static final double LOOP_TIME = 0.02;
