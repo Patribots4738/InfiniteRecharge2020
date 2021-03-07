@@ -21,6 +21,15 @@ public class Shooter {
 	// in decimal percent
 	private double acceptableSpeedError = 0.05;
 
+	// each index in this array is another foot of distance from the target, starting at 10ft away, ending at 35ft away
+	// these will be used to determine the speeds the shooter wheels need to be at when the robot is firing
+	// order is topSpeed, bottomSpeed
+	private double[][] shooterSpeeds = { {}, {}, {}, {}, {}, //10-15ft
+										 {}, {}, {}, {}, {}, //16-20ft
+										 {}, {}, {}, {}, {}, // 21-25ft
+										 {}, {}, {}, {}, {}, // 26-30ft
+										 {}, {}, {}, {}, {}}; // 31-35ft
+
 	public Shooter(PIDMotor topWheel, PIDMotor bottomWheel, MotorGroup feeders, DoubleSolenoid blocker) {
 
 		this.topWheel = topWheel;
@@ -34,58 +43,33 @@ public class Shooter {
 
 	private double[] distanceToSpeeds(double distance) {
 
-		double topWheelSpeed = getTopSpeed(distance);
-		double bottomWheelSpeed = getBottomSpeed(distance);
+		double feet = distance/12.0;
 
-		if(distance > 200) {
+		// exception case for when the robot is at maximum range
+		if(feet >= 35.0) {
 
-			topWheelSpeed = 0.185 + (distance / 60000.0);
-			bottomWheelSpeed = 0.695 + (distance / 50000.0);
+			return shooterSpeeds[24];
+
+		}
+
+		// exception case for when the robot is at minimum range
+		if(feet < 10) {
+
+			return shooterSpeeds[0];
 
 		}
 
-		if(Robot.emergencyManual) {
+		double arrayPosition = (feet - 10.0) / 5.0;
 
-			topWheelSpeed = 0.58;
-			bottomWheelSpeed = 0.36;
+		int lowerIndex = (int)arrayPosition;
+		int upperIndex = lowerIndex + 1;
 
-		}
-		
-		return new double[]{topWheelSpeed, bottomWheelSpeed};
+		double percentBetweenPoints = arrayPosition - (double)lowerIndex;
 
-	}
+		double topSpeed = shooterSpeeds[lowerIndex][0] + (shooterSpeeds[upperIndex][0] - shooterSpeeds[lowerIndex][0]) * percentBetweenPoints;
+		double bottomSpeed = shooterSpeeds[lowerIndex][1] + (shooterSpeeds[upperIndex][1] - shooterSpeeds[lowerIndex][1]) * percentBetweenPoints;
 
-	private double getTopSpeed(double distance) {
-
-		double const1 = (-2.15 * (Math.pow(10.0, -9.0)));
-		double const2 = (1.99 * (Math.pow(10.0, -6.0)));
-		double const3 = (-6.428 * (Math.pow(10.0, -4.0)));
-		double const4 = (0.0835);
-		double const5 = (-3.02);
-
-		double degree4 = (Math.pow(distance, 4)) * const1;
-		double degree3 = (Math.pow(distance, 3)) * const2;
-		double degree2 = (Math.pow(distance, 2)) * const3;
-		double degree1 = distance * const4;
-
-		return degree4 + degree3 + degree2 + degree1 + const5;
-
-	}
-
-	private double getBottomSpeed(double distance) {
-
-		double const1 = (3.04 * (Math.pow(10.0, -9.0)));
-		double const2 = (-2.92 * (Math.pow(10.0, -6.0)));
-		double const3 = (1 * (Math.pow(10.0, -3.0)));
-		double const4 = (-0.143);
-		double const5 = (7.58);
-
-		double degree4 = (Math.pow(distance, 4)) * const1;
-		double degree3 = (Math.pow(distance, 3)) * const2;
-		double degree2 = (Math.pow(distance, 2)) * const3;
-		double degree1 = distance * const4;
-
-		return degree4 + degree3 + degree2 + degree1 + const5;
+		return new double[] {topSpeed, bottomSpeed};
 
 	}
 
