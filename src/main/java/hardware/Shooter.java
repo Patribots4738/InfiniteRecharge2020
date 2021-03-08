@@ -24,11 +24,11 @@ public class Shooter {
 	// each index in this array is another foot of distance from the target, starting at 10ft away, ending at 35ft away
 	// these will be used to determine the speeds the shooter wheels need to be at when the robot is firing
 	// order is topSpeed, bottomSpeed
-	private double[][] shooterSpeeds = { {}, {}, {}, {}, {}, //10-15ft
-										 {}, {}, {}, {}, {}, //16-20ft
-										 {}, {}, {}, {}, {}, // 21-25ft
-										 {}, {}, {}, {}, {}, // 26-30ft
-										 {}, {}, {}, {}, {}}; // 31-35ft
+	private double[][] shooterSpeeds = { {0.5, 0.4}, {0.475, 0.45}, {0.45, 0.45}, {0.575, 0.375}, {0.65, 0.325}, //10-14ft
+										 {0.7, 0.3}, {0.75, 0.225}, {0.775, 0.2}, {0.75, 0.2}, {0.75, 0.225}, //15-19ft
+										 {}, {}, {}, {}, {}, // 20-24ft
+										 {}, {}, {}, {}, {}, // 25-29ft
+										 {}, {}, {}, {}, {}}; // 30-34ft
 
 	public Shooter(PIDMotor topWheel, PIDMotor bottomWheel, MotorGroup feeders, DoubleSolenoid blocker) {
 
@@ -103,6 +103,17 @@ public class Shooter {
 
 		topWheel.setSpeed(topSpeed);
 		bottomWheel.setSpeed(-bottomSpeed);
+
+	}
+
+	public void rawEval(double topSpeed, double bottomSpeed) {
+
+		double[] speeds = {topSpeed, bottomSpeed};
+
+		boolean topReady = Calc.isBetween(topWheel.getSpeed(), speeds[0] - acceptableSpeedError, speeds[0] + acceptableSpeedError);
+		boolean bottomReady = Calc.isBetween(Math.abs(bottomWheel.getSpeed()), speeds[1] - acceptableSpeedError, speeds[1] + acceptableSpeedError);
+
+		readyToFire = topReady && bottomReady;
 
 	}
 

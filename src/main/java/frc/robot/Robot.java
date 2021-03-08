@@ -516,8 +516,8 @@ public class Robot extends TimedRobot {
 
 	}
 	
-	double topSpeed = 0.5;
-	double bottomSpeed = 0.5;
+	double topSpeed = 0;
+	double bottomSpeed = 0;
 
 	@Override
 	public void testInit() {
@@ -527,13 +527,15 @@ public class Robot extends TimedRobot {
 		rightMotors.setPID(0.5, 0, 0);
 
 	}
-
 	
 	@Override
 	public void testPeriodic() {
-
-		System.out.println(shooterCam.getDistance());
-
+		
+		System.out.println("corrected Distance: " + shooterControl.correctLimelightDistanceError(shooterCam.getDistance()));
+		System.out.println(".");
+		System.out.println("raw Distance: " + shooterCam.getDistance());
+		System.out.println(".");
+		
 		if (driver.getButtonDown(XboxController.Buttons.X)) {
 			this.topSpeed += 0.025;
 		} 
@@ -548,11 +550,16 @@ public class Robot extends TimedRobot {
 		}
 		
 		System.out.println("Top: " + topSpeed + "\nBottom: " + bottomSpeed);
+		System.out.println(".");
 
 		shooter.setFeeders(driver.getAxis(XboxController.Axes.RightTrigger) > 0.7);
 		conveyor.setConveyor(driver.getAxis(XboxController.Axes.RightTrigger) > 0.7);
 		
 		shooter.setRawSpeeds(topSpeed, bottomSpeed);
+
+		shooter.rawEval(topSpeed, bottomSpeed);
+
+		shooter.setBlocker(Shooter.readyToFire);
 
 		/*smashBoard.set("angleFromTarget", "" + shooterCam.getHorizontalAngle());
 		smashBoard.set("distFromTarget", "" + shooterCam.getDistance());
