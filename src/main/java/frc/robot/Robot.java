@@ -8,7 +8,6 @@ import interfaces.*;
 import networking.*;
 import utils.*;
 import wrappers.*;
-import wrappers.XboxController.Buttons;
 
 public class Robot extends TimedRobot {
 
@@ -353,6 +352,12 @@ public class Robot extends TimedRobot {
 
 		}
 
+		if((shooterCam.getHorizontalAngle() == 0.0) && fireInput) {
+
+			babyShot();
+
+		}
+
 		if(ShooterController.aligned) {
 
 			if(fireInput) {
@@ -516,8 +521,18 @@ public class Robot extends TimedRobot {
 
 	}
 	
-	double topSpeed = 0;
-	double bottomSpeed = 0;
+	double topSpeed = 0.18;
+	double bottomSpeed = 0.13;
+
+	public void babyShot(){
+
+		shooter.setRawSpeeds(topSpeed, bottomSpeed);
+
+		shooter.rawEval(topSpeed, bottomSpeed);
+
+		shooter.setFeeders(Shooter.readyToFire);
+
+	}
 
 	@Override
 	public void testInit() {
@@ -535,18 +550,20 @@ public class Robot extends TimedRobot {
 		System.out.println(".");
 		System.out.println("raw Distance: " + shooterCam.getDistance());
 		System.out.println(".");
+
+		double interval = 0.005;
 		
 		if (driver.getButtonDown(XboxController.Buttons.X)) {
-			this.topSpeed += 0.025;
+			this.topSpeed += interval;
 		} 
 		if (driver.getButtonDown(XboxController.Buttons.Y)) {
-			this.topSpeed -= 0.025;
+			this.topSpeed -= interval;
 		}
 		if (driver.getButtonDown(XboxController.Buttons.A)) {
-			this.bottomSpeed += 0.025;
+			this.bottomSpeed += interval;
 		}
 		if (driver.getButtonDown(XboxController.Buttons.B)) {
-			this.bottomSpeed -= 0.025;
+			this.bottomSpeed -= interval;
 		}
 		
 		System.out.println("Top: " + topSpeed + "\nBottom: " + bottomSpeed);

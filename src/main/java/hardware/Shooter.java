@@ -21,14 +21,13 @@ public class Shooter {
 	// in decimal percent
 	private double acceptableSpeedError = 0.05;
 
-	// each index in this array is another foot of distance from the target, starting at 10ft away, ending at 35ft away
+	// each index in this array is another foot of distance from the target, starting at 10ft away, ending at 25ft away
 	// these will be used to determine the speeds the shooter wheels need to be at when the robot is firing
 	// order is topSpeed, bottomSpeed
 	private double[][] shooterSpeeds = { {0.5, 0.4}, {0.475, 0.45}, {0.45, 0.45}, {0.575, 0.375}, {0.65, 0.325}, //10-14ft
 										 {0.7, 0.3}, {0.75, 0.225}, {0.775, 0.2}, {0.75, 0.2}, {0.75, 0.225}, //15-19ft
-										 {}, {}, {}, {}, {}, // 20-24ft
-										 {}, {}, {}, {}, {}, // 25-29ft
-										 {}, {}, {}, {}, {}}; // 30-34ft
+										 {0.75, 0.275}, {0.75, 0.3}, {0.775, 0.3}, {0.76, 0.3}, {0.79, 0.3}, // 20-24ft
+										 {0.79, 0.3} }; // 25ft
 
 	public Shooter(PIDMotor topWheel, PIDMotor bottomWheel, MotorGroup feeders, DoubleSolenoid blocker) {
 
@@ -46,9 +45,9 @@ public class Shooter {
 		double feet = distance/12.0;
 
 		// exception case for when the robot is at maximum range
-		if(feet >= 35.0) {
+		if(feet >= 25.0) {
 
-			return shooterSpeeds[24];
+			return shooterSpeeds[15];
 
 		}
 
