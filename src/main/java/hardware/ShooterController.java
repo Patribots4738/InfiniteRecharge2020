@@ -18,7 +18,7 @@ public class ShooterController {
 	// these may need some tuning as things change
 	private double maxSpeed = 0.12;  //0.15 worked
 
-	private double acceptableAngleError = .65;
+	private double acceptableAngleError = .9;
 
 	private double minSpeed = 0.033;
 

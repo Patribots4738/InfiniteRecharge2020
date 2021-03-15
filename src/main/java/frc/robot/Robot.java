@@ -11,7 +11,9 @@ import wrappers.*;
 
 public class Robot extends TimedRobot {
 
-	boolean singleDriver = false;
+	boolean singleDriver = true;
+
+	boolean joystick = true;
 
 	public static boolean emergencyManual = false;
 
@@ -59,8 +61,13 @@ public class Robot extends TimedRobot {
 
 	AutoSeeker seeker;
 
+	Gamepad driveStick;
+
 	@Override
 	public void robotInit() {
+
+		driveStick = new Gamepad(2);
+
 		// here begin all the constructors
 
 		cam = new DriverCamera(0);
@@ -255,11 +262,64 @@ public class Robot extends TimedRobot {
 
 	}
 
+	public void joyDrive() {
+
+		if(driveStick.getButton(2)) {
+
+			autoShoot(driveStick.getButton(0));
+
+			return;
+
+		} else {
+
+			shooterControl.stop();
+
+		}
+
+		double multiplier = ((driveStick.getToggle(4)) ? 1.0:-1.0);
+
+		if(driveStick.getButton(2)) {
+
+			autoShoot(driveStick.getButton(0));
+
+			return;
+
+		}
+
+		double turning = (driveStick.getAxis(2) * 0.3);//(driveStick.getAxis(0) * 0.5) + (driveStick.getAxis(2) * 0.5);
+
+		if(!driveStick.getButton(1)) {
+
+			turning *= 0;
+
+		}
+
+		drive.trainingWheels(driveStick.getAxis(1) * multiplier, turning);
+
+		if (driveStick.getButton(3)) {
+
+			intake.setSuck(-0.5);
+			conveyor.setSpeed(0.4);
+
+		} else if (driveStick.getButton(5)) {
+
+			intake.setSuck(0.5);
+			conveyor.setSpeed(-0.4);
+
+		} else {
+
+			intake.setSuck(0);
+			conveyor.setSpeed(0);
+
+		}
+
+	}
+
 	public void drive() {
 
 		boolean trainingWheels = true;
 
-		boolean inverted = driver.getToggle(XboxController.Buttons.L);
+		boolean inverted = driver.getToggle(XboxController.Buttons.R);
 		double multiplier = ((inverted) ? -1.0 : 1.0);
 
 		double maxSpeed = 1.0;
@@ -340,43 +400,77 @@ public class Robot extends TimedRobot {
 
 		shifted = true;
 
+		if(fireInput) {
+
+			// the area of the target is never exactly 0 unless it can't see the target
+			if(shooterCam.getTargetAreaPercent() <= 0.01) {
+
+				// if we're trying to fire and can't see the target, we're trying to baby shot
+				babyShot();
+
+			} else {
+
+				// if we can see the target, then aim and fire
+				shooterControl.aim();
+
+				if(ShooterController.aligned) {
+
+					shooterControl.fire();
+
+				}
+
+			}
+
+		} else {
+
+			// if we aren't trying to fire, we should be stopped
+			shooterControl.stop();
+
+		}
+
+		/*
 		// the angle between the shooterCam and the target is never exactly 0 unless it can't see the target
 		if(shooterCam.getHorizontalAngle() == 0.0) {
 
-			// and if the shooterCam cant see the target then it shouldn't do anything
-			shooterControl.stop();
+			if(fireInput) {
+
+				babyShot();
+				
+
+			} else {
+
+				// and if the shooterCam cant see the target then it shouldn't do anything
+				shooterControl.stop();
+
+			}
 
 		} else {
 
 			shooterControl.aim();
 
-		}
+			if(ShooterController.aligned) {
 
-		if((shooterCam.getHorizontalAngle() == 0.0) && fireInput) {
-
-			babyShot();
-
-		}
-
-		if(ShooterController.aligned) {
-
-			if(fireInput) {
-
-				shooterControl.fire();
-
+				if(fireInput) {
+	
+					shooterControl.fire();
+	
+				} else {
+	
+					// if the operator isn't trying to fire the shooter should be off
+					shooterControl.stop();
+	
+				} 
+	
 			} else {
-
-				// if the operator isn't trying to fire the shooter should be off
+	
+				// if the robot isn't aligned the shooter should be off
 				shooterControl.stop();
+	
+			}
+			
 
-			} 
-
-		} else {
-
-			// if the robot isn't aligned the shooter should be off
-			shooterControl.stop();
-
-		}
+		}	
+		*/	
 
 		shooterControl.eval();
 
@@ -474,6 +568,14 @@ public class Robot extends TimedRobot {
 
 		}
 
+		if(joystick) {
+
+			joyDrive();
+			
+			return;
+
+		}
+
 		// here begins the code for controlling the full robot
 		boolean aiming = driver.getButton(XboxController.Buttons.A);
 		
@@ -531,6 +633,8 @@ public class Robot extends TimedRobot {
 		shooter.rawEval(topSpeed, bottomSpeed);
 
 		shooter.setFeeders(Shooter.readyToFire);
+
+		conveyor.setConveyor(Shooter.readyToFire);
 
 	}
 
