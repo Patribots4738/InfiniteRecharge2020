@@ -276,25 +276,27 @@ public class Robot extends TimedRobot {
 
 		}
 
-		double multiplier = ((driveStick.getToggle(4)) ? 1.0:-1.0);
+		double throttle = 0;
+		double turning = 0;
 
-		if(driveStick.getButton(2)) {
+		if(driveStick.getPOV(Gamepad.Directions.N)) {
 
-			autoShoot(driveStick.getButton(0));
+			throttle = 0.4;
 
-			return;
+		}
+		if(driveStick.getPOV(Gamepad.Directions.S)) {
+
+			throttle = -0.4;
 
 		}
 
-		double turning = (driveStick.getAxis(2) * 0.3);//(driveStick.getAxis(0) * 0.5) + (driveStick.getAxis(2) * 0.5);
+		if(driveStick.getButton(1)) {
 
-		if(!driveStick.getButton(1)) {
-
-			turning *= 0;
+			turning = (driveStick.getAxis(2) * 0.3);
 
 		}
 
-		drive.trainingWheels(driveStick.getAxis(1) * multiplier, turning);
+		drive.trainingWheels(throttle, turning);
 
 		if (driveStick.getButton(3)) {
 
