@@ -294,77 +294,28 @@ public class Robot extends TimedRobot {
 
 	}
 
-	public void operate() {
+	public void operate(XboxController controller) {
 
 		double intakeMultiplier = 0.75;
 		double conveyorMultiplier = 0.275;
 
-		if(operator.getAxis(XboxController.Axes.RightTrigger) < 0.2) {
+		if(controller.getAxis(XboxController.Axes.RightTrigger) < 0.2) {
 
-			intake.setSuck(operator.getAxis(XboxController.Axes.LeftTrigger) * intakeMultiplier);
-			conveyor.setSpeed(-operator.getAxis(XboxController.Axes.LeftTrigger) * conveyorMultiplier);
+			intake.setSuck(controller.getAxis(XboxController.Axes.LeftTrigger) * intakeMultiplier);
+			conveyor.setSpeed(-controller.getAxis(XboxController.Axes.LeftTrigger) * conveyorMultiplier);
 			
 		} else {
 
-			intake.setSuck(-operator.getAxis(XboxController.Axes.RightTrigger) * intakeMultiplier);
-			conveyor.setSpeed(operator.getAxis(XboxController.Axes.RightTrigger) * conveyorMultiplier);
+			intake.setSuck(-controller.getAxis(XboxController.Axes.RightTrigger) * intakeMultiplier);
+			conveyor.setSpeed(controller.getAxis(XboxController.Axes.RightTrigger) * conveyorMultiplier);
 
 		}
 
 		/*
-		boolean elevatorLock = operator.getToggle(XboxController.Buttons.Select);
+		boolean elevatorLock = controller.getToggle(XboxController.Buttons.Select);
 
-		boolean eleUp = operator.getDPad(Gamepad.Directions.N);
-		boolean eleDown = operator.getDPad(Gamepad.Directions.S);
-
-		if(eleUp) {
-
-			elevator.setElevatorUp();
-
-		} else if(eleDown) {
-
-			elevator.setElevatorDown();
-
-		} else {
-
-			elevator.stop();
-
-		}
-
-		if(!topSwitch.getState() && eleUp) {
-
-			elevator.stop();
-
-		}
-
-		elevator.setLock(elevatorLock);
-		*/
-
-	}
-
-	// for use when only one driver is around
-	public void soloOperate() {
-		
-		double intakeMultiplier = 0.75;
-		double conveyorMultiplier = 0.275;
-
-		if(driver.getAxis(XboxController.Axes.RightTrigger) < 0.2) {
-
-			intake.setSuck(driver.getAxis(XboxController.Axes.LeftTrigger) * intakeMultiplier);
-			conveyor.setSpeed(-driver.getAxis(XboxController.Axes.LeftTrigger) * conveyorMultiplier);
-			
-		} else {
-
-			intake.setSuck(-driver.getAxis(XboxController.Axes.RightTrigger) * intakeMultiplier);
-			conveyor.setSpeed(driver.getAxis(XboxController.Axes.RightTrigger) * conveyorMultiplier);
-
-		}
-
-		/*
-		boolean elevatorLock = driver.getToggle(XboxController.Buttons.Select);
-
-		boolean eleUp = driver.getDPad(Gamepad.Directions.N);
-		boolean eleDown = driver.getDPad(Gamepad.Directions.S);
+		boolean eleUp = controller.getDPad(Gamepad.Directions.N);
+		boolean eleDown = controller.getDPad(Gamepad.Directions.S);
 
 		if(eleUp) {
 
@@ -506,7 +457,7 @@ public class Robot extends TimedRobot {
 
 			drive();
 
-			operate();
+			operate(operator);
 
 		}
 
@@ -550,7 +501,7 @@ public class Robot extends TimedRobot {
 			if(!driver.getButton(XboxController.Buttons.A)) {
 
 				drive();
-				soloOperate();
+				operate(driver);
 
 			} else {
 
@@ -588,7 +539,7 @@ public class Robot extends TimedRobot {
 			
 			drive();
 
-			operate();
+			operate(operator);
 
 		}
 
@@ -641,7 +592,8 @@ public class Robot extends TimedRobot {
 
 		shooter.setBlocker(Shooter.readyToFire);
 
-		/*smashBoard.set("angleFromTarget", "" + shooterCam.getHorizontalAngle());
+		/*
+		smashBoard.set("angleFromTarget", "" + shooterCam.getHorizontalAngle());
 		smashBoard.set("distFromTarget", "" + shooterCam.getDistance());
 		smashBoard.set("aligned", "" + (Math.abs(shooterCam.getHorizontalAngle()) <= 0.5));
 
@@ -656,7 +608,8 @@ public class Robot extends TimedRobot {
 
 			seeker.runSeeker();
 
-		}*/
+		}
+		*/
 	
 	}
 
