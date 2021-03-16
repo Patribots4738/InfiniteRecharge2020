@@ -262,62 +262,6 @@ public class Robot extends TimedRobot {
 
 	}
 
-	public void joyDrive() {
-
-		if(driveStick.getButton(2)) {
-
-			autoShoot(driveStick.getButton(0));
-
-			return;
-
-		} else {
-
-			shooterControl.stop();
-
-		}
-
-		double throttle = 0;
-		double turning = 0;
-
-		if(driveStick.getPOV(Gamepad.Directions.N)) {
-
-			throttle = 0.4;
-
-		}
-		
-		if(driveStick.getPOV(Gamepad.Directions.S)) {
-
-			throttle = -0.4;
-
-		}
-
-		if(driveStick.getButton(1)) {
-
-			turning = (driveStick.getAxis(2) * 0.3);
-
-		}
-
-		drive.trainingWheels(throttle, turning);
-
-		if (driveStick.getButton(3)) {
-
-			intake.setSuck(-0.5);
-			conveyor.setSpeed(0.4);
-
-		} else if (driveStick.getButton(5)) {
-
-			intake.setSuck(0.5);
-			conveyor.setSpeed(-0.4);
-
-		} else {
-
-			intake.setSuck(0);
-			conveyor.setSpeed(0);
-
-		}
-
-	}
-
 	public void drive() {
 
 		boolean trainingWheels = true;
@@ -355,6 +299,18 @@ public class Robot extends TimedRobot {
 		double intakeMultiplier = 0.75;
 		double conveyorMultiplier = 0.275;
 
+		if(operator.getAxis(XboxController.Axes.RightTrigger) < 0.2) {
+
+			intake.setSuck(operator.getAxis(XboxController.Axes.LeftTrigger) * intakeMultiplier);
+			conveyor.setSpeed(-operator.getAxis(XboxController.Axes.LeftTrigger) * conveyorMultiplier);
+			
+		} else {
+
+			intake.setSuck(-operator.getAxis(XboxController.Axes.RightTrigger) * intakeMultiplier);
+			conveyor.setSpeed(operator.getAxis(XboxController.Axes.RightTrigger) * conveyorMultiplier);
+
+		}
+
 		/*
 		boolean elevatorLock = operator.getToggle(XboxController.Buttons.Select);
 
@@ -384,17 +340,54 @@ public class Robot extends TimedRobot {
 		elevator.setLock(elevatorLock);
 		*/
 
-		if(operator.getAxis(XboxController.Axes.RightTrigger) < 0.2) {
+	}
 
-			intake.setSuck(operator.getAxis(XboxController.Axes.LeftTrigger) * intakeMultiplier);
-			conveyor.setSpeed(-operator.getAxis(XboxController.Axes.LeftTrigger) * conveyorMultiplier);
+	// for use when only one driver is around
+	public void soloOperate() {
+		
+		double intakeMultiplier = 0.75;
+		double conveyorMultiplier = 0.275;
+
+		if(driver.getAxis(XboxController.Axes.RightTrigger) < 0.2) {
+
+			intake.setSuck(driver.getAxis(XboxController.Axes.LeftTrigger) * intakeMultiplier);
+			conveyor.setSpeed(-driver.getAxis(XboxController.Axes.LeftTrigger) * conveyorMultiplier);
 			
 		} else {
 
-			intake.setSuck(-operator.getAxis(XboxController.Axes.RightTrigger) * intakeMultiplier);
-			conveyor.setSpeed(operator.getAxis(XboxController.Axes.RightTrigger) * conveyorMultiplier);
+			intake.setSuck(-driver.getAxis(XboxController.Axes.RightTrigger) * intakeMultiplier);
+			conveyor.setSpeed(driver.getAxis(XboxController.Axes.RightTrigger) * conveyorMultiplier);
 
 		}
+
+		/*
+		boolean elevatorLock = driver.getToggle(XboxController.Buttons.Select);
+
+		boolean eleUp = driver.getDPad(Gamepad.Directions.N);
+		boolean eleDown = driver.getDPad(Gamepad.Directions.S);
+
+		if(eleUp) {
+
+			elevator.setElevatorUp();
+
+		} else if(eleDown) {
+
+			elevator.setElevatorDown();
+
+		} else {
+
+			elevator.stop();
+
+		}
+
+		if(!topSwitch.getState() && eleUp) {
+
+			elevator.stop();
+
+		}
+
+		elevator.setLock(elevatorLock);
+		*/
 
 	}
 
@@ -431,98 +424,61 @@ public class Robot extends TimedRobot {
 
 		}
 
-		/*
-		// the angle between the shooterCam and the target is never exactly 0 unless it can't see the target
-		if(shooterCam.getHorizontalAngle() == 0.0) {
-
-			if(fireInput) {
-
-				babyShot();
-				
-
-			} else {
-
-				// and if the shooterCam cant see the target then it shouldn't do anything
-				shooterControl.stop();
-
-			}
-
-		} else {
-
-			shooterControl.aim();
-
-			if(ShooterController.aligned) {
-
-				if(fireInput) {
-	
-					shooterControl.fire();
-	
-				} else {
-	
-					// if the operator isn't trying to fire the shooter should be off
-					shooterControl.stop();
-	
-				} 
-	
-			} else {
-	
-				// if the robot isn't aligned the shooter should be off
-				shooterControl.stop();
-	
-			}
-			
-
-		}	
-		*/	
-
 		shooterControl.eval();
 
 	}
 
-	// for use when only one driver is around
-	public void soloOperate() {
-		
-		double intakeMultiplier = 0.75;
-		double conveyorMultiplier = 0.275;
+	public void joyDrive() {
 
-		/*
-		boolean elevatorLock = driver.getToggle(XboxController.Buttons.Select);
+		if(driveStick.getButton(2)) {
 
-		boolean eleUp = driver.getDPad(Gamepad.Directions.N);
-		boolean eleDown = driver.getDPad(Gamepad.Directions.S);
+			autoShoot(driveStick.getButton(0));
 
-		if(eleUp) {
-
-			elevator.setElevatorUp();
-
-		} else if(eleDown) {
-
-			elevator.setElevatorDown();
+			return;
 
 		} else {
 
-			elevator.stop();
+			shooterControl.stop();
 
 		}
 
-		if(!topSwitch.getState() && eleUp) {
+		double throttle = 0;
+		double turning = 0;
 
-			elevator.stop();
+		if(driveStick.getPOV(Gamepad.Directions.N)) {
+
+			throttle = 0.4;
 
 		}
 
-		elevator.setLock(elevatorLock);
-		*/
+		if(driveStick.getPOV(Gamepad.Directions.S)) {
 
-		if(driver.getAxis(XboxController.Axes.RightTrigger) < 0.2) {
+			throttle = -0.4;
 
-			intake.setSuck(driver.getAxis(XboxController.Axes.LeftTrigger) * intakeMultiplier);
-			conveyor.setSpeed(-driver.getAxis(XboxController.Axes.LeftTrigger) * conveyorMultiplier);
-			
+		}
+
+		if(driveStick.getButton(1)) {
+
+			turning = (driveStick.getAxis(2) * 0.3);
+
+		}
+
+		drive.trainingWheels(throttle, turning);
+
+		if (driveStick.getButton(3)) {
+
+			intake.setSuck(-0.5);
+			conveyor.setSpeed(0.4);
+
+		} else if (driveStick.getButton(5)) {
+
+			intake.setSuck(0.5);
+			conveyor.setSpeed(-0.4);
+
 		} else {
 
-			intake.setSuck(-driver.getAxis(XboxController.Axes.RightTrigger) * intakeMultiplier);
-			conveyor.setSpeed(driver.getAxis(XboxController.Axes.RightTrigger) * conveyorMultiplier);
+			intake.setSuck(0);
+			conveyor.setSpeed(0);
 
 		}
 
@@ -540,9 +496,9 @@ public class Robot extends TimedRobot {
 
 			drive();
 
-		}
+			operate();
 
-		operate();
+		}
 
 		if(operator.getButton(XboxController.Buttons.A)) {
 
@@ -559,18 +515,9 @@ public class Robot extends TimedRobot {
 	@Override
 	public void teleopPeriodic() {
 
-		// B for brake, as in stop the robot
-		boolean brake = driver.getButton(XboxController.Buttons.B);
+		// initial 3 exception cases
 
-		if(brake) {
-
-			rightMotors.safeStop(0.25);
-			leftMotors.safeStop(0.25);
-
-			return;
-
-		}
-
+		// exception case for joystick driving
 		if(joystick) {
 
 			joyDrive();
@@ -579,12 +526,7 @@ public class Robot extends TimedRobot {
 
 		}
 
-		// here begins the code for controlling the full robot
-		boolean aiming = driver.getButton(XboxController.Buttons.A);
-		
-		//System.out.println("Distance: " + shooterCam.getDistance());
-
-		// if emergency manual mode, run only the emergency manual code, then return
+		// excpetion case for emergency manual mode
 		if(emergencyManual) {
 
 			emergencyManual();
@@ -592,9 +534,10 @@ public class Robot extends TimedRobot {
 
 		}
 
+		// exception case for sinlge operator/driver mode
 		if(singleDriver) {
 
-			if(!aiming) {
+			if(!driver.getButton(XboxController.Buttons.A)) {
 
 				drive();
 				soloOperate();
@@ -609,18 +552,33 @@ public class Robot extends TimedRobot {
 
 		}
 
-		// standard operation from here on out
-		if(!aiming) {
+		// after this is normal operation
+
+		// B for brake, as in stop the robot
+		boolean brake = driver.getButton(XboxController.Buttons.B);
+
+		if(brake) {
+
+			rightMotors.safeStop(0.25);
+			leftMotors.safeStop(0.25);
+
+			return;
+
+		}
+		
+		boolean aiming = driver.getButton(XboxController.Buttons.A);		
+
+		if(aiming) {
+
+			autoShoot(operator.getButton(XboxController.Buttons.A));			
+
+		} else {
 
 			shooterControl.stop();
 			
 			drive();
 
 			operate();
-
-		} else {
-
-			autoShoot(operator.getButton(XboxController.Buttons.A));
 
 		}
 
