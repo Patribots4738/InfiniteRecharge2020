@@ -402,7 +402,17 @@ public class Robot extends TimedRobot {
 			if(shooterCam.getTargetAreaPercent() <= 0.01) {
 
 				// if we're trying to fire and can't see the target, we're trying to baby shot
-				babyShot();
+
+				double topSpeed = 0.18;
+				double bottomSpeed = 0.13;
+
+				shooter.setRawSpeeds(topSpeed, bottomSpeed);
+
+				shooter.rawEval(topSpeed, bottomSpeed);
+
+				shooter.setFeeders(Shooter.readyToFire);
+
+				conveyor.setConveyor(Shooter.readyToFire);
 
 			} else {
 
@@ -583,21 +593,9 @@ public class Robot extends TimedRobot {
 		}
 
 	}
-	
+
 	double topSpeed = 0.18;
 	double bottomSpeed = 0.13;
-
-	public void babyShot(){
-
-		shooter.setRawSpeeds(topSpeed, bottomSpeed);
-
-		shooter.rawEval(topSpeed, bottomSpeed);
-
-		shooter.setFeeders(Shooter.readyToFire);
-
-		conveyor.setConveyor(Shooter.readyToFire);
-
-	}
 
 	@Override
 	public void testInit() {
