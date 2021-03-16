@@ -284,6 +284,7 @@ public class Robot extends TimedRobot {
 			throttle = 0.4;
 
 		}
+		
 		if(driveStick.getPOV(Gamepad.Directions.S)) {
 
 			throttle = -0.4;
