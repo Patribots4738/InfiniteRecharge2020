@@ -14,6 +14,8 @@ public class Talon implements PIDMotor{
 
 	private PIDLoop PIDLoop;
 
+	double lastSpeed;
+
 	public Talon(int canID){
 
 		motor = new TalonSRX(canID);
@@ -29,6 +31,8 @@ public class Talon implements PIDMotor{
 		motor.setSensorPhase(true); // you might need to change this, but hopefully not
 
 		PIDLoop = new PIDLoop(0, 0, 0);
+
+		lastSpeed = 0.0;
 
 	}
 
@@ -97,6 +101,48 @@ public class Talon implements PIDMotor{
 		motor.configPeakOutputForward(maxSpeed, 20);
 
 		motor.set(ControlMode.Position, (int)(rotations * Constants.TALON_CLICKS));
+
+	}
+
+	/**
+	 * accelerates robot so it doesnt tip over, or just for smoothness
+	 * @param speed desired speed
+	 * @param increment added percent speed per 0.02 second loop (set VERY low, like 0.01 or something)
+	 */
+	public void setAccelerationPercent(double speed, double increment) {
+
+		double newSpeed = lastSpeed + increment;
+
+		if (speed > 1.0) {
+
+			speed = 1.0;
+
+		} 
+
+		if (speed < -1.0) {
+
+			speed = -1.0;
+
+		}
+
+		if (newSpeed > speed) {
+
+			setPercent(speed);
+		
+		} else {
+
+			setPercent(newSpeed);
+
+		}
+
+	}
+
+	/**
+	 * run at end of (insert_name_here)Periodic loop in the mode you are using in robot.java (auto, teleop, disabled (wtf are you doing), or test)
+	 */
+	public void setLastSpeed() {
+
+		lastSpeed = getSpeed();
 
 	}
 

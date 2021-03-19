@@ -127,6 +127,27 @@ public class PIDMotorGroup extends MotorGroup implements PIDMotor {
 
 	}
 
+	public void setAccelerationPercent(double speed, double increment) {
+
+
+		for (PIDMotor motor: pidMotors) {
+
+			motor.setAccelerationPercent(speed, increment);
+
+		}
+
+	}
+
+	public void setLastSpeed() {
+
+		for (PIDMotor motor: pidMotors) {
+
+			motor.setLastSpeed();
+
+		}
+
+	}
+
 	/**
 	 * function to slowly stop the robot over time, 
 	 * it should be above zero and below 1 (not including 0), with the deceleration getting stronger as you approach 1

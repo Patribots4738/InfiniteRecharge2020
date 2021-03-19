@@ -17,4 +17,7 @@ public interface PIDMotor extends Motor {
 	public double getSpeed();
 	public void resetEncoder();
 
+	public void setAccelerationPercent(double speed, double increment);
+	public void setLastSpeed();
+
 }

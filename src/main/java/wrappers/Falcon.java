@@ -13,9 +13,13 @@ public class Falcon implements PIDMotor {
 
 	PIDLoop PIDLoop;
 
+	double lastSpeed;
+
 	public Falcon(int canID) {
 
 		motor = new TalonFX(canID);
+
+		lastSpeed = 0.0;
 
 		//this is a black box, dont touch, get Zach (unless I'm gone, then google, I'm sorry for the horrors that await you)
 		motor.configSelectedFeedbackSensor(FeedbackDevice.IntegratedSensor);
@@ -81,6 +85,48 @@ public class Falcon implements PIDMotor {
 	public void setPercent(double percent) {
 
 		motor.set(ControlMode.PercentOutput, percent);
+
+	}
+
+	/**
+	 * accelerates robot so it doesnt tip over, or just for smoothness
+	 * @param speed desired speed
+	 * @param increment added percent speed per 0.02 second loop (set VERY low, like 0.01 or something)
+	 */
+	public void setAccelerationPercent(double speed, double increment) {
+
+		double newSpeed = lastSpeed + increment;
+
+		if (speed > 1.0) {
+
+			speed = 1.0;
+
+		} 
+
+		if (speed < -1.0) {
+
+			speed = -1.0;
+
+		}
+
+		if (newSpeed > speed) {
+
+			setPercent(speed);
+		
+		} else {
+
+			setPercent(newSpeed);
+
+		}
+
+	}
+
+	/**
+	 * run at end of (insert_name_here)Periodic loop in the mode you are using in robot.java (auto, teleop, disabled (wtf are you doing), or test)
+	 */
+	public void setLastSpeed() {
+
+		lastSpeed = getSpeed();
 
 	}
 

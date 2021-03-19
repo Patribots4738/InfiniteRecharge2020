@@ -17,6 +17,8 @@ public class SparkMax implements PIDMotor {
 
 	PIDLoop PIDLoop;
 
+	double lastSpeed;
+
 	// @param canID: CAN ID of the motor
 	public SparkMax(int canID) {
 
@@ -31,6 +33,8 @@ public class SparkMax implements PIDMotor {
 		pidController.setD(0);
 
 		PIDLoop = new PIDLoop(0, 0, 0);
+
+		lastSpeed = 0.0;
 		
 	}
 
@@ -88,6 +92,48 @@ public class SparkMax implements PIDMotor {
 	public void setPercent(double percent) {
 
 		pidController.setReference(percent, ControlType.kDutyCycle);
+
+	}
+
+	/**
+	 * accelerates robot so it doesnt tip over, or just for smoothness
+	 * @param speed desired speed
+	 * @param increment added percent speed per 0.02 second loop (set VERY low, like 0.01 or something)
+	 */
+	public void setAccelerationPercent(double speed, double increment) {
+
+		double newSpeed = lastSpeed + increment;
+
+		if (speed > 1.0) {
+
+			speed = 1.0;
+
+		} 
+
+		if (speed < -1.0) {
+
+			speed = -1.0;
+
+		}
+
+		if (newSpeed > speed) {
+
+			setPercent(speed);
+		
+		} else {
+
+			setPercent(newSpeed);
+
+		}
+
+	}
+
+	/**
+	 * run at end of (insert_name_here)Periodic loop in the mode you are using in robot.java (auto, teleop, disabled (wtf are you doing), or test)
+	 */
+	public void setLastSpeed() {
+
+		lastSpeed = getSpeed();
 
 	}
 
