@@ -389,6 +389,16 @@ public class Robot extends TimedRobot {
 
 	}
 
+	public void hyperDrive() {
+
+		double multiplier = ((Math.abs(driver.getAxis(XboxController.Axes.RightX)) > 0.08) ? 0.7 : 0.8);
+
+		double inverted = ((driver.getDPad(Gamepad.Directions.W)) ? 1.0 : -1.0);
+
+		drive.curvature(driver.getAxis(XboxController.Axes.RightTrigger) * inverted * multiplier, driver.getAxis(XboxController.Axes.RightX));
+
+	}
+
 	public void joyDrive() {
 
 		if(driveStick.getButton(2)) {
@@ -481,7 +491,7 @@ public class Robot extends TimedRobot {
 		// exception case for joystick driving
 		if(joystick) {
 
-			joyDrive();
+			hyperDrive();
 			
 			return;
 
