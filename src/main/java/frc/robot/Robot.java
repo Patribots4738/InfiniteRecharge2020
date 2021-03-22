@@ -389,14 +389,11 @@ public class Robot extends TimedRobot {
 
 	}
 
-	// joystick driving for instellar accuracy challenge
-	public void joyDriveInterstellar() {
+	public void joyDrive() {
 
 		if(driveStick.getButton(2)) {
 
 			autoShoot(driveStick.getButton(0));
-
-			intake.setSuck(0);
 
 			return;
 
@@ -409,18 +406,15 @@ public class Robot extends TimedRobot {
 		double throttle = 0;
 		double turning = 0;
 
-		double presetThrottle = 0.35;
-		double speedModifier = ((!driveStick.getButton(10)) ? 1.0 : 1.7);
-
 		if(driveStick.getPOV(Gamepad.Directions.N)) {
 
-			throttle = -presetThrottle * speedModifier;
+			throttle = 0.4;
 
 		}
 
 		if(driveStick.getPOV(Gamepad.Directions.S)) {
 
-			throttle = presetThrottle * speedModifier;
+			throttle = -0.4;
 
 		}
 
@@ -432,12 +426,12 @@ public class Robot extends TimedRobot {
 
 		drive.trainingWheels(throttle, turning);
 
-		if (driveStick.getToggle(3)) {
+		if (driveStick.getButton(3)) {
 
 			intake.setSuck(-0.5);
 			conveyor.setSpeed(0.4);
 
-		} else if (driveStick.getToggle(5)){
+		} else if (driveStick.getButton(5)) {
 
 			intake.setSuck(0.5);
 			conveyor.setSpeed(-0.4);
@@ -487,7 +481,7 @@ public class Robot extends TimedRobot {
 		// exception case for joystick driving
 		if(joystick) {
 
-			joyDriveInterstellar();
+			joyDrive();
 			
 			return;
 

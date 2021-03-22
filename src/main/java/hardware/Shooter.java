@@ -1,6 +1,7 @@
 package hardware;
 
 import wrappers.*;
+import frc.robot.Robot;
 import interfaces.*;
 import utils.*;
 

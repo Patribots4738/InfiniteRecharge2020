@@ -16,11 +16,11 @@ public class ShooterController {
 	// swap out current alignment math with PIDLoop class
 
 	// these may need some tuning as things change
-	private double maxSpeed = 0.125;  //0.15 worked
+	private double maxSpeed = 0.12;  //0.15 worked
 
-	private double acceptableAngleError = 1.2;
+	private double acceptableAngleError = .9;
 
-	private double minSpeed = 0.07;
+	private double minSpeed = 0.033;
 
 	private double converter = 1.0 / 15;
 
@@ -72,7 +72,7 @@ public class ShooterController {
 
 		double angle = limelight.getHorizontalAngle() - offset;
 
-		aligned = Math.abs(angle) <= acceptableAngleError;
+		aligned = Math.abs(angle) <= acceptableAngleError; 
 	 
 		shooter.eval(correctLimelightDistanceError(limelight.getDistance()));
 
