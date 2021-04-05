@@ -391,11 +391,15 @@ public class Robot extends TimedRobot {
 
 	public void hyperDrive() {
 
-		double multiplier = ((Math.abs(driver.getAxis(XboxController.Axes.RightX)) > 0.08) ? 0.7 : 0.8);
+		double throttle = Math.max(driver.getAxis(XboxController.Axes.RightTrigger), driver.getAxis(XboxController.Axes.LeftTrigger));
 
-		double inverted = ((driver.getDPad(Gamepad.Directions.W)) ? 1.0 : -1.0);
+		double multiplier = ((throttle > 0.08) ? 0.6 : 0.7);
 
-		drive.curvature(driver.getAxis(XboxController.Axes.RightTrigger) * inverted * multiplier, driver.getAxis(XboxController.Axes.RightX));
+		//double inverted = ((driver.getDPad(Gamepad.Directions.W)) ? 1.0 : -1.0);
+
+		double inverted = ((driver.getAxis(XboxController.Axes.LeftTrigger) > driver.getAxis(XboxController.Axes.RightTrigger)) ? 1.0 : -1.0);
+
+		drive.curvature(throttle * inverted * multiplier, driver.getAxis(XboxController.Axes.RightX));
 
 	}
 
