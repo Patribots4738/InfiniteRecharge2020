@@ -11,9 +11,9 @@ import wrappers.*;
 
 public class Robot extends TimedRobot {
 
-	boolean singleDriver = true;
+	boolean singleDriver = false;
 
-	boolean joystick = true;
+	boolean joystick = false;
 
 	public static boolean emergencyManual = false;
 
