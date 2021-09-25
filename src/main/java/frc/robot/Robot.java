@@ -165,9 +165,9 @@ public class Robot extends TimedRobot {
 
 		firstTime = true;
 		
-		shifted = true;
+		//shifted = true;
 
-		gearShifter.activateChannel(shifted);
+		//gearShifter.activateChannel(shifted);
 
 		shootTimer.reset();
 
@@ -178,19 +178,18 @@ public class Robot extends TimedRobot {
 		auto.reset();
 
 		//auto.addPath(new AutoPath("home/lvuser/deploy/autopaths/Default.json"));
-		auto.addCommands(new Command(CommandType.MOVE, 12, 0.2));
+		auto.addCommands(new Command(CommandType.MOVE, 27, 0.2));
 
 		shooterControl.stop();
-		
 
-		seeker.reset();
+		//seeker.reset();
 
 	} 
 
 	@Override
 	public void autonomousPeriodic() {
 
-		seeker.runSeeker();
+		//seeker.runSeeker();
 
 		if (auto.queueIsEmpty()) {
 
@@ -214,7 +213,7 @@ public class Robot extends TimedRobot {
 
 				if(firstTime) {
 										
-					auto.addPath(path);
+					//auto.addPath(path);
 
 					firstTime = false;
 
@@ -270,7 +269,7 @@ public class Robot extends TimedRobot {
 
 	public void drive() {
 
-		boolean trainingWheels = false;
+		boolean trainingWheels = true;
 
 		boolean inverted = driver.getToggle(XboxController.Buttons.R);
 		double multiplier = ((inverted) ? -1.0 : 1.0);
@@ -303,7 +302,7 @@ public class Robot extends TimedRobot {
 
 	public void operate(XboxController controller) {
 
-		double intakeMultiplier = 0.75;
+		double intakeMultiplier = 0.55;
 		double conveyorMultiplier = 0.275;
 
 		if(controller.getAxis(XboxController.Axes.RightTrigger) < 0.2) {
@@ -332,8 +331,6 @@ public class Robot extends TimedRobot {
 			//leftElevator.resetEncoder();
 
 		//} else {
-
-			System.out.println("Left Position: " + leftElevator.getPosition());
 
 			if (eleDown && leftElevator.getPosition() > -21) {
 
@@ -593,9 +590,6 @@ public class Robot extends TimedRobot {
 			operate(operator);
 
 		}
-
-		System.out.println("Left Elevator Amperage: " + leftElevator.getAmperage());
-		System.out.println("Right Elevator Amperage: " + rightElevator.getAmperage());
 
 	}
 
