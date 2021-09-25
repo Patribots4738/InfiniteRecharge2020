@@ -3,6 +3,7 @@ package frc.robot;
 import edu.wpi.first.wpilibj.TimedRobot;
 
 import autonomous.*;
+import autonomous.Command.CommandType;
 import hardware.*;
 import interfaces.*;
 import networking.*;
@@ -163,7 +164,7 @@ public class Robot extends TimedRobot {
 	public void autonomousInit() {
 
 		firstTime = true;
-		/*
+		
 		shifted = true;
 
 		gearShifter.activateChannel(shifted);
@@ -176,10 +177,11 @@ public class Robot extends TimedRobot {
 
 		auto.reset();
 
-		auto.addPath(new AutoPath("home/lvuser/deploy/autopaths/Default.json"));
+		//auto.addPath(new AutoPath("home/lvuser/deploy/autopaths/Default.json"));
+		auto.addCommands(new Command(CommandType.MOVE, 12, 0.2));
 
 		shooterControl.stop();
-		*/
+		
 
 		seeker.reset();
 
@@ -190,7 +192,6 @@ public class Robot extends TimedRobot {
 
 		seeker.runSeeker();
 
-	/*
 		if (auto.queueIsEmpty()) {
 
 			if(shootTimer.isRunning()) {
@@ -230,7 +231,7 @@ public class Robot extends TimedRobot {
 			auto.executeQueue();
 
 		}
-	*/
+	
 	}
 
 	// NO TOUCH
@@ -260,6 +261,8 @@ public class Robot extends TimedRobot {
 
 		leftMotors.resetEncoder();
 		rightMotors.resetEncoder();
+
+		leftElevator.resetEncoder();
 
 		shooterControl.stop();
 
@@ -321,28 +324,58 @@ public class Robot extends TimedRobot {
 		boolean eleUp = controller.getDPad(Gamepad.Directions.N);
 		boolean eleDown = controller.getDPad(Gamepad.Directions.S);
 
-		if(eleUp) {
+		// if the elevator is pushing downwards onto the metal bar, then through experimentation both motors will be at
+		// approximatly 50 amps, so this will make it go up just a bit until it is no longer stressing the motors
+		//if(leftElevator.getAmperage() > 35) {
 
-			elevator.setElevatorUp();
+			//elevator.setElevatorUp();
+			//leftElevator.resetEncoder();
 
-		} else if(eleDown) {
+		//} else {
 
-			elevator.setElevatorDown();
+			System.out.println("Left Position: " + leftElevator.getPosition());
 
-		} else {
+			if (eleDown && leftElevator.getPosition() > -21) {
 
-			elevator.stop();
+				eleDown = false;
+	
+			}
 
-		}
+			if (eleUp && leftElevator.getPosition() < -125) {
 
-		if(!topSwitch.getState() && eleUp) {
+				eleUp = false;
 
-			elevator.stop();
+			}
 
-		}
+			if (!eleUp && !eleDown) {
 
-		elevator.setLock(elevatorLock);
-		
+				elevator.stop();
+
+			}
+
+			if(eleUp) {
+
+				elevator.setElevatorUp();
+	
+			} else if(eleDown) {
+	
+				elevator.setElevatorDown();
+	
+			} else {
+	
+				elevator.stop();
+	
+			}
+	
+			if(!topSwitch.getState() && eleUp) {
+	
+				elevator.stop();
+	
+			}
+	
+			elevator.setLock(elevatorLock);
+
+		//}
 
 	}
 
