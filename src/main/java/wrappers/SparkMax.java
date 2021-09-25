@@ -164,4 +164,11 @@ public class SparkMax implements PIDMotor {
 
 	}
 
+	// NOT FUNCTIONAL
+	public double getAmperage() {
+
+		return 0.0;
+
+	}
+
 }

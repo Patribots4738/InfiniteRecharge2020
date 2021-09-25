@@ -188,4 +188,19 @@ public class PIDMotorGroup extends MotorGroup implements PIDMotor {
 
 	}
 
+	// NOT FUNCTIONAL
+	public double getAmperage() {
+
+		double ampsSum = 0.0;
+
+		for (PIDMotor motor : pidMotors) {
+
+			ampsSum += motor.getAmperage();
+
+		}
+
+		return ampsSum / motors.length;
+
+	}
+
 }

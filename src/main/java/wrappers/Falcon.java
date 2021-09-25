@@ -160,4 +160,11 @@ public class Falcon implements PIDMotor {
 
 	}
 
+	public double getAmperage() {
+
+		return motor.getStatorCurrent();
+
+
+	}
+
 }

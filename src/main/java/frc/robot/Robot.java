@@ -55,6 +55,9 @@ public class Robot extends TimedRobot {
 	Limitswitch topSwitch;
 
 	Elevator elevator;
+
+	PIDMotor leftElevator;
+	PIDMotor rightElevator;
 	
 	AutoPath path;
 	AutoDrive auto;
@@ -118,8 +121,8 @@ public class Robot extends TimedRobot {
 
 		shooterControl = new ShooterController(conveyor, shooter, shooterCam, drive);
 
-		PIDMotor leftElevator = new Falcon(12);
-		PIDMotor rightElevator = new Falcon(11);
+		leftElevator = new Falcon(12);
+		rightElevator = new Falcon(11);
 
 		DoubleSolenoid elevatorLock = new DoubleSolenoid(1,0);
 
@@ -312,7 +315,7 @@ public class Robot extends TimedRobot {
 
 		}
 
-		/*
+		
 		boolean elevatorLock = controller.getToggle(XboxController.Buttons.Select);
 
 		boolean eleUp = controller.getDPad(Gamepad.Directions.N);
@@ -339,7 +342,7 @@ public class Robot extends TimedRobot {
 		}
 
 		elevator.setLock(elevatorLock);
-		*/
+		
 
 	}
 
@@ -557,6 +560,9 @@ public class Robot extends TimedRobot {
 			operate(operator);
 
 		}
+
+		System.out.println("Left Elevator Amperage: " + leftElevator.getAmperage());
+		System.out.println("Right Elevator Amperage: " + rightElevator.getAmperage());
 
 	}
 

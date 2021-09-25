@@ -164,4 +164,11 @@ public class Talon implements PIDMotor{
 
 	}
 
+	// NOT FUNCTIONAL
+	public double getAmperage() {
+
+		return 0.0;
+
+	}
+
 }
