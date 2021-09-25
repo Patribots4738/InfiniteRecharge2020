@@ -264,7 +264,7 @@ public class Robot extends TimedRobot {
 
 	public void drive() {
 
-		boolean trainingWheels = true;
+		boolean trainingWheels = false;
 
 		boolean inverted = driver.getToggle(XboxController.Buttons.R);
 		double multiplier = ((inverted) ? -1.0 : 1.0);
@@ -277,6 +277,7 @@ public class Robot extends TimedRobot {
 			maxSpeed = 0.65;
 
 		}
+
 
 		multiplier *= maxSpeed;
 
