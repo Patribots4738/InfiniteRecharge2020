@@ -272,6 +272,7 @@ public class Robot extends TimedRobot {
 		boolean trainingWheels = false;
 
 		boolean inverted = driver.getToggle(XboxController.Buttons.R);
+
 		double multiplier = ((inverted) ? -1.0 : 1.0);
 
 		double maxSpeed = 1.0;
@@ -381,8 +382,11 @@ public class Robot extends TimedRobot {
 
 		shifted = true;
 
-		if(fireInput) {
+		// if we can see the target, then aim and fire
+		shooterControl.aim();
 
+		if(fireInput) {
+/*
 			// the area of the target is never exactly 0 unless it can't see the target
 			if(shooterCam.getTargetAreaPercent() <= 0.01) {
 
@@ -400,15 +404,14 @@ public class Robot extends TimedRobot {
 				conveyor.setConveyor(Shooter.readyToFire);
 
 			} else {
-
-				// if we can see the target, then aim and fire
-				shooterControl.aim();
+*/
+				
 
 				if(ShooterController.aligned) {
 
 					shooterControl.fire();
 
-				}
+				//}
 
 			}
 

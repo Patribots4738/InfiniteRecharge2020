@@ -140,6 +140,9 @@ public class Drive {
 		throttle = deadBand(throttle);
 		turning = deadBand(turning);
 
+		throttle = Calc.bananaCurve(throttle);
+		turning = Calc.bananaCurve(turning);
+
 		if(throttle == 0) {
 
 			bananaArcade(throttle, turning);
