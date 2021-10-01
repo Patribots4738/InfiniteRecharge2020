@@ -157,7 +157,7 @@ public class Robot extends TimedRobot {
 
 		falconMusic = new FalconMusic(new Falcon[]{new Falcon(6), new Falcon(7)});
 		falconMusic.loadSong("cottoneyedjoe.chrp");
-		falconMusic.play();
+		//falconMusic.play();
 
 	}
 
