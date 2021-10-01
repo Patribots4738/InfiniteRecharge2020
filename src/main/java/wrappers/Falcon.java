@@ -167,4 +167,10 @@ public class Falcon implements PIDMotor {
 
 	}
 
+	public TalonFX getTalonFX() {
+
+		return motor;
+
+	}
+
 }

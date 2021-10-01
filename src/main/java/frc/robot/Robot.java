@@ -67,6 +67,8 @@ public class Robot extends TimedRobot {
 
 	Gamepad driveStick;
 
+	FalconMusic falconMusic;
+
 	@Override
 	public void robotInit() {
 
@@ -148,6 +150,14 @@ public class Robot extends TimedRobot {
 		seeker = new AutoSeeker(intake, conveyor, ballFinder, drive, leftMotors, rightMotors);
 
 		auto.reset();
+
+		// see comments on function
+		driver.setUpButtons();
+		operator.setUpButtons();
+
+		falconMusic = new FalconMusic(new Falcon[]{new Falcon(6), new Falcon(7)});
+		falconMusic.loadSong("cottoneyedjoe.chrp");
+		falconMusic.play();
 
 	}
 
@@ -272,7 +282,6 @@ public class Robot extends TimedRobot {
 		boolean trainingWheels = false;
 
 		boolean inverted = driver.getToggle(XboxController.Buttons.R);
-
 		double multiplier = ((inverted) ? -1.0 : 1.0);
 
 		double maxSpeed = 1.0;
@@ -382,11 +391,8 @@ public class Robot extends TimedRobot {
 
 		shifted = true;
 
-		// if we can see the target, then aim and fire
-		shooterControl.aim();
-
 		if(fireInput) {
-/*
+
 			// the area of the target is never exactly 0 unless it can't see the target
 			if(shooterCam.getTargetAreaPercent() <= 0.01) {
 
@@ -404,14 +410,15 @@ public class Robot extends TimedRobot {
 				conveyor.setConveyor(Shooter.readyToFire);
 
 			} else {
-*/
-				
+
+				// if we can see the target, then aim and fire
+				shooterControl.aim();
 
 				if(ShooterController.aligned) {
 
 					shooterControl.fire();
 
-				//}
+				}
 
 			}
 

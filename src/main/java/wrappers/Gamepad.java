@@ -36,6 +36,27 @@ public class Gamepad {
 	}
 
 	/**
+	 * run in robotInit, this makes sure the robot and controller are like yup we have buttons
+	 * so that it does not crash when it is enabled for the first time after being
+	 * powered on
+	 */
+	public void setUpButtons() {
+
+		joystick = new Joystick(port);
+
+		int buttonCount = joystick.getButtonCount();
+
+		buttons = new TogglableButton[buttonCount];
+
+		for (int i = 0; i < buttons.length; i++) {
+
+			buttons[i] = new TogglableButton();
+
+		}
+
+	}
+
+	/**
 	 * @param button Button to be toggled.
 	 * @return Returns opposite state from when button was previously toggled.
 	 */
