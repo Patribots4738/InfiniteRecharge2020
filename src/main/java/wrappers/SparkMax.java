@@ -23,8 +23,8 @@ public class SparkMax implements PIDMotor {
 	public SparkMax(int canID) {
 
 		motor = new CANSparkMax(canID, CANSparkMaxLowLevel.MotorType.kBrushless);
-		encoder = new CANEncoder(motor);
-		pidController = new CANPIDController(motor);
+		encoder = motor.getEncoder();
+		pidController = motor.getPIDController();
 
 		encoder.setPosition(0);
 
