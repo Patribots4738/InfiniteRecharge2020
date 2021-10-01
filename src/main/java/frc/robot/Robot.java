@@ -327,56 +327,45 @@ public class Robot extends TimedRobot {
 		boolean eleUp = controller.getDPad(Gamepad.Directions.N);
 		boolean eleDown = controller.getDPad(Gamepad.Directions.S);
 
-		// if the elevator is pushing downwards onto the metal bar, then through experimentation both motors will be at
-		// approximatly 50 amps, so this will make it go up just a bit until it is no longer stressing the motors
-		//if(leftElevator.getAmperage() > 35) {
+		if (eleDown && leftElevator.getPosition() > -21) {
 
-			//elevator.setElevatorUp();
-			//leftElevator.resetEncoder();
+			eleDown = false;
 
-		//} else {
+		}
 
-			if (eleDown && leftElevator.getPosition() > -21) {
+		if (eleUp && leftElevator.getPosition() < -125) {
 
-				eleDown = false;
-	
-			}
+			eleUp = false;
 
-			if (eleUp && leftElevator.getPosition() < -125) {
+		}
 
-				eleUp = false;
+		if (!eleUp && !eleDown) {
 
-			}
+			elevator.stop();
 
-			if (!eleUp && !eleDown) {
+		}
 
-				elevator.stop();
+		if(eleUp) {
 
-			}
+			elevator.setElevatorUp();
 
-			if(eleUp) {
+		} else if(eleDown) {
 
-				elevator.setElevatorUp();
-	
-			} else if(eleDown) {
-	
-				elevator.setElevatorDown();
-	
-			} else {
-	
-				elevator.stop();
-	
-			}
-	
-			if(!topSwitch.getState() && eleUp) {
-	
-				elevator.stop();
-	
-			}
-	
-			elevator.setLock(elevatorLock);
+			elevator.setElevatorDown();
 
-		//}
+		} else {
+
+			elevator.stop();
+
+		}
+
+		if(!topSwitch.getState() && eleUp) {
+
+			elevator.stop();
+
+		}
+
+		elevator.setLock(elevatorLock);
 
 	}
 
