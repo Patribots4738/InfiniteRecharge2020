@@ -151,13 +151,7 @@ public class Robot extends TimedRobot {
 
 		auto.reset();
 
-		// see comments on function
-		driver.setUpButtons();
-		operator.setUpButtons();
-
-		falconMusic = new FalconMusic(new Falcon[]{new Falcon(6), new Falcon(7)});
-		falconMusic.loadSong("cottoneyedjoe.chrp");
-		//falconMusic.play();
+		falconMusic = new FalconMusic(new Falcon[]{new Falcon(12), new Falcon(11), new Falcon(6), new Falcon(5)});
 
 	}
 
@@ -596,7 +590,7 @@ public class Robot extends TimedRobot {
 			shooterControl.stop();
 			
 			drive();
-
+			
 			operate(operator);
 
 		}
@@ -610,14 +604,24 @@ public class Robot extends TimedRobot {
 	public void testInit() {
 
 		// config motors for velocity control
-		leftMotors.setPID(0.5, 0, 0);
-		rightMotors.setPID(0.5, 0, 0);
+		//leftMotors.setPID(0.5, 0, 0);
+		//rightMotors.setPID(0.5, 0, 0);
 
 	}
 	
 	@Override
 	public void testPeriodic() {
-		
+
+		falconMusic.play();
+		System.out.println(falconMusic.isPlaying());
+
+		if(!falconMusic.isPlaying()) {
+
+			falconMusic.loadSong("cottoneyedjoe.chrp");
+
+		}
+
+		/*
 		System.out.println("corrected Distance: " + shooterControl.correctLimelightDistanceError(shooterCam.getDistance()));
 		System.out.println(".");
 		System.out.println("raw Distance: " + shooterCam.getDistance());

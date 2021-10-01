@@ -44,6 +44,7 @@ public class FalconMusic {
 
 
         }
+        System.out.println("PLAYING");
         
         orchestra.play();
 
