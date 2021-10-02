@@ -617,6 +617,7 @@ public class Robot extends TimedRobot {
 
 		System.out.println("Playing: " + playing);
 		System.out.println("Joe: " + joe);
+		System.out.println("Actually playing: " + falconMusic.isPlaying());
 
 		if (playing) {
 
