@@ -601,12 +601,54 @@ public class Robot extends TimedRobot {
 	@Override
 	public void testPeriodic() {
 
+		/*
 		falconMusic.play();
 		System.out.println(falconMusic.isPlaying());
 
-		if(!falconMusic.isPlaying()) {
+		if (!falconMusic.isPlaying()) {
 
 			falconMusic.loadSong("cottoneyedjoe.chrp");
+
+		}
+*/
+
+		boolean playing = driver.getToggle(XboxController.Buttons.A);
+		boolean joe = !driver.getToggle(XboxController.Buttons.X);
+
+		System.out.println("Playing: " + playing);
+		System.out.println("Joe: " + joe);
+
+		if (playing) {
+
+			if (joe) {
+
+				if (falconMusic.isPlaying()) {
+
+					falconMusic.play();
+
+				} else {
+
+					falconMusic.loadSong("cottoneyedjoe.chrp");
+
+				}
+
+			} else {
+
+				if (falconMusic.isPlaying()) {
+
+					falconMusic.play();
+
+				} else {
+
+					falconMusic.loadSong("imperialmarch.chrp");
+
+				}
+
+			}
+
+		} else {
+
+			falconMusic.stop();
 
 		}
 

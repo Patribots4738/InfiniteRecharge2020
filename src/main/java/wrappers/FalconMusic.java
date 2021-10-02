@@ -44,7 +44,6 @@ public class FalconMusic {
 
 
         }
-        System.out.println("PLAYING");
         
         orchestra.play();
 
@@ -65,6 +64,22 @@ public class FalconMusic {
     public boolean isPlaying() {
 
         return orchestra.isPlaying();
+
+    }
+
+    public void addFalcon(Falcon falcon) {
+
+        orchestra.addInstrument(falcon.getTalonFX());
+
+    }
+
+    public void addFalcons(Falcon[] falcons) {
+
+        for (Falcon falcon : falcons) {
+
+            orchestra.addInstrument(falcon.getTalonFX());
+
+        }
 
     }
 
