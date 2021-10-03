@@ -592,7 +592,7 @@ public class Robot extends TimedRobot {
 	int song = 0;
 	String[] songs = {"cottoneyedjoe.chrp", "imperialmarch.chrp", "mainstarwarstheme.chrp"};
 	boolean playing = driver.getToggle(XboxController.Buttons.A);
-	boolean switchSong = driver.getToggle(XboxController.Buttons.X);
+	boolean switchSong = driver.getButtonDown(XboxController.Buttons.X);
 
 	@Override
 	public void testInit() {
