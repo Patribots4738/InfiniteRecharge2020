@@ -50,7 +50,6 @@ public class XboxController extends Gamepad {
 		return this.getToggle(button.ordinal());
 
 	}
-	
 	/**
 	 * 
 	 * @param button

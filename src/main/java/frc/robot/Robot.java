@@ -67,8 +67,6 @@ public class Robot extends TimedRobot {
 
 	Gamepad driveStick;
 
-	//FalconMusic falconMusic;
-
 	@Override
 	public void robotInit() {
 
@@ -150,8 +148,6 @@ public class Robot extends TimedRobot {
 		seeker = new AutoSeeker(intake, conveyor, ballFinder, drive, leftMotors, rightMotors);
 
 		auto.reset();
-
-		//falconMusic = new FalconMusic(new Falcon[]{});
 
 	}
 
@@ -276,6 +272,7 @@ public class Robot extends TimedRobot {
 		boolean trainingWheels = false;
 
 		boolean inverted = driver.getToggle(XboxController.Buttons.R);
+
 		double multiplier = ((inverted) ? -1.0 : 1.0);
 
 		double maxSpeed = 1.0;
@@ -327,45 +324,56 @@ public class Robot extends TimedRobot {
 		boolean eleUp = controller.getDPad(Gamepad.Directions.N);
 		boolean eleDown = controller.getDPad(Gamepad.Directions.S);
 
-		if (eleDown && leftElevator.getPosition() > -21) {
+		// if the elevator is pushing downwards onto the metal bar, then through experimentation both motors will be at
+		// approximatly 50 amps, so this will make it go up just a bit until it is no longer stressing the motors
+		//if(leftElevator.getAmperage() > 35) {
 
-			eleDown = false;
+			//elevator.setElevatorUp();
+			//leftElevator.resetEncoder();
 
-		}
+		//} else {
 
-		if (eleUp && leftElevator.getPosition() < -125) {
+			if (eleDown && leftElevator.getPosition() > -21) {
 
-			eleUp = false;
+				eleDown = false;
+	
+			}
 
-		}
+			if (eleUp && leftElevator.getPosition() < -125) {
 
-		if (!eleUp && !eleDown) {
+				eleUp = false;
 
-			elevator.stop();
+			}
 
-		}
+			if (!eleUp && !eleDown) {
 
-		if(eleUp) {
+				elevator.stop();
 
-			elevator.setElevatorUp();
+			}
 
-		} else if(eleDown) {
+			if(eleUp) {
 
-			elevator.setElevatorDown();
+				elevator.setElevatorUp();
+	
+			} else if(eleDown) {
+	
+				elevator.setElevatorDown();
+	
+			} else {
+	
+				elevator.stop();
+	
+			}
+	
+			if(!topSwitch.getState() && eleUp) {
+	
+				elevator.stop();
+	
+			}
+	
+			elevator.setLock(elevatorLock);
 
-		} else {
-
-			elevator.stop();
-
-		}
-
-		if(!topSwitch.getState() && eleUp) {
-
-			elevator.stop();
-
-		}
-
-		elevator.setLock(elevatorLock);
+		//}
 
 	}
 
@@ -374,8 +382,11 @@ public class Robot extends TimedRobot {
 
 		shifted = true;
 
-		if(fireInput) {
+		// if we can see the target, then aim and fire
+		shooterControl.aim();
 
+		if(fireInput) {
+/*
 			// the area of the target is never exactly 0 unless it can't see the target
 			if(shooterCam.getTargetAreaPercent() <= 0.01) {
 
@@ -393,15 +404,14 @@ public class Robot extends TimedRobot {
 				conveyor.setConveyor(Shooter.readyToFire);
 
 			} else {
-
-				// if we can see the target, then aim and fire
-				shooterControl.aim();
+*/
+				
 
 				if(ShooterController.aligned) {
 
 					shooterControl.fire();
 
-				}
+				//}
 
 			}
 
@@ -579,7 +589,7 @@ public class Robot extends TimedRobot {
 			shooterControl.stop();
 			
 			drive();
-			
+
 			operate(operator);
 
 		}
@@ -589,69 +599,18 @@ public class Robot extends TimedRobot {
 	double topSpeed = 0.18;
 	double bottomSpeed = 0.13;
 
-	int song = 0;
-	String[] songs = {"cottoneyedjoe.chrp", "imperialmarch.chrp", "mainstarwarstheme.chrp"};
-	boolean playing = driver.getToggle(XboxController.Buttons.A);
-	boolean switchSong = driver.getButtonDown(XboxController.Buttons.X);
-
 	@Override
 	public void testInit() {
 
 		// config motors for velocity control
-		//leftMotors.setPID(0.5, 0, 0);
-		//rightMotors.setPID(0.5, 0, 0);
-		song = 0;
-		
+		leftMotors.setPID(0.5, 0, 0);
+		rightMotors.setPID(0.5, 0, 0);
 
 	}
 	
 	@Override
 	public void testPeriodic() {
-
-		/*
-		falconMusic.play();
-		System.out.println(falconMusic.isPlaying());
-
-		if (!falconMusic.isPlaying()) {
-
-			falconMusic.loadSong("cottoneyedjoe.chrp");
-
-		}
-*/
-
-		playing = driver.getToggle(XboxController.Buttons.A);
-		switchSong = driver.getButtonDown(XboxController.Buttons.X);
-
-		System.out.println("Playing: " + playing);
-		System.out.println("Song num: " + song);
-
-		if (playing) {
-
-			if (switchSong) {
-
-				if (song == (songs.length - 1)) {
-	
-					song = 0;
-	
-				} else {
-	
-					song++;
-	
-				}
-
-				//falconMusic.loadSong(songs[song]);
-	
-			}
-	
-			//falconMusic.play();
-
-		} else {
-
-			//falconMusic.stop();
-
-		}
-
-		/*
+		
 		System.out.println("corrected Distance: " + shooterControl.correctLimelightDistanceError(shooterCam.getDistance()));
 		System.out.println(".");
 		System.out.println("raw Distance: " + shooterCam.getDistance());
