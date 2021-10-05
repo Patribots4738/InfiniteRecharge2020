@@ -67,7 +67,7 @@ public class Robot extends TimedRobot {
 
 	Gamepad driveStick;
 
-	FalconMusic falconMusic;
+	//FalconMusic falconMusic;
 
 	@Override
 	public void robotInit() {
@@ -151,7 +151,7 @@ public class Robot extends TimedRobot {
 
 		auto.reset();
 
-		falconMusic = new FalconMusic(new Falcon[]{});
+		//falconMusic = new FalconMusic(new Falcon[]{});
 
 	}
 
@@ -601,7 +601,7 @@ public class Robot extends TimedRobot {
 		//leftMotors.setPID(0.5, 0, 0);
 		//rightMotors.setPID(0.5, 0, 0);
 		song = 0;
-		falconMusic.addFalcons(new Falcon[]{new Falcon(12), new Falcon(11), new Falcon(6), new Falcon(5)});
+		
 
 	}
 	
@@ -639,15 +639,15 @@ public class Robot extends TimedRobot {
 	
 				}
 
-				falconMusic.loadSong(songs[song]);
+				//falconMusic.loadSong(songs[song]);
 	
 			}
 	
-			falconMusic.play();
+			//falconMusic.play();
 
 		} else {
 
-			falconMusic.stop();
+			//falconMusic.stop();
 
 		}
 
