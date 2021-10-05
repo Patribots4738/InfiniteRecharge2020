@@ -67,6 +67,8 @@ public class Robot extends TimedRobot {
 
 	Gamepad driveStick;
 
+	FalconMusic falconMusic;
+
 	@Override
 	public void robotInit() {
 
@@ -148,6 +150,8 @@ public class Robot extends TimedRobot {
 		seeker = new AutoSeeker(intake, conveyor, ballFinder, drive, leftMotors, rightMotors);
 
 		auto.reset();
+
+		falconMusic = new FalconMusic(new Falcon[]{new Falcon(12), new Falcon(11), new Falcon(6), new Falcon(5)});
 
 	}
 
@@ -602,6 +606,7 @@ public class Robot extends TimedRobot {
 	@Override
 	public void testInit() {
 
+		falconMusic.loadSong("cottoneyedjoe.chrp");
 		// config motors for velocity control
 		leftMotors.setPID(0.5, 0, 0);
 		rightMotors.setPID(0.5, 0, 0);
@@ -610,7 +615,10 @@ public class Robot extends TimedRobot {
 	
 	@Override
 	public void testPeriodic() {
-		
+
+		falconMusic.play();
+
+		/*
 		System.out.println("corrected Distance: " + shooterControl.correctLimelightDistanceError(shooterCam.getDistance()));
 		System.out.println(".");
 		System.out.println("raw Distance: " + shooterCam.getDistance());
@@ -642,7 +650,7 @@ public class Robot extends TimedRobot {
 		shooter.rawEval(topSpeed, bottomSpeed);
 
 		shooter.setBlocker(Shooter.readyToFire);
-
+*/
 		/*
 		smashBoard.set("angleFromTarget", "" + shooterCam.getHorizontalAngle());
 		smashBoard.set("distFromTarget", "" + shooterCam.getDistance());
