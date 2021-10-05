@@ -151,7 +151,7 @@ public class Robot extends TimedRobot {
 
 		auto.reset();
 
-		falconMusic = new FalconMusic(new Falcon[]{new Falcon(12), new Falcon(11), new Falcon(6), new Falcon(5)});
+		falconMusic = new FalconMusic(new Falcon[]{});
 
 	}
 
@@ -603,20 +603,57 @@ public class Robot extends TimedRobot {
 	double topSpeed = 0.18;
 	double bottomSpeed = 0.13;
 
+	int song = 0;
+	String[] songs = {"cottoneyedjoe.chrp", "imperialmarch.chrp", "mainstarwarstheme.chrp"};
+	boolean playing = driver.getToggle(XboxController.Buttons.A);
+	boolean switchSong = driver.getToggle(XboxController.Buttons.X);
+
 	@Override
 	public void testInit() {
-
-		falconMusic.loadSong("cottoneyedjoe.chrp");
+/*
 		// config motors for velocity control
 		leftMotors.setPID(0.5, 0, 0);
 		rightMotors.setPID(0.5, 0, 0);
+*/
+		song = 0;
+		falconMusic.addFalcons(new Falcon[]{new Falcon(12), new Falcon(11), new Falcon(6), new Falcon(5)});
 
 	}
 	
 	@Override
 	public void testPeriodic() {
 
-		falconMusic.play();
+		playing = driver.getToggle(XboxController.Buttons.A);
+		switchSong = driver.getButtonDown(XboxController.Buttons.X);
+
+		System.out.println("Playing: " + playing);
+		System.out.println("Song num: " + song);
+
+		if (playing) {
+
+			if (switchSong) {
+
+				if (song == (songs.length - 1)) {
+	
+					song = 0;
+	
+				} else {
+	
+					song++;
+	
+				}
+
+				falconMusic.loadSong(songs[song]);
+	
+			}
+	
+			falconMusic.play();
+
+		} else {
+
+			falconMusic.stop();
+
+		}
 
 		/*
 		System.out.println("corrected Distance: " + shooterControl.correctLimelightDistanceError(shooterCam.getDistance()));
