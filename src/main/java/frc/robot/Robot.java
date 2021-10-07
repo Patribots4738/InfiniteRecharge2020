@@ -67,6 +67,8 @@ public class Robot extends TimedRobot {
 
 	Gamepad driveStick;
 
+	FalconMusic falconMusic;
+
 	@Override
 	public void robotInit() {
 
@@ -148,6 +150,8 @@ public class Robot extends TimedRobot {
 		seeker = new AutoSeeker(intake, conveyor, ballFinder, drive, leftMotors, rightMotors);
 
 		auto.reset();
+
+		falconMusic = new FalconMusic(new Falcon[]{});
 
 	}
 
@@ -238,6 +242,8 @@ public class Robot extends TimedRobot {
 	public void disabledInit() {
 
 		firstTime = true;
+
+		falconMusic.stop();
 		
 		leftMotors.setPID(0.5, 0, 0);
 		rightMotors.setPID(0.5, 0, 0);
@@ -597,28 +603,33 @@ public class Robot extends TimedRobot {
 	}
 
 	double topSpeed = 0.18;
-	double bottomSpeed = 0.13;
+	double bottomSpeed = 0.13; 
 
-	int song = 0;
+	int song;
 	String[] songs = {"cottoneyedjoe.chrp", "imperialmarch.chrp", "mainstarwarstheme.chrp"};
-	boolean playing = driver.getToggle(XboxController.Buttons.A);
-	boolean switchSong = driver.getToggle(XboxController.Buttons.X);
-	//FalconMusic falconMusic;
+	boolean playing = false;
+	boolean switchSong = false;
 
 	@Override
 	public void testInit() {
-/*
+		
+		song = 0;
+		playing = false;
+		switchSong = false;
+
+		falconMusic.addFalcons(new Falcon[]{new Falcon(12), new Falcon(11), new Falcon(6), new Falcon(5)});
+		falconMusic.loadSong(songs[song]);
+		
 		// config motors for velocity control
 		leftMotors.setPID(0.5, 0, 0);
 		rightMotors.setPID(0.5, 0, 0);
-*/
-		song = 0;
-		//falconMusic = new FalconMusic(new Falcon[]{new Falcon(12), new Falcon(11), new Falcon(6), new Falcon(5)});
 
 	}
 	
 	@Override
 	public void testPeriodic() {
+
+		compressor.setState(false);
 
 		playing = driver.getToggle(XboxController.Buttons.A);
 		switchSong = driver.getButtonDown(XboxController.Buttons.X);
@@ -640,15 +651,15 @@ public class Robot extends TimedRobot {
 	
 				}
 
-				//falconMusic.loadSong(songs[song]);
+				falconMusic.loadSong(songs[song]);
 	
 			}
 	
-			//falconMusic.play();
+			falconMusic.play();
 
 		} else {
 
-			//falconMusic.stop();
+			falconMusic.stop();
 
 		}
 
