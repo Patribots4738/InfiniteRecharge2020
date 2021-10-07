@@ -1,4 +1,4 @@
-package wrappers;
+/*package wrappers;
 
 import java.util.ArrayList;
 
@@ -28,6 +28,7 @@ public class FalconMusic {
      * place song in deploy folder
      * @param song is .chrp file, make a .chrp from a .MIDI inside of phoenix tuner, son should be in the format of "song.chrp"
      */
+    /*
     public void loadSong(String song) {
 
         orchestra.loadMusic(song);
@@ -83,4 +84,4 @@ public class FalconMusic {
 
     }
 
-}
+}*/
