@@ -93,6 +93,20 @@ public class ShooterController {
 
 	}
 
+	// this spins up the shooter and sets the conveyor and feeders based on wether the shooter is up to speed
+	// FOR WHEN LIMELIGHT CRAPS OUT
+	public void emergencyFire() {
+
+		shooter.setShooterSpeeds(15 * 12);
+
+		conveyor.setConveyor(Shooter.readyToFire);
+
+		shooter.setFeeders(Shooter.readyToFire);
+
+		//System.out.println("shooter: " + Shooter.readyToFire);
+
+	}
+
 	public double correctLimelightDistanceError(double rawDistance) {
 
 		// each index after 0 is 2 feet of distance from the target starting at 10ft away

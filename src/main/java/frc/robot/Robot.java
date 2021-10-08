@@ -17,6 +17,7 @@ public class Robot extends TimedRobot {
 	boolean joystick = false;
 
 	public static boolean emergencyManual = false;
+	public static boolean superEmergencyManual = false;
 
 	DriverCamera cam;
 
@@ -530,6 +531,34 @@ public class Robot extends TimedRobot {
 
 	}
 
+	public void superEmergencyManual() {
+
+		boolean aiming = driver.getButton(XboxController.Buttons.A);
+
+		if(aiming) {
+
+
+
+		} else {
+
+			drive();
+
+			operate(operator);
+
+		}
+
+		if(operator.getButton(XboxController.Buttons.A)) {
+
+			shooterControl.emergencyFire();
+
+		} else {
+
+			shooter.stop();
+
+		}
+
+	}
+
 	@Override
 	public void teleopPeriodic() {
 
@@ -548,6 +577,13 @@ public class Robot extends TimedRobot {
 		if(emergencyManual) {
 
 			emergencyManual();
+			return;
+
+		}
+
+		if(superEmergencyManual) {
+
+			superEmergencyManual();
 			return;
 
 		}
