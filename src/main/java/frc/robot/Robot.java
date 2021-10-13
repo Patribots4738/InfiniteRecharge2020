@@ -19,7 +19,7 @@ public class Robot extends TimedRobot {
 	public static boolean emergencyManual = false;
 	public static boolean superEmergencyManual = false;
 
-	DriverCamera cam;
+	//DriverCamera cam;
 
 	public static boolean shifted;
 
@@ -77,7 +77,7 @@ public class Robot extends TimedRobot {
 
 		// here begin all the constructors
 
-		cam = new DriverCamera(0);
+		//cam = new DriverCamera(0);
 
 		Timer.init();
 
@@ -648,7 +648,7 @@ public class Robot extends TimedRobot {
 
 	@Override
 	public void testInit() {
-		
+
 		song = 0;
 		playing = false;
 		switchSong = false;
@@ -664,8 +664,6 @@ public class Robot extends TimedRobot {
 	
 	@Override
 	public void testPeriodic() {
-
-		compressor.setState(false);
 
 		playing = driver.getToggle(XboxController.Buttons.A);
 		switchSong = driver.getButtonDown(XboxController.Buttons.X);
@@ -750,7 +748,7 @@ public class Robot extends TimedRobot {
 
 		}
 		*/
-	
+
 	}
 
 }
