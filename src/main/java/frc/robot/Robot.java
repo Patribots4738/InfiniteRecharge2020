@@ -272,6 +272,9 @@ public class Robot extends TimedRobot {
 
 		shooterControl.stop();
 
+		driver.setupButtons();
+		operator.setupButtons();
+
 	}
 
 	public void drive() {
@@ -659,6 +662,9 @@ public class Robot extends TimedRobot {
 		// config motors for velocity control
 		leftMotors.setPID(0.5, 0, 0);
 		rightMotors.setPID(0.5, 0, 0);
+
+		driver.setupButtons();
+		operator.setupButtons();
 
 	}
 	

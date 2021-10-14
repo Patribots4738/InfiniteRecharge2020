@@ -36,6 +36,26 @@ public class Gamepad {
 	}
 
 	/**
+	 * NEEDS TO BE IN TELEOP INIT AND TEST INIT
+	 * This function makes there not need to be an initial
+	 * start up crash after powering on the robot
+	 * call for ALL xboxcontrollers or driving devices
+	 */
+	public void setupButtons() {
+
+		int buttonCount = joystick.getButtonCount();
+
+		buttons = new TogglableButton[buttonCount];
+
+		for (int i = 0; i < buttons.length; i++) {
+
+			buttons[i] = new TogglableButton();
+
+		}
+
+	}
+
+	/**
 	 * @param button Button to be toggled.
 	 * @return Returns opposite state from when button was previously toggled.
 	 */
