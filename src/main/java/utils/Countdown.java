@@ -29,4 +29,13 @@ public class Countdown {
 
 	}
 
+	/**
+	 * @return time remaining in seconds
+	 */
+	public double timeRemaining() {
+
+		return (endTime - Timer.getTime());
+
+	}
+
 }

@@ -26,8 +26,10 @@ public class Robot extends TimedRobot {
 	boolean firstTime;
 
 	double shootTime;
+	double intakeTime;
 
 	Countdown shootTimer;
+	Countdown intakeTimer;
 
 	NTTable smashBoard;
 
@@ -70,6 +72,13 @@ public class Robot extends TimedRobot {
 
 	FalconMusic falconMusic;
 
+	PIDLoop aimLoop;
+
+	ExternalCPUInterface cpu;
+
+	boolean firstIntaking;
+	boolean intaking;
+
 	@Override
 	public void robotInit() {
 
@@ -85,12 +94,11 @@ public class Robot extends TimedRobot {
 
 		firstTime = true;
 
-		shootTime = 13;
+		shootTime = 8;
+		intakeTime = 2;
 
 		shooterCam = new Limelight("limelight-shooter");
 		ballFinder = new Limelight("limelight-balls");
-
-		shootTimer = new Countdown(shootTime);
 
 		smashBoard = new NTTable("/SmartDashboard");
 
@@ -150,6 +158,8 @@ public class Robot extends TimedRobot {
 
 		seeker = new AutoSeeker(intake, conveyor, ballFinder, drive, leftMotors, rightMotors);
 
+		cpu = new ExternalCPUInterface(new int[]{1}, new int[]{});
+
 		auto.reset();
 
 		falconMusic = new FalconMusic(new Falcon[]{});
@@ -168,26 +178,42 @@ public class Robot extends TimedRobot {
 	@Override
 	public void autonomousInit() {
 
+		auto.reset();
+
+		if (cpu.getInputPort(1)) {
+
+			shootTime = 6;
+
+		} else {
+
+			//auto.addPath(new AutoPath("home/lvuser/deploy/autopaths/Default.json"));
+			auto.addCommands(new Command(CommandType.MOVE, 27, 0.2));
+
+		}
+
+		shootTimer = new Countdown(shootTime);
+		intakeTimer = new Countdown(intakeTime);
+
 		firstTime = true;
+		firstIntaking = true;
+		intaking = true;
 		
 		//shifted = true;
 
 		//gearShifter.activateChannel(shifted);
 
 		shootTimer.reset();
+		intakeTimer.reset();
 
 		// config motors for positional control
 		leftMotors.setPID(2, 0, 0);
 		rightMotors.setPID(2, 0, 0);
 
-		auto.reset();
-
-		//auto.addPath(new AutoPath("home/lvuser/deploy/autopaths/Default.json"));
-		auto.addCommands(new Command(CommandType.MOVE, 27, 0.2));
-
 		shooterControl.stop();
 
 		//seeker.reset();
+
+		aimLoop = new PIDLoop(.95, .15, .075, 1, 25);
 
 	} 
 
@@ -196,9 +222,25 @@ public class Robot extends TimedRobot {
 
 		//seeker.runSeeker();
 
+		System.out.println("Intaking: " + intaking);
+		System.out.println("First Intaking: " + firstIntaking);
+		System.out.println("Intake Time Remaining: " + intakeTimer.timeRemaining());
+		System.out.println("Shooter Time Remaining: " + shootTimer.timeRemaining());
+		System.out.println("Shoot Time: " + shootTime);
+		System.out.println("Target Area Percent: " + ballFinder.getTargetAreaPercent());
+		System.out.println("Command Queue Length: " + auto.getQueueLength());
+		System.out.println("Shooter Timer Running: " + shootTimer.isRunning());
+		System.out.println("Intake Timer Running: " + intakeTimer.isRunning());
+
+		double maxTurning = 0.2;
+		double minTurning = 0.05;
+		double converter = 1.0 / 15;
+
 		if (auto.queueIsEmpty()) {
 
 			if(shootTimer.isRunning()) {
+
+				System.out.println("SHOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOTING");
 
 				leftMotors.setPID(0.5, 0, 0);
 				rightMotors.setPID(0.5, 0, 0);
@@ -226,11 +268,67 @@ public class Robot extends TimedRobot {
 
 					shooterControl.stop();
 
+				} else {
+
+					if (firstIntaking && intakeTimer.isRunning()) {
+
+						intakeTimer.reset();
+	
+					}
+	
+					if (!intakeTimer.isRunning()) {
+	
+						intaking = false;
+						shootTimer.reset();
+	
+					}
+	
+					if (intaking) {
+
+						System.out.println("INTAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAKING");
+	
+						if (ballFinder.getTargetAreaPercent() > 0.1 && firstIntaking) {
+	
+							firstIntaking = false;
+							intakeTimer.reset();
+	
+						}
+	
+						// the following code makes the robot back up and suck balls
+	
+						// set the intake and conveyor on to collect balls
+						intake.setSuck(-0.75);
+						conveyor.setConveyor(true);
+	
+						double angle = ballFinder.getHorizontalAngle();
+						double turning = -(aimLoop.getCommand(0, angle) * converter); 
+						double throttle = 0.3;
+	
+						// if turning is less than minTurning, it sets it to minTurning
+						if(Math.abs(turning) < minTurning) {
+	
+							turning = minTurning * Math.signum(turning);
+	
+						}
+	
+						// if turning is greater than maxTurning, it sets it to maxTurning
+						if(Math.abs(turning) > maxTurning) {
+	
+							turning = maxTurning * Math.signum(turning);
+	
+						}
+	
+						drive.bananaArcade(throttle, turning);
+	
+					}
+
 				}
 
 			}
 
 		} else {
+
+			System.out.println("RUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUNING COMMMANDS");
 
 			auto.executeQueue();
 

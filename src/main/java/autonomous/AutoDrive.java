@@ -121,6 +121,12 @@ public class AutoDrive {
 
 	}
 
+	public int getQueueLength() {
+
+		return commandQueue.size();
+
+	}
+
 	// this command will be called once to start executing a command
 	public void executeCommand(Command command) {
 
