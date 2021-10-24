@@ -232,6 +232,7 @@ public class Robot extends TimedRobot {
 		System.out.println("Shooter Timer Running: " + shootTimer.isRunning());
 		System.out.println("Intake Timer Running: " + intakeTimer.isRunning());
 
+		double throttle = 0.3;
 		double maxTurning = 0.2;
 		double minTurning = 0.05;
 		double converter = 1.0 / 15;
@@ -290,8 +291,15 @@ public class Robot extends TimedRobot {
 						if (ballFinder.getTargetAreaPercent() > 0.1 && firstIntaking) {
 	
 							firstIntaking = false;
+							throttle = 0.15;
 							intakeTimer.reset();
 	
+						}
+
+						if (!firstIntaking) {
+
+							throttle = 0.15;
+
 						}
 	
 						// the following code makes the robot back up and suck balls
@@ -301,8 +309,7 @@ public class Robot extends TimedRobot {
 						conveyor.setConveyor(true);
 	
 						double angle = ballFinder.getHorizontalAngle();
-						double turning = -(aimLoop.getCommand(0, angle) * converter); 
-						double throttle = 0.3;
+						double turning = -(aimLoop.getCommand(0, angle) * converter);
 	
 						// if turning is less than minTurning, it sets it to minTurning
 						if(Math.abs(turning) < minTurning) {
