@@ -8,9 +8,9 @@ public class Calc {
 	// input and output should be within -1 and 1 (inclusive)
 	public static double bananaCurve(double x) {
 
-		//return Math.signum(x) * Math.pow(Math.abs(x), 1 + (Math.abs(x))); //original
+		return Math.signum(x) * Math.pow(Math.abs(x), 1 + (Math.abs(x))); //original
 		///return Math.signum(x) * Math.pow(Math.abs(x), 1.15 + (Math.abs(x))); //v2.0
-		return (1.175 * Math.signum(x) * Math.pow(Math.abs(x), 1 + (Math.abs(x)))) - (x * 0.175); //v3.0
+		//return (1.175 * Math.signum(x) * Math.pow(Math.abs(x), 1 + (Math.abs(x)))) - (x * 0.175); //v3.0
 
 		// graph of all 3: https://www.desmos.com/calculator/r6amhjsyyo
 

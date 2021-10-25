@@ -56,7 +56,7 @@ public class Robot extends TimedRobot {
 
 	ShooterController shooterControl;
 
-	Limitswitch topSwitch;
+	//Limitswitch topSwitch;
 
 	Elevator elevator;
 
@@ -97,7 +97,7 @@ public class Robot extends TimedRobot {
 		firstTime = true;
 
 		shootTime = 8;
-		intakeTime = 15;
+		intakeTime = 3;
 
 		shooterCam = new Limelight("limelight-shooter");
 		ballFinder = new Limelight("limelight-balls");
@@ -140,7 +140,7 @@ public class Robot extends TimedRobot {
 
 		DoubleSolenoid elevatorLock = new DoubleSolenoid(1,0);
 
-		topSwitch = new Limitswitch(0);
+		//topSwitch = new Limitswitch(0);
 
 		elevator = new Elevator(leftElevator, rightElevator, elevatorLock);
 
@@ -224,7 +224,7 @@ public class Robot extends TimedRobot {
 
 		//seeker.runSeeker();
 
-		System.out.println("state: " + autoSwitch.getState());
+		System.out.println("State: " + autoSwitch.getState());
 		System.out.println("Intaking: " + intaking);
 		System.out.println("First Intaking: " + firstIntaking);
 		System.out.println("Intake Time Remaining: " + intakeTimer.timeRemaining());
@@ -245,6 +245,8 @@ public class Robot extends TimedRobot {
 			if(shootTimer.isRunning()) {
 
 				System.out.println("SHOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOTING");
+				
+				intakeTimer.reset();
 
 				leftMotors.setPID(0.5, 0, 0);
 				rightMotors.setPID(0.5, 0, 0);
@@ -273,8 +275,8 @@ public class Robot extends TimedRobot {
 					shooterControl.stop();
 
 				} else {
-/*
-					if (firstIntaking && intakeTimer.isRunning()) {
+
+					if (firstIntaking) {
 
 						System.out.println("REEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEESET");
 						intakeTimer.reset();
@@ -283,27 +285,27 @@ public class Robot extends TimedRobot {
 
 					if (!intakeTimer.isRunning()) {
 	
-						//intaking = false;
-						//shootTimer.reset();
-						System.out.println("HEEEEEELP");
+						intaking = false;
+						shootTimer.reset();
+						System.out.println("STOOOOOOOOOOOOOOOOOOOOOOP INTAKING");
 	
 					}
-	*/
+	
 					if (intaking) {
 
 						System.out.println("INTAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAKING");
 	
-						//if (ballFinder.getTargetAreaPercent() > 1.5 && firstIntaking) {
+						if (ballFinder.getTargetAreaPercent() > 1.5 && firstIntaking) {
 	
 							firstIntaking = false;
-							throttle = 0.15;
-							//intakeTimer.reset();
+							throttle = 0.05;
+							intakeTimer.reset();
 	
-						//}
+						}
 
 						if (!firstIntaking) {
 
-							throttle = 0.15;
+							throttle = 0.05;
 
 						}
 	
@@ -315,6 +317,8 @@ public class Robot extends TimedRobot {
 	
 						double angle = ballFinder.getHorizontalAngle();
 						double turning = -(aimLoop.getCommand(0, angle) * converter);
+
+						System.out.println("Angle: " + angle + "; Turning: " + turning);
 	
 						// if turning is less than minTurning, it sets it to minTurning
 						if(Math.abs(turning) < minTurning) {
@@ -484,13 +488,13 @@ public class Robot extends TimedRobot {
 				elevator.stop();
 	
 			}
-	
+	/*
 			if(!topSwitch.getState() && eleUp) {
 	
 				elevator.stop();
 	
 			}
-	
+	*/
 			elevator.setLock(elevatorLock);
 
 		//}
