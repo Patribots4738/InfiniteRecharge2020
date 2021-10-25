@@ -79,6 +79,8 @@ public class Robot extends TimedRobot {
 	boolean firstIntaking;
 	boolean intaking;
 
+	Limitswitch autoSwitch;
+
 	@Override
 	public void robotInit() {
 
@@ -95,7 +97,7 @@ public class Robot extends TimedRobot {
 		firstTime = true;
 
 		shootTime = 8;
-		intakeTime = 2;
+		intakeTime = 15;
 
 		shooterCam = new Limelight("limelight-shooter");
 		ballFinder = new Limelight("limelight-balls");
@@ -158,7 +160,7 @@ public class Robot extends TimedRobot {
 
 		seeker = new AutoSeeker(intake, conveyor, ballFinder, drive, leftMotors, rightMotors);
 
-		cpu = new ExternalCPUInterface(new int[]{1}, new int[]{});
+		autoSwitch = new Limitswitch(5);
 
 		auto.reset();
 
@@ -180,7 +182,7 @@ public class Robot extends TimedRobot {
 
 		auto.reset();
 
-		if (cpu.getInputPort(1)) {
+		if (!autoSwitch.getState()) {
 
 			shootTime = 6;
 
@@ -222,6 +224,7 @@ public class Robot extends TimedRobot {
 
 		//seeker.runSeeker();
 
+		System.out.println("state: " + autoSwitch.getState());
 		System.out.println("Intaking: " + intaking);
 		System.out.println("First Intaking: " + firstIntaking);
 		System.out.println("Intake Time Remaining: " + intakeTimer.timeRemaining());
@@ -270,31 +273,33 @@ public class Robot extends TimedRobot {
 					shooterControl.stop();
 
 				} else {
-
+/*
 					if (firstIntaking && intakeTimer.isRunning()) {
 
+						System.out.println("REEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEESET");
 						intakeTimer.reset();
 	
 					}
-	
+
 					if (!intakeTimer.isRunning()) {
 	
-						intaking = false;
-						shootTimer.reset();
+						//intaking = false;
+						//shootTimer.reset();
+						System.out.println("HEEEEEELP");
 	
 					}
-	
+	*/
 					if (intaking) {
 
 						System.out.println("INTAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAKING");
 	
-						if (ballFinder.getTargetAreaPercent() > 0.1 && firstIntaking) {
+						//if (ballFinder.getTargetAreaPercent() > 1.5 && firstIntaking) {
 	
 							firstIntaking = false;
 							throttle = 0.15;
-							intakeTimer.reset();
+							//intakeTimer.reset();
 	
-						}
+						//}
 
 						if (!firstIntaking) {
 
