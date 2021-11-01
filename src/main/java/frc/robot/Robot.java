@@ -97,7 +97,7 @@ public class Robot extends TimedRobot {
 		firstTime = true;
 
 		shootTime = 8;
-		intakeTime = 2.5;
+		intakeTime = 3;
 
 		shooterCam = new Limelight("limelight-shooter");
 		ballFinder = new Limelight("limelight-balls");
@@ -251,7 +251,7 @@ public class Robot extends TimedRobot {
 				leftMotors.setPID(0.5, 0, 0);
 				rightMotors.setPID(0.5, 0, 0);
 
-				//shooterControl.aim();
+				shooterControl.aim();
 
 				if(ShooterController.aligned) {
 
@@ -286,7 +286,6 @@ public class Robot extends TimedRobot {
 					if (!intakeTimer.isRunning()) {
 	
 						intaking = false;
-						// go forwards 8 feet to shoot
 						shootTimer = new Countdown(15);
 						shootTimer.reset();
 						System.out.println("STOOOOOOOOOOOOOOOOOOOOOOP INTAKING");
@@ -300,14 +299,14 @@ public class Robot extends TimedRobot {
 						if (ballFinder.getTargetAreaPercent() > 1.5 && firstIntaking) {
 	
 							firstIntaking = false;
-							throttle = 0.275;
+							throttle = 0.25;
 							intakeTimer.reset();
 	
 						}
 
 						if (!firstIntaking) {
 
-							throttle = 0.275;
+							throttle = 0.25;
 
 						}
 	
@@ -372,11 +371,7 @@ public class Robot extends TimedRobot {
 	
 	// VERY EXTRA NO TOUCH
 	@Override
-	public void disabledPeriodic() {
-
-		System.out.println(autoSwitch.getState());
-
-	}
+	public void disabledPeriodic() {}
 	
 	@Override
 	public void teleopInit() {
