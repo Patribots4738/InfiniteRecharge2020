@@ -97,7 +97,7 @@ public class Robot extends TimedRobot {
 		firstTime = true;
 
 		shootTime = 8;
-		intakeTime = 3;
+		intakeTime = 3.3333;
 
 		shooterCam = new Limelight("limelight-shooter");
 		ballFinder = new Limelight("limelight-balls");
