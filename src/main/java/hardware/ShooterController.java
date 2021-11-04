@@ -124,9 +124,9 @@ public class ShooterController {
 
 		}
 
-		if(arrayPosition >= 12) {
+		if(arrayPosition >= 11) {
 
-			return rawDistance;
+			return rawDistance +20;
 
 		}
 
