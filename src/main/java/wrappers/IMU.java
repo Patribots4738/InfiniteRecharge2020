@@ -1,15 +1,19 @@
 package wrappers;
 
 import com.analog.adis16470.frc.*;
-import com.analog.adis16470.frc.ADIS16470_IMU.IMUAxis;
 
 public class IMU {
 
     ADIS16470_IMU imu;
 
-    double rotX = 0.0;
-    double rotY = 0.0;
-    double rotZ = 0.0;
+    double prevCompX = 0.0;
+    double prevCompY = 0.0;
+
+    double currentCompX = 0.0;
+    double currentCompY = 0.0;
+
+    double rotCompX = 0.0;
+    double rotCompY = 0.0;
 
     /**
      * Axis can be found on a diagram on the front
@@ -24,54 +28,120 @@ public class IMU {
     }
 
     /**
-     * @return Rotational degrees (-1.0 to 1.0) around X axis
+     * When the X Axis is pointing towards the ground
+     * The acceleration will be equal to 1 g, because
+     * there is always 1 earth gravity pulling towards
+     * the center of the earth
+     * @return acceleration on X axis in g's
      */
-    public double getXRotation() {
+    public double getXAcceleration() {
 
-        //return imu.getAccelInstantY();
-
-        rotX = Math.abs(imu.getAccelInstantY());
-
-        //imu.reset();
-
-        return imu.getYFilteredAccelAngle();
+        return imu.getAccelInstantX();
 
     }
 
     /**
-     * @return Rotational degrees (-1.0 to 1.0) around Y axis
+     * When the Y Axis is pointing towards the ground
+     * The acceleration will be equal to 1 g, because
+     * there is always 1 earth gravity pulling towards
+     * the center of the earth
+     * @return acceleration on Y axis in g's
      */
-    public double getYRotation() {
+    public double getYAcceleration() {
 
-        //return imu.getAccelInstantX();
-
-        //imu.setYawAxis(IMUAxis.kY);
-
-        return imu.getXFilteredAccelAngle();
+        return imu.getAccelInstantY();
 
     }
-/*
+
     /**
-     * @return Degrees (-1.0 to 1.0) from Z to XY plane of IMU
-     
-    public double getAngleFromZPlane() {
+     * When the Z Axis is pointing towards the ground
+     * The acceleration will be equal to 1 g, because
+     * there is always 1 earth gravity pulling towards
+     * the center of the earth
+     * @return acceleration on Z axis in g's
+     */
+    public double getZAcceleration() {
 
         return imu.getAccelInstantZ();
 
     }
-*/
-    public double getZRotation() {
 
-        //return imu.getAngle();
+    /**
+     * -360 = 1 rotation backwards
+     * +360 = 1 rotation forwards
+     * -720 = 2 rotations backwards
+     * +720 = 2 rotations forwards
+     * @return rotations on the X axis in degrees
+     */
+    public double getXRotation() {
 
-        //imu.setYawAxis(IMUAxis.kZ);
+        currentCompX = imu.getYComplementaryAngle();
+        
+        double difference = currentCompX - prevCompX;
 
-        return imu.getAngle();
+        if (difference >= 300) {
+            
+            rotCompX -= 360;
+
+        } else if (difference <= -300) {
+            
+            rotCompX += 360;
+
+        }
+
+        prevCompX = currentCompX;
+
+        rotCompX += difference;
+
+        return rotCompX;
 
     }
 
     /**
-     * @return acceleration of rotation on X axis
+     * -360 = 1 rotation backwards
+     * +360 = 1 rotation forwards
+     * -720 = 2 rotations backwards
+     * +720 = 2 rotations forwards
+     * @return rotations on the Y axis in degrees
+     */
+    public double getYRotation() {
+
+        currentCompY = imu.getXComplementaryAngle();
+        
+        double difference = currentCompY - prevCompY;
+
+        if (difference >= 300) {
+            
+            rotCompY -= 360;
+
+        } else if (difference <= -300) {
+            
+            rotCompY += 360;
+
+        }
+
+        prevCompY = currentCompY;
+
+        rotCompY += difference;
+
+        return rotCompY;
+
+    }
+
+    /**
+     * -360 = 1 rotation backwards
+     * +360 = 1 rotation forwards
+     * -720 = 2 rotations backwards
+     * +720 = 2 rotations forwards
+     * @return rotations on the Z axis in degrees
+     */
+    public double getZRotation() {
+
+       return imu.getAngle();
+    }
+
+    /**
+     * @return acceleration of rotation on X axis in degrees/sec
      */
     public double getXRotationalAcceleration() {
 
@@ -80,7 +150,7 @@ public class IMU {
     }
 
     /**
-     * @return acceleration of rotation on Y axis
+     * @return acceleration of rotation on Y axis in degrees/sec
      */
     public double getYRotationalAcceleration() {
 
@@ -89,7 +159,7 @@ public class IMU {
     }
 
     /**
-     * @return acceleration of rotation on Z axis
+     * @return acceleration of rotation on Z axis in degrees/sec
      */
     public double getZRotationalAcceleration() {
 
