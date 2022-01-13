@@ -6,7 +6,7 @@ public class Command {
 
     public enum CommandType {
 
-        MOVE, ROTATE;
+        MOVE, ROTATE, SPLINE;
         
     }
 
@@ -19,11 +19,27 @@ public class Command {
     // decimal percent of the max motor speed
     private double speed;
 
+    private double chordLength;
+    private double arcHeight;
+
     public Command(CommandType type, double value, double speed) {
 
         this.type = type;
         this.value = ((type == CommandType.ROTATE) ? Calc.robotRotationsToDrive(value) : Calc.inchesToDrive(value)); 
         this.speed = speed;
+        chordLength = 0.0;
+        arcHeight = 0.0;
+
+    }
+
+    // Command constructor for spline paths only
+    public Command(CommandType type, double chordLength, double arcHeight, double speed) {
+
+        this.type = type;
+        this.chordLength = chordLength;
+        this.arcHeight = arcHeight;
+        this.speed = speed;
+        value = 0.0;
 
     }
 
@@ -42,6 +58,18 @@ public class Command {
     public double getSpeed() {
 
         return speed;
+
+    }
+
+    public double getChordLength() {
+
+        return chordLength;
+
+    }
+
+    public double getArcHeight() {
+
+        return arcHeight;
 
     }
 

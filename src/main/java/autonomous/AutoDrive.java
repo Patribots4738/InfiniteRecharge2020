@@ -1,6 +1,7 @@
 package autonomous;
 
 import wrappers.*;
+import utils.*;
 
 import java.util.ArrayList;
 
@@ -136,11 +137,13 @@ public class AutoDrive {
 
 		double value = command.getValue();
 		double speed = command.getSpeed();
-
-		// the left motor will always move in the same relative direction regardless of moving or rotating the robot
-		completePositions[0] += value;
+		double chordLength = command.getChordLength();
+		double arcHeight = command.getArcHeight();
 		
-		if(commandType == Command.CommandType.MOVE) {
+		if (commandType == Command.CommandType.MOVE) {
+
+			// set left motor speed
+			completePositions[0] += value;
 			
 			// sets the right motor to rotate opposite of the left
 			completePositions[1] -= value;
@@ -148,12 +151,49 @@ public class AutoDrive {
 			leftMotors.setPosition(completePositions[0], -speed, speed);
 			rightMotors.setPosition(completePositions[1], -speed, speed);
 
-		} else if(commandType == Command.CommandType.ROTATE) {
+		} else if (commandType == Command.CommandType.ROTATE) {
+
+			//set right motor speed
+			completePositions[0] += value;
 
 			completePositions[1] += value;
 
 			leftMotors.setPosition(completePositions[0], -speed, speed);
 			rightMotors.setPosition(completePositions[1], -speed, speed);
+
+			// And now, "The last command type" - Ben 2022
+		} else if (commandType == Command.CommandType.SPLINE) { 
+
+			double radius = (chordLength * chordLength) / (8 * arcHeight) + (arcHeight / 2);
+
+			double radiusOut = radius + Constants.ROBOT_WHEEL_SPACING/2;
+			double radiusIn = radius - Constants.ROBOT_WHEEL_SPACING/2;
+
+			double outSpeed = speed;
+			double inSpeed = speed * (radiusIn / radiusOut);
+
+			// decide which one based on sign of height
+			if (arcHeight > 0) {
+
+				// total distances in inches needed to travel
+				// for left (index 0) and right (index 1)
+				completePositions[0] += 2 * radiusOut * Math.asin(chordLength / (2 * radiusOut));
+				completePositions[1] -= 2 * radiusIn * Math.asin(chordLength / (2 * radiusIn));
+
+				leftMotors.setPosition(completePositions[0], -outSpeed, outSpeed);
+				rightMotors.setPosition(completePositions[1], -inSpeed, inSpeed);
+
+			} else {
+
+				// total distances in inches needed to travel
+				// for left (index 0) and right (index 1)
+				completePositions[0] += 2 * radiusIn * Math.asin(chordLength / (2 * radiusIn));
+				completePositions[1] -= 2 * radiusOut * Math.asin(chordLength / (2 * radiusOut));
+
+				leftMotors.setPosition(completePositions[0], -inSpeed, inSpeed);
+				rightMotors.setPosition(completePositions[1], -outSpeed, outSpeed);
+
+			}
 
 		}
 
