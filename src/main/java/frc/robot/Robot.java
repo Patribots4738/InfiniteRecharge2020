@@ -173,6 +173,8 @@ public class Robot extends TimedRobot {
 
 		gearShifter.activateChannel(shifted);
 
+		//System.out.println("Angle: " + Calc.getAngleFromSplineDestination(60, 24));
+
 		compressor.setState(true);
 
 	}
@@ -182,6 +184,10 @@ public class Robot extends TimedRobot {
 
 		auto.reset();
 
+		auto.addCommands(new Command(CommandType.SPLINE, 60, 24, 0.2));
+		//auto.addCommands(new Command(CommandType.MOVE, 90, 0.2));
+
+/*
 		if (!autoSwitch.getState()) {
 
 			shootTime = 4.5;
@@ -193,7 +199,7 @@ public class Robot extends TimedRobot {
 			auto.addCommands(new Command(CommandType.MOVE, 27, 0.2));
 
 		}
-
+*/
 		shootTimer = new Countdown(shootTime);
 		intakeTimer = new Countdown(intakeTime);
 
@@ -222,7 +228,9 @@ public class Robot extends TimedRobot {
 
 	@Override
 	public void autonomousPeriodic() {
+auto.executeQueue();
 
+/*
 		//seeker.runSeeker();
 
 		System.out.println("State: " + autoSwitch.getState());
@@ -351,7 +359,7 @@ public class Robot extends TimedRobot {
 			auto.executeQueue();
 
 		}
-	
+	*/
 	}
 
 	// NO TOUCH
@@ -790,9 +798,6 @@ public class Robot extends TimedRobot {
 	
 	@Override
 	public void testPeriodic() {
-
-		System.out.println("IMU X: " + imu.getXAngle());
-		System.out.println("GYR X: " + imu.ew());
 
 		drive();
 

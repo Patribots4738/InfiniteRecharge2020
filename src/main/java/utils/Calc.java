@@ -49,6 +49,21 @@ public class Calc {
 		
 	}
 
+	/**
+	 * @return degrees from chord to tangent of arc of spline, AKA angle to set up robot
+	 * from robot being straight to end point. ALSO angle from chord that
+	 * robot will end up at at end of spline path
+	 */
+	public static double getAngleFromSplineDestination(double chordLength, double arcHeight) {
+
+		double radius = (chordLength * chordLength) / (8 * arcHeight) + (arcHeight / 2);
+
+		double arcLength = 2 * radius * Math.asin(chordLength / (2 * radius));
+
+		return (0.5 * arcLength);
+
+	}
+
 	// caps a value between the two specified inputs and outputs
 	public static double cap(double value, double min, double max) {
 
