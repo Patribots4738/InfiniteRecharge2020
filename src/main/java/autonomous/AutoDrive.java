@@ -5,6 +5,8 @@ import utils.*;
 
 import java.util.ArrayList;
 
+import autonomous.Command.CommandType;
+
 public class AutoDrive {
 
 	PIDMotorGroup leftMotors;
@@ -166,49 +168,49 @@ public class AutoDrive {
 
 			double radius = (chordLength * chordLength) / (8 * arcHeight) + (arcHeight / 2);
 
-			double radiusOut = radius + Constants.ROBOT_WHEEL_SPACING / 2;
-			double radiusIn = radius - Constants.ROBOT_WHEEL_SPACING / 2;
+			double arcLength = 2 * radius * Math.asin(chordLength / (2 * radius));
 
-			System.out.println("radius out: " + radiusOut);
+			double outerScalar = 1 + Constants.ROBOT_WHEEL_SPACING / 2 / radius;
+			double innerScalar = 1 - Constants.ROBOT_WHEEL_SPACING / 2 / radius;
+
+			double leftSpeed = speed;
+			double rightSpeed = speed;
+			
 			System.out.println("radius: " + radius);
-			System.out.println("radius in: " + radiusIn);
+			System.out.println("arcLength: " + arcLength);
 
-			System.out.println("chord length: " + chordLength);
-
-			double outSpeed = speed;
-			double inSpeed = speed * (radiusIn / radiusOut);
+			System.out.println("outerScalar: " + outerScalar);
+			System.out.println("innerScalar: " + innerScalar);
 
 			// decide which one based on sign of height
 			if (arcHeight > 0) {
+				System.out.println("arcHeight positive");
+				completePositions[0] += arcLength * outerScalar;
+				completePositions[1] -= arcLength * innerScalar;
 
-				// total distances in inches needed to travel
-				// for left (index 0) and right (index 1)
-				//completePositions[0] += 2 * radiusOut * Math.asin((chordLength * (radiusOut / radius)) / (2 * radiusOut));
-				//completePositions[1] -= 2 * radiusIn * Math.asin((chordLength * (radiusIn / radius)) / (2 * radiusIn));
-
-				completePositions[0] += 2 * Math.PI * radiusOut * (2 * Calc.getAngleFromSplineDestination(chordLength * (radiusOut / radius), arcHeight) / 360);
-				completePositions[1] -= 2 * Math.PI * radiusIn * (2 * Calc.getAngleFromSplineDestination(chordLength * (radiusIn / radius), arcHeight) / 360);
-
-				System.out.println("complete out: " + 2 * radiusOut * Math.asin((chordLength * (radiusOut / radius)) / (2 * radiusOut)));
-				System.out.println("complete in: " + 2 * radiusIn * Math.asin((chordLength * (radiusIn / radius)) / (2 * radiusIn)));
-
-				System.out.println("speed in: " + inSpeed);
-				System.out.println("speed out: " + outSpeed);
-
-				leftMotors.setPosition(completePositions[0], -outSpeed, outSpeed);
-				rightMotors.setPosition(completePositions[1], -inSpeed, inSpeed);
+				leftSpeed *= outerScalar;
+				rightSpeed *= innerScalar;
 
 			} else {
 
-				// total distances in inches needed to travel
-				// for left (index 0) and right (index 1)
-				completePositions[0] += 2 * radiusIn * Math.asin(chordLength / (2 * radiusIn));
-				completePositions[1] -= 2 * radiusOut * Math.asin(chordLength / (2 * radiusOut));
+				completePositions[0] += arcLength * innerScalar;
+				completePositions[1] -= arcLength * outerScalar;
 
-				leftMotors.setPosition(completePositions[0], -inSpeed, inSpeed);
-				rightMotors.setPosition(completePositions[1], -outSpeed, outSpeed);
+				leftSpeed *= innerScalar;
+				rightSpeed *= outerScalar;
 
 			}
+
+			System.out.println("leftSpeed: " + leftSpeed);
+			System.out.println("rightSpeed: " + rightSpeed);
+
+			System.out.println("left complete position: " + completePositions[0]);
+			System.out.println("right complete position: " + completePositions[1]);
+
+			//leftMotors.setPosition(completePositions[0], -leftSpeed, leftSpeed);
+			//rightMotors.setPosition(completePositions[1], -rightSpeed, rightSpeed);
+			leftMotors.setSpeed(leftSpeed);
+			rightMotors.setSpeed(-rightSpeed);
 
 		}
 
@@ -238,11 +240,35 @@ public class AutoDrive {
 		System.out.println("left: " + leftWheelPosition);
 		System.out.println("right: " + rightWheelPosition);
 
+		System.out.println("left speed: " + leftMotors.getSpeed());
+		System.out.println("right speed: " + rightMotors.getSpeed());
+
 		double leftError = Math.abs(completePositions[0] - leftWheelPosition);
 		double rightError = Math.abs(completePositions[1] - rightWheelPosition);
 
-		if(leftError <= acceptableError && rightError <= acceptableError) {
+		System.out.println("left error: " + leftError);
+		System.out.println("right error: " + rightError);
 
+		if (getQueue().get(0).getType() == Command.CommandType.SPLINE) {
+
+			if (leftError <= acceptableError) {
+
+				leftMotors.setSpeed(0.0);
+
+			}
+
+			if (rightError <= acceptableError) {
+
+				rightMotors.setSpeed(0.0);
+
+			}
+
+		}
+
+		if(leftError <= acceptableError && rightError <= acceptableError) {
+			System.out.println("DONE COMMAND");
+			leftMotors.setSpeed(0.0);
+			rightMotors.setSpeed(0.0);
 			removeCommand(0);
 
 			if(queueIsEmpty()) {

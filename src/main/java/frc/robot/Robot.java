@@ -215,8 +215,8 @@ public class Robot extends TimedRobot {
 		intakeTimer.reset();
 
 		// config motors for positional control
-		leftMotors.setPID(2, 0, 0);
-		rightMotors.setPID(2, 0, 0);
+		leftMotors.setPID(0.5, 0, 0);
+		rightMotors.setPID(0.5, 0, 0);
 
 		shooterControl.stop();
 
@@ -228,7 +228,7 @@ public class Robot extends TimedRobot {
 
 	@Override
 	public void autonomousPeriodic() {
-auto.executeQueue();
+		auto.executeQueue();
 
 /*
 		//seeker.runSeeker();
