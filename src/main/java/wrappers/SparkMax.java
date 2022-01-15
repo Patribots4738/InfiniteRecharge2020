@@ -19,12 +19,16 @@ public class SparkMax implements PIDMotor {
 
 	double lastSpeed;
 
+	boolean isNeo550;
+
 	// @param canID: CAN ID of the motor
-	public SparkMax(int canID) {
+	public SparkMax(int canID, boolean isNeo550) {
 
 		motor = new CANSparkMax(canID, CANSparkMaxLowLevel.MotorType.kBrushless);
 		encoder = new CANEncoder(motor);
 		pidController = new CANPIDController(motor);
+
+		this.isNeo550 = isNeo550;
 
 		encoder.setPosition(0);
 
@@ -154,6 +158,13 @@ public class SparkMax implements PIDMotor {
 	public double getSpeed() {
 
 		// 5700 is the theoretical max RPM of the neo
+
+		if (isNeo550) {
+
+			return encoder.getVelocity() / 11000;
+
+		}
+
 		return encoder.getVelocity() / 5700.0;
 
 	}
