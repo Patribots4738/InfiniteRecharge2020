@@ -207,10 +207,10 @@ public class AutoDrive {
 			System.out.println("left complete position: " + completePositions[0]);
 			System.out.println("right complete position: " + completePositions[1]);
 
-			//leftMotors.setPosition(completePositions[0], -leftSpeed, leftSpeed);
-			//rightMotors.setPosition(completePositions[1], -rightSpeed, rightSpeed);
-			leftMotors.setSpeed(leftSpeed);
-			rightMotors.setSpeed(-rightSpeed);
+			leftMotors.setPosition(Calc.inchesToDrive(completePositions[0]), -leftSpeed, leftSpeed);
+			rightMotors.setPosition(Calc.inchesToDrive(completePositions[1]), -rightSpeed, rightSpeed);
+			//leftMotors.setSpeed(leftSpeed);
+			//rightMotors.setSpeed(-rightSpeed);
 
 		}
 
@@ -248,7 +248,7 @@ public class AutoDrive {
 
 		System.out.println("left error: " + leftError);
 		System.out.println("right error: " + rightError);
-
+/*
 		if (getQueue().get(0).getType() == Command.CommandType.SPLINE) {
 
 			if (leftError <= acceptableError) {
@@ -264,11 +264,9 @@ public class AutoDrive {
 			}
 
 		}
-
+*/
 		if(leftError <= acceptableError && rightError <= acceptableError) {
 			System.out.println("DONE COMMAND");
-			leftMotors.setSpeed(0.0);
-			rightMotors.setSpeed(0.0);
 			removeCommand(0);
 
 			if(queueIsEmpty()) {
