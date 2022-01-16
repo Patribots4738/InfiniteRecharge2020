@@ -184,8 +184,10 @@ public class Robot extends TimedRobot {
 
 		auto.reset();
 
-		auto.addCommands(new Command(CommandType.SPLINE, 90, 24, 0.2));
+		//auto.addCommands(new Command(CommandType.SPLINE, 90, 24, 0.2));
 		//auto.addCommands(new Command(CommandType.MOVE, 90, 0.2));
+
+		auto.addPath(new AutoPath("home/lvuser/deploy/autopaths/test.json"));
 
 /*
 		if (!autoSwitch.getState()) {

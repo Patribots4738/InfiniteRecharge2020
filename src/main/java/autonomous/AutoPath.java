@@ -75,11 +75,19 @@ public class AutoPath {
             String group = matches.group();
             String[] splitCommands = group.substring(1, group.length() - 1).split(",");
 
+            double[] commandValues = new double[splitCommands.length];
+
+            for (int i = 0; i < splitCommands.length; i++) {
+
+                commandValues[i] = Double.parseDouble(splitCommands[i]);
+
+            }
+/*
             double[] commandValues = new double[3];
             commandValues[0] = Double.parseDouble(splitCommands[0]);
             commandValues[1] = Double.parseDouble(splitCommands[1]);
             commandValues[2] = Double.parseDouble(splitCommands[2]);
-
+*/
             commandValArray[index] = commandValues;
 
             index++;
@@ -99,9 +107,26 @@ public class AutoPath {
 
         for(int i = 0; i < commandVals.length; i++) {
 
-            Command.CommandType type = (commandVals[i][0] == 0) ? CommandType.ROTATE : CommandType.MOVE;
+            //Command.CommandType type = (commandVals[i][0] == 0) ? CommandType.ROTATE : CommandType.MOVE;
 
-            commandQueue.add(new Command(type, commandVals[i][1], commandVals[i][2]));
+            Command.CommandType type;
+
+            switch ((int)(commandVals[i][0])) {
+
+                case 0:
+                    type = CommandType.ROTATE;
+                    commandQueue.add(new Command(type, commandVals[i][1], commandVals[i][2]));
+                    break;
+                case 1:
+                    type = CommandType.MOVE;
+                    commandQueue.add(new Command(type, commandVals[i][1], commandVals[i][2]));
+                    break;
+                case 2: 
+                    type = CommandType.SPLINE;
+                    commandQueue.add(new Command(type, commandVals[i][1], commandVals[i][2], commandVals[i][3]));
+                    break;
+                
+            }
 
         }
 
