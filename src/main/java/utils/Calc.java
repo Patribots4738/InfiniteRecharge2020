@@ -49,6 +49,12 @@ public class Calc {
 		
 	}
 
+	public static double driveToInches(double drive) {
+
+		return (drive * Constants.DRIVE_WHEEL_CIRCUMFRENCE * ((Robot.shifted) ? (Constants.DRIVE_GEAR_RATIO2) : (Constants.DRIVE_GEAR_RATIO)));
+
+	}
+
 	/**
 	 * @return degrees from chord to tangent of arc of spline, AKA angle to set up robot
 	 * from robot being straight to end point. ALSO angle from chord that

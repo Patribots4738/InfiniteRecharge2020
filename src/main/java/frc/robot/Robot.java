@@ -166,6 +166,8 @@ public class Robot extends TimedRobot {
 
 		falconMusic = new FalconMusic(new Falcon[]{});
 
+		imu = new IMU();
+
 	}
 
 	@Override
@@ -184,10 +186,9 @@ public class Robot extends TimedRobot {
 
 		auto.reset();
 
-		//auto.addCommands(new Command(CommandType.SPLINE, 90, 24, 0.2));
-		//auto.addCommands(new Command(CommandType.MOVE, 90, 0.2));
+		auto.addCommands(new Command(CommandType.SPLINE, 120, 30, 0.2));
 
-		auto.addPath(new AutoPath("home/lvuser/deploy/autopaths/test.json"));
+		//auto.addPath(new AutoPath("home/lvuser/deploy/autopaths/test.json"));
 
 /*
 		if (!autoSwitch.getState()) {
@@ -231,6 +232,19 @@ public class Robot extends TimedRobot {
 	@Override
 	public void autonomousPeriodic() {
 		auto.executeQueue();
+
+		System.out.println("imu: " + imu.getZRotation());
+
+		if (auto.queueIsEmpty()) {
+
+			if (!(imu.getZRotation() <= 181 && imu.getZRotation() >= 179)) {
+
+				System.out.println("TURNING");
+				drive.bananaArcade(0.0, 0.2);
+
+			}
+
+		}
 
 /*
 		//seeker.runSeeker();
