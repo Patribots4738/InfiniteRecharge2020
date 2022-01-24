@@ -81,6 +81,8 @@ public class Robot extends TimedRobot {
 
 	Limitswitch autoSwitch;
 
+	LogWriter log;
+
 	@Override
 	public void robotInit() {
 
@@ -227,13 +229,16 @@ public class Robot extends TimedRobot {
 
 		aimLoop = new PIDLoop(.95, .15, .075, 1, 25);
 
+		log = new LogWriter();
+		log.addHeader("Left Motors Position", "Right Motors Position", "Left Motors Speed", "Right Motors Speed", "X Rotation", "Y Rotation", "Z Rotation", "X Rotational Acceleration", "Y Rotational Acceleration", "Z Rotational Acceleration", "X Acceleration", "Y Acceleration", "Z Acceleration");
+
 	} 
 
 	@Override
 	public void autonomousPeriodic() {
 		auto.executeQueue();
 
-		System.out.println("imu: " + imu.getZRotation());
+		log.write(leftMotors.getPosition(),rightMotors.getPosition(),leftMotors.getSpeed(),rightMotors.getSpeed(),imu.getXRotation(),imu.getYRotation(),imu.getZRotation(),imu.getXRotationalAcceleration(),imu.getYRotationalAcceleration(),imu.getZRotationalAcceleration(),imu.getXAcceleration(),imu.getYAcceleration(),imu.getZAcceleration());
 
 		if (auto.queueIsEmpty()) {
 
