@@ -820,9 +820,9 @@ public class Robot extends TimedRobot {
 	@Override
 	public void testPeriodic() {
 
-		drive();
+//		drive();
 
-/*
+
 		playing = driver.getToggle(XboxController.Buttons.A);
 		switchSong = driver.getButtonDown(XboxController.Buttons.X);
 
@@ -854,7 +854,7 @@ public class Robot extends TimedRobot {
 			falconMusic.stop();
 
 		}
-*/
+
 		/*
 		System.out.println("corrected Distance: " + shooterControl.correctLimelightDistanceError(shooterCam.getDistance()));
 		System.out.println(".");
